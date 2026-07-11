@@ -1,0 +1,18 @@
+{
+  "name": "tiankin-chiangmai-setup",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Chiang Mai restaurant data fetcher for เที่ยงกิน app",
+  "main": "setup-chiangmai.mjs",
+  "scripts": {
+    "start": "node setup-chiangmai.mjs",
+    "refresh": "node setup-chiangmai.mjs --refresh",
+    "filter": "node filter-data.mjs"
+  },
+  "keywords": ["chiangmai", "restaurants", "foursquare", "tiankin"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

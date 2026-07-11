@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เที่ยงกิน — Workflow & Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --card: #ffffff;
+    --border: #e9e3d6;
+    --line-soft: #ece7da;
+    --text: #14171e;
+    --text-2: #3a4256;
+    --muted: #7c7a72;
+    --primary: #c97b3f;
+    --primary-soft: #f4e5d4;
+    --green: #2f6f5e;
+    --green-soft: #dceae3;
+    --warn: #b06367;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+  body {
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(201, 123, 63, 0.04), transparent 50%),
+      radial-gradient(ellipse 80% 50% at 90% 100%, rgba(47, 111, 94, 0.04), transparent 50%),
+      var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { font-family: 'DM Serif Display', serif; font-weight: 400; letter-spacing: -0.005em; color: var(--text); }
+  h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px 0; }
+  h2 { font-size: 26px; line-height: 1.2; margin: 0 0 14px 0; }
+  h3 { font-size: 19px; line-height: 1.3; margin: 0 0 10px 0; }
+  p { margin: 0 0 12px 0; color: var(--text-2); }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 0.88em; background: var(--line-soft); padding: 2px 6px; border-radius: 4px; color: var(--text); }
+  pre { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: #1a1d24; color: #e9e3d6; padding: 18px 22px; border-radius: 12px; overflow-x: auto; line-height: 1.55; }
+  pre code { background: transparent; color: inherit; padding: 0; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* HERO */
+  .hero { padding: 24px 0 56px; border-bottom: 1px solid var(--border); margin-bottom: 56px; }
+  .hero h1 { font-size: 44px; }
+  .hero .sub { font-size: 18px; color: var(--muted); margin-bottom: 28px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; color: var(--text-2); font-weight: 500; }
+  .tag.green { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+  .tag.amber { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+
+  /* SECTIONS */
+  section { margin-bottom: 64px; }
+  .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .section-num { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--primary); }
+  .section-num::after { content: "·"; margin-left: 12px; color: var(--border); }
+
+  /* CARDS */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+  .card + .card { margin-top: 16px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 800px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* PHASE TOGGLE */
+  .phase-tabs { display: inline-flex; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 4px; margin-bottom: 24px; }
+  .phase-tab { padding: 10px 22px; border: none; background: transparent; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 500; color: var(--muted); transition: all 0.2s; }
+  .phase-tab.active { background: var(--text); color: white; }
+  .phase-content { display: none; }
+  .phase-content.active { display: block; }
+
+  /* DIAGRAM */
+  .mermaid { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px 20px; overflow-x: auto; }
+
+  /* ARCH SVG */
+  .arch-svg { width: 100%; height: auto; display: block; }
+
+  /* COST PILL */
+  .cost-pill { display: inline-block; padding: 4px 12px; background: var(--green-soft); color: var(--green); border-radius: 999px; font-weight: 600; font-size: 14px; }
+
+  /* BENCH */
+  .bench { display: grid; grid-template-columns: 160px 1fr 70px; gap: 12px; align-items: center; padding: 8px 0; }
+  .bench-label { color: var(--text-2); font-size: 14px; font-weight: 500; }
+  .bench-track { height: 14px; background: var(--line-soft); border-radius: 7px; overflow: hidden; }
+  .bench-fill { height: 100%; background: var(--primary); border-radius: 7px; transition: width 0.6s ease; }
+  .bench-val { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); }
+
+  /* TIMELINE */
+  .timeline { list-style: none; padding: 0; margin: 0; position: relative; }
+  .timeline::before { content: ""; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 2px; background: var(--primary); opacity: 0.3; }
+  .timeline li { position: relative; padding: 0 0 22px 36px; }
+  .timeline li::before { content: ""; position: absolute; left: 3px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: white; border: 2px solid var(--primary); }
+  .timeline li strong { display: block; font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--text); margin-bottom: 4px; font-weight: 400; }
+  .timeline li p { margin: 0; font-size: 14px; color: var(--text-2); }
+
+  /* KEY/VAL */
+  .kv { display: grid; grid-template-columns: 140px 1fr; row-gap: 10px; column-gap: 20px; margin: 0; }
+  .kv dt { color: var(--muted); font-size: 13px; padding-bottom: 8px; border-bottom: 1px dashed var(--line-soft); }
+  .kv dd { margin: 0; font-size: 14px; color: var(--text); padding-bottom: 8px; border-bottom: 1px dashed var(--line-soft); }
+
+  /* FOOTER */
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+
+  .icon { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; display: inline-block; vertical-align: middle; }
+
+  .badge { display: inline-block; padding: 2px 8px; background: var(--line-soft); color: var(--text-2); border-radius: 6px; font-size: 12px; font-weight: 500; font-family: 'JetBrains Mono', monospace; }
+  .badge.green { background: var(--green-soft); color: var(--green); }
+  .badge.amber { background: var(--primary-soft); color: var(--primary); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <header class="hero">
+    <h1>เที่ยงกิน</h1>
+    <p class="sub">กินดี ตลอดทาง — เพื่อนร่วมทางสายกิน เปิดแอปก็ต้องเจอร้าน</p>
+    <div class="tag-row">
+      <span class="tag green">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        $0 ต่อเดือน
+      </span>
+      <span class="tag amber">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M5 17h14M3 17h18l-2-7H5l-2 7zM7 10V6a5 5 0 0 1 10 0v4"/></svg>
+        Travel Mode (ขับรถ/เดินทาง)
+      </span>
+      <span class="tag">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Route-based + Near-me
+      </span>
+      <span class="tag">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+        Offline-first
+      </span>
+    </div>
+
+    <div class="card" style="margin-top: 28px; background: linear-gradient(135deg, var(--primary-soft), var(--green-soft)); border-color: var(--primary);">
+      <h3 style="margin: 0 0 8px; color: var(--primary);">🎯 North Star</h3>
+      <p style="margin: 0; font-size: 15px; color: var(--text);"><strong>"ขับรถทั้งวัน เปิดแอปก็เจอร้าน" — เปิดแอปแล้วต้องเจอร้าน ไม่มี empty state</strong></p>
+    </div>
+
+    <details style="margin-top: 20px; padding: 16px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px;">
+      <summary style="cursor: pointer; font-weight: 600; color: var(--text); font-size: 14px;">📜 Version Changelog — ดูว่ามีอะไรเพิ่มเข้ามาบ้าง</summary>
+      <div style="margin-top: 14px; padding-left: 12px; border-left: 2px solid var(--primary);">
+        <p style="margin: 0 0 10px; font-size: 13px; color: var(--text-2);"><strong style="color: var(--text);">v1</strong> — แนวคิดแรก: "AI คัดร้านอร่อยใกล้ฉัน" · 9 sections · Near-me only · 4-week plan</p>
+        <p style="margin: 0 0 10px; font-size: 13px; color: var(--text-2);"><strong style="color: var(--text);">v2</strong> — เพิ่ม Best-of-Breed (ยืมจุดเด่นจาก Wongnai/Google/Kinraidee/Hungry Hub/Dine AI) · 6-week plan · เพิ่ม "Rural features" · Phase 1.5, 2, 3</p>
+        <p style="margin: 0; font-size: 13px; color: var(--text-2);"><strong style="color: var(--text);">v3</strong> — Travel Mode เป็น primary use case · "กินดี ตลอดทาง" · Corridor cache · Auto-detect driving · North Star: เปิดแอปต้องเจอร้าน</p>
+      </div>
+    </details>
+  </header>
+
+  <!-- TLDR -->
+  <section>
+    <div class="section-head"><span class="section-num">01</span><h2>TL;DR — 2 โหมด × 3 Phase</h2></div>
+
+    <div class="grid-2" style="margin-bottom: 20px;">
+      <div class="card" style="border-color: var(--primary); background: var(--primary-soft);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h3 style="margin: 0;">🚗 Travel Mode (หลัก)</h3>
+          <span class="badge green">Killer</span>
+        </div>
+        <p style="font-size: 14px; color: var(--text); margin-bottom: 14px;"><strong>ขับรถ/เดินทาง → เปิดแอปก็เจอร้าน</strong></p>
+        <dl class="kv">
+          <dt>Input</dt><dd>"จะไปไหน?" + GPS auto-detect</dd>
+          <dt>Output</dt><dd>5-10 จุดแวะ + ETA + detour</dd>
+          <dt>Data</dt><dd>Corridor cache (ร้านตามเส้นทาง)</dd>
+          <dt>Guarantee</dt><dd>ไม่มี empty state (ขยายรัศมีอัตโนมัติ)</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h3 style="margin: 0;">📍 Near-me Mode</h3>
+          <span class="badge">สำรอง</span>
+        </div>
+        <p style="font-size: 14px; color: var(--text); margin-bottom: 14px;">อยู่ที่เดิม → หาร้านรอบๆ</p>
+        <dl class="kv">
+          <dt>Input</dt><dd>Filter: ระยะ/คะแนน/รีวิว/เปิดอยู่/ประเภท</dd>
+          <dt>Output</dt><dd>Top 20 เรียงตาม AI score</dd>
+          <dt>Data</dt><dd>Room DB query</dd>
+          <dt>UX</dt><dd>Filter UI เต็มรูปแบบ</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card" style="padding: 16px 20px;">
+        <span class="badge green">Phase 1 · Week 1-5</span>
+        <p style="font-size: 13px; margin: 8px 0 0;"><strong>Local-First MVP</strong><br>Foursquare + Room DB<br>$0 ตลอดกาล</p>
+      </div>
+      <div class="card" style="padding: 16px 20px;">
+        <span class="badge amber">Phase 1.5 · Week 3-4</span>
+        <p style="font-size: 13px; margin: 8px 0 0;"><strong>+Wongnai / Rural</strong><br>Categories, Quick presets, "คนท้องถิ่น"</p>
+      </div>
+      <div class="card" style="padding: 16px 20px;">
+        <span class="badge">Phase 2 · Week 6+</span>
+        <p style="font-size: 13px; margin: 8px 0 0;"><strong>Google Places + AI</strong><br>ร้านเล็กร้านซอย + Chat<br>$0* (1-2 users)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section>
+    <div class="section-head"><span class="section-num">02</span><h2>System Architecture</h2></div>
+    <div class="card">
+      <svg class="arch-svg" viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#c97b3f"/>
+          </marker>
+          <marker id="arrow-soft" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#7c7a72"/>
+          </marker>
+        </defs>
+
+        <!-- Section Labels -->
+        <text x="20" y="30" font-family="DM Serif Display" font-size="16" fill="#c97b3f">Android App</text>
+        <text x="20" y="220" font-family="DM Serif Display" font-size="16" fill="#2f6f5e">Local Data Layer</text>
+        <text x="660" y="30" font-family="DM Serif Display" font-size="16" fill="#c97b3f">Backend (Phase 2)</text>
+        <text x="660" y="220" font-family="DM Serif Display" font-size="16" fill="#2f6f5e">External APIs</text>
+
+        <!-- Android App Boxes -->
+        <rect x="20" y="50" width="280" height="60" rx="10" fill="white" stroke="#e9e3d6"/>
+        <text x="160" y="78" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">📱 Android UI (Compose)</text>
+        <text x="160" y="96" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">🚗 Travel Mode · 📍 Near-me</text>
+
+        <rect x="20" y="130" width="280" height="60" rx="10" fill="white" stroke="#e9e3d6"/>
+        <text x="160" y="158" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">🤖 AI Ranking (on-device)</text>
+        <text x="160" y="176" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">40/30/15/10/5 · Corridor + Route-aware</text>
+
+        <rect x="340" y="50" width="280" height="60" rx="10" fill="#f4e5d4" stroke="#c97b3f"/>
+        <text x="480" y="78" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">🗺️ Google Maps SDK</text>
+        <text x="480" y="96" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">Display + "Open in Maps" deep link</text>
+
+        <!-- Local Data -->
+        <rect x="20" y="250" width="280" height="70" rx="10" fill="white" stroke="#e9e3d6"/>
+        <text x="160" y="280" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">🗄️ Room Database (SQLite)</text>
+        <text x="160" y="298" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">restaurants · favorites · routes · corridor_cache</text>
+        <text x="160" y="313" text-anchor="middle" font-family="Outfit" font-size="11" fill="#2f6f5e" font-weight="600">⚡ Offline · &lt;100ms · Pre-load เส้นทาง</text>
+
+        <rect x="340" y="250" width="280" height="70" rx="10" fill="white" stroke="#e9e3d6"/>
+        <text x="480" y="280" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">🛠️ Setup Script (Node.js)</text>
+        <text x="480" y="298" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">run ครั้งเดียว + refresh weekly</text>
+        <text x="480" y="313" text-anchor="middle" font-family="Outfit" font-size="11" fill="#2f6f5e" font-weight="600">→ เก็บ JSON ลง Room DB</text>
+
+        <!-- Backend -->
+        <rect x="660" y="50" width="320" height="60" rx="10" fill="#f4e5d4" stroke="#c97b3f" stroke-dasharray="6 4"/>
+        <text x="820" y="78" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">☁️ Supabase Edge Function</text>
+        <text x="820" y="96" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">🔑 API key เก็บที่นี่ (ไม่อยู่ในแอป)</text>
+
+        <rect x="660" y="130" width="320" height="60" rx="10" fill="white" stroke="#e9e3d6"/>
+        <text x="820" y="158" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">🗃️ Supabase Postgres (cache)</text>
+        <text x="820" y="176" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">cached search results · 1-3 hr TTL</text>
+
+        <rect x="660" y="210" width="320" height="60" rx="10" fill="white" stroke="#e9e3d6"/>
+        <text x="820" y="238" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">🔄 Realtime Sync (2 devices)</text>
+        <text x="820" y="256" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">favorites · history sync</text>
+
+        <!-- External APIs -->
+        <rect x="660" y="290" width="320" height="60" rx="10" fill="white" stroke="#e9e3d6"/>
+        <text x="820" y="318" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">🗺️ Google Places API (New)</text>
+        <text x="820" y="336" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">$200 free credit/เดือน · via Edge Function</text>
+
+        <rect x="660" y="370" width="320" height="60" rx="10" fill="white" stroke="#e9e3d6"/>
+        <text x="820" y="398" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="14" fill="#14171e">🔍 Foursquare Places API</text>
+        <text x="820" y="416" text-anchor="middle" font-family="Outfit" font-size="12" fill="#7c7a72">100K calls/เดือน free · ไม่ต้องใส่บัตร</text>
+
+        <!-- Arrows -->
+        <!-- App to Room DB -->
+        <line x1="160" y1="110" x2="160" y2="250" stroke="#c97b3f" stroke-width="2" marker-end="url(#arrow)"/>
+        <!-- App to Edge Function (Phase 2) -->
+        <path d="M 300 80 Q 480 80 660 80" fill="none" stroke="#c97b3f" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+        <text x="480" y="70" text-anchor="middle" font-family="Outfit" font-size="11" fill="#c97b3f" font-weight="500">Phase 2: HTTPS only</text>
+        <!-- Setup to Room DB -->
+        <line x1="480" y1="250" x2="200" y2="320" stroke="#2f6f5e" stroke-width="2" marker-end="url(#arrow)"/>
+        <!-- Setup to Foursquare -->
+        <line x1="620" y1="285" x2="660" y2="400" stroke="#2f6f5e" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="640" y="345" text-anchor="middle" font-family="Outfit" font-size="11" fill="#2f6f5e" font-weight="500">Phase 1</text>
+        <!-- Edge Function to Google Places -->
+        <line x1="820" y1="110" x2="820" y2="290" stroke="#c97b3f" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="828" y="200" font-family="Outfit" font-size="11" fill="#c97b3f" font-weight="500">🔑</text>
+        <!-- Edge Function to Cache -->
+        <line x1="820" y1="110" x2="820" y2="130" stroke="#7c7a72" stroke-width="1.5" marker-end="url(#arrow-soft)"/>
+
+      </svg>
+    </div>
+  </section>
+
+  <!-- USER FLOW -->
+  <section>
+    <div class="section-head"><span class="section-num">03</span><h2>User Flow — 2 โหมด (Travel / Near-me)</h2></div>
+
+    <div class="phase-tabs">
+      <button class="phase-tab active" onclick="showMode('travel')">🚗 Travel Mode (หลัก)</button>
+      <button class="phase-tab" onclick="showMode('nearme')">📍 Near-me Mode</button>
+    </div>
+
+    <div class="phase-content active" id="travel">
+      <div class="mermaid">
+flowchart TD
+    A([📱 เปิดแอป]) --> B{ขับรถ/เดินทาง<br/>อยู่ไหม?}
+    B -->|Auto-detect: speed > 20 km/h| C[🚗 Travel Mode UI<br/>big buttons]
+    B -->|ไม่| H[📍 Near-me Mode]
+    C --> D[🛣️ "จะไปไหน?"<br/>input destination]
+    D --> E[🗄️ Query corridor cache<br/>ร้านในรัศมี 20 กม. จากเส้นทาง]
+    E --> F[🤖 AI rank by:<br/>distance to route + rating + open now]
+    F --> G[📊 Top 5-10 จุดแวะ<br/>พร้อม ETA + detour]
+    G --> I{กดร้าน}
+    I --> J[🗺️ Deep link Google Maps<br/>พร้อม route ไปร้านนั้น]
+    I --> K[❤️ บันทึก / 📤 แชร์]
+
+    style A fill:#c97b3f,color:#fff,stroke:none
+    style C fill:#c97b3f,color:#fff,stroke:none
+    style J fill:#2f6f5e,color:#fff,stroke:none
+    style H fill:#3a4256,color:#fff,stroke:none
+    </div>
+    <div class="card" style="margin-top: 16px; background: var(--primary-soft); border-color: var(--primary);">
+      <strong>🎯 การันตี:</strong> Travel Mode จะ <strong>ไม่มี empty state</strong> — ถ้าร้านในรัศมี 5 กม. ไม่มี → ขยายเป็น 20 กม. → ถ้ายังไม่มี → แสดงเมืองถัดไปบนเส้นทาง
+    </div>
+    <div class="grid-3" style="margin-top: 16px;">
+      <div class="card" style="padding: 16px 20px;">
+        <strong style="color: var(--green);">⚡ &lt;500ms</strong>
+        <p style="font-size: 13px; margin: 6px 0 0;">Query corridor จาก local cache</p>
+      </div>
+      <div class="card" style="padding: 16px 20px;">
+        <strong style="color: var(--green);">📴 Offline</strong>
+        <p style="font-size: 13px; margin: 6px 0 0;">Pre-load corridor ก่อนออกเดินทาง</p>
+      </div>
+      <div class="card" style="padding: 16px 20px;">
+        <strong style="color: var(--green);">🎤 Hands-free</strong>
+        <p style="font-size: 13px; margin: 6px 0 0;">Big buttons + voice ready</p>
+      </div>
+    </div>
+    </div>
+
+    <div class="phase-content" id="nearme">
+      <div class="mermaid">
+flowchart TD
+    A([📱 เปิดแอป]) --> B{ขอ GPS Permission}
+    B -->|อนุญาต| C[รับพิกัดปัจจุบัน]
+    B -->|ไม่อนุญาต| D[เลือกตำแหน่งบนแผนที่]
+    C --> E
+    D --> E[📋 หน้า Filter]
+    E --> F[เลือก: ระยะ/คะแนน/รีวิว/เปิดอยู่/ประเภท]
+    F --> G([🔍 กดค้นหา])
+    G --> H[Query data layer]
+    H --> I[🤖 AI Ranking]
+    I --> J[📊 Top 20 results]
+    J --> K{เลือกร้าน}
+    K --> L[📄 หน้า Detail]
+    L --> M[🗺️ เปิด Google Maps]
+    L --> N[❤️ บันทึก / 📤 แชร์]
+
+    style A fill:#3a4256,color:#fff,stroke:none
+    style G fill:#3a4256,color:#fff,stroke:none
+    style M fill:#2f6f5e,color:#fff,stroke:none
+    </div>
+    </div>
+  </section>
+
+  <!-- DATA FLOW -->
+  <section>
+    <div class="section-head"><span class="section-num">04</span><h2>Data Flow — Phase 1 vs Phase 2</h2></div>
+
+    <div class="phase-tabs">
+      <button class="phase-tab active" onclick="showPhase('p1')">Phase 1 · Local-First</button>
+      <button class="phase-tab" onclick="showPhase('p2')">Phase 2 · Google Places</button>
+    </div>
+
+    <div class="phase-content active" id="p1">
+      <div class="mermaid">
+flowchart LR
+    A[🛠️ Setup Script<br/>run ครั้งเดียว] -->|1. Call API| B[🔍 Foursquare API<br/>100K free/mo]
+    B -->|2. JSON results| C[Filter: rating ≥ 4.0<br/>has reviews]
+    C -->|3. Save| D[(🗄️ Room DB<br/>~500-2000 ร้าน)]
+
+    E[📱 App Search] -->|4. Query local| D
+    D -->|5. Results| F[🤖 AI Ranking<br/>on-device]
+    F -->|6. Top 20| G[📊 Display]
+
+    style A fill:#f4e5d4,stroke:#c97b3f
+    style D fill:#dceae3,stroke:#2f6f5e
+    style F fill:#f4e5d4,stroke:#c97b3f
+    style G fill:#dceae3,stroke:#2f6f5e
+      </div>
+      <div class="grid-3" style="margin-top: 20px;">
+        <div class="card" style="padding: 16px 20px;">
+          <strong style="color: var(--green);">⚡ เร็ว</strong>
+          <p style="font-size: 13px; margin: 6px 0 0;">&lt;100ms (local query)</p>
+        </div>
+        <div class="card" style="padding: 16px 20px;">
+          <strong style="color: var(--green);">📴 Offline</strong>
+          <p style="font-size: 13px; margin: 6px 0 0;">ใช้ได้แม้ไม่มี internet</p>
+        </div>
+        <div class="card" style="padding: 16px 20px;">
+          <strong style="color: var(--green);">💸 $0</strong>
+          <p style="font-size: 13px; margin: 6px 0 0;">ไม่มี API key, ไม่มี server</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-content" id="p2">
+      <div class="mermaid">
+flowchart LR
+    A[📱 App Search<br/>new area] -->|1. HTTPS| B[☁️ Supabase Edge Function]
+    B -->|2. Check cache| C{Cache<br/>fresh?}
+    C -->|Yes <1hr| D[(🗃️ Supabase DB)]
+    C -->|No/stale| E[🗺️ Google Places API<br/>🔑 key ใน Edge Function]
+    E -->|3. JSON| F[Save to cache]
+    F --> D
+    D -->|4. Results| B
+    B -->|5. Return| G[📱 App]
+    G -->|6. AI rank| H[📊 Top 20]
+
+    style B fill:#f4e5d4,stroke:#c97b3f
+    style E fill:#f4e5d4,stroke:#c97b3f
+    style D fill:#dceae3,stroke:#2f6f5e
+    style H fill:#dceae3,stroke:#2f6f5e
+      </div>
+      <div class="card" style="margin-top: 20px; border-color: var(--primary); background: var(--primary-soft);">
+        <strong>🔒 Security:</strong> API key อยู่ใน Edge Function เท่านั้น — ไม่อยู่ใน APK แม้แต่ตัวเดียว → reverse-engineer แอปก็ไม่เจอ
+      </div>
+    </div>
+  </section>
+
+  <!-- DECISION TREE -->
+  <section>
+    <div class="section-head"><span class="section-num">05</span><h2>Decision Flow — เลือก data source</h2></div>
+    <div class="mermaid">
+flowchart TD
+    Start([🔍 User search]) --> Local{มีร้านใน<br/>Room DB<br/>ในรัศมีนี้?}
+    Local -->|Yes, ครบ| Rank1[🤖 AI rank local]
+    Rank1 --> Show([📊 แสดงผล])
+    Local -->|น้อย/ไม่มี| Time{พื้นที่<br/>เคย query<br/><1 ชม.?}
+    Time -->|Yes| Cache[(🗃️ Supabase cache)]
+    Cache --> Rank2[🤖 AI rank]
+    Rank2 --> Show
+    Time -->|No| Google[☁️ Edge Function<br/>→ Google Places]
+    Google --> Save[Save to cache]
+    Save --> Rank3[🤖 AI rank]
+    Rank3 --> Show
+
+    style Start fill:#c97b3f,color:#fff,stroke:none
+    style Show fill:#2f6f5e,color:#fff,stroke:none
+    style Google fill:#f4e5d4,stroke:#c97b3f
+    </div>
+  </section>
+
+  <!-- BEST OF BREED -->
+  <section>
+    <div class="section-head"><span class="section-num">06</span><h2>Best-of-Breed — ยืมจุดเด่นจากแต่ละแอป</h2></div>
+    <p style="margin-bottom: 20px;">แทนที่จะสู้กับ Wongnai/Google ตรงๆ — เลือกเฉพาะ "จุดเด่น" ของแต่ละเจ้ามารวมไว้ในที่เดียว</p>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <h3 style="margin: 0;">🥇 Wongnai (เบอร์ 1 ไทย)</h3>
+        <span class="badge amber">Phase 1.5</span>
+      </div>
+      <div class="grid-2" style="gap: 12px;">
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">จุดเด่นที่ยืม:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li>Categories ละเอียดแบบ local (ก๋วยเตี๋ยว, ส้มตำ, ข้าวซอย, น้ำตก, ปิ้งย่าง)</li>
+            <li>"555 อันดับ" → เพิ่ม "User Votes" กด "อร่อยจริง" เพิ่ม AI weight</li>
+            <li>"แนะนำสำหรับคุณ" → AI เรียนรู้จาก history</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">ที่ไม่เอา:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li>โฆษณา, booking, delivery (คนละ business model)</li>
+            <li>Member rewards (ต้องทีมใหญ่)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <h3 style="margin: 0;">🤖 Google Maps + Gemini AI</h3>
+        <span class="badge amber">Phase 2</span>
+      </div>
+      <div class="grid-2" style="gap: 12px;">
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">จุดเด่นที่ยืม:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li><strong>AI Review Summary</strong> — "เด่น: ก๋วยเตี๋ยวเนื้อ / ขาด: ที่จอดรถ"</li>
+            <li><strong>Contextual Attributes</strong> — filter: WiFi, ที่จอด, Pet-friendly, เปิดดึก</li>
+            <li><strong>"Ask Maps"</strong> chat — ถาม "อยากกินอะไรดี" ได้ (Gemini Flash)</li>
+            <li>Personalization จาก save/favorite</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">ที่ไม่เอา:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li>"Inspiration curated" (Google เฉพาะเจาะจงเกินไป)</li>
+            <li>Track ทุก search (privacy issue)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <h3 style="margin: 0;">🍜 Kinraidee (กินไรดี) + Jaew Pa Gin</h3>
+        <span class="badge green">Phase 1</span>
+      </div>
+      <div class="grid-2" style="gap: 12px;">
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">จุดเด่นที่ยืม:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li><strong>"วันนี้กินอะไรดี?"</strong> random button (Kinraidee)</li>
+            <li><strong>Quick presets</strong> — 1 tap ได้ร้าน (Jaew Pa Gin style)</li>
+            <li>Calorie counter (optional, ถ้ามีข้อมูลเมนู)</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">ที่ไม่เอา:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li>Random menu เฉยๆ (ไม่มี GPS/distance)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <h3 style="margin: 0;">📅 Hungry Hub + OpenRice</h3>
+        <span class="badge">Phase 3</span>
+      </div>
+      <div class="grid-2" style="gap: 12px;">
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">จุดเด่นที่ยืม:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li><strong>Multi-language</strong> — Thai-first + English toggle (Hungry Hub 15 langs)</li>
+            <li>Price range filter (OpenRice) — <code>$ / $$ / $$$ / $$$$</code></li>
+            <li>Deep link ไป Hungry Hub สำหรับ booking (ไม่ทำเอง)</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">ที่ไม่เอา:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li>Booking/Deals เอง (ทำยาก, scale ไม่ได้)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <h3 style="margin: 0;">🌍 Dine AI + Place Review Analyzer + Umamii</h3>
+        <span class="badge">Phase 3</span>
+      </div>
+      <div class="grid-2" style="gap: 12px;">
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">จุดเด่นที่ยืม:</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-2);">
+            <li><strong>Aspect scores</strong> — รสชาติ/บริการ/ความคุ้ม/บรรยากาศ (Review Analyzer)</li>
+            <li><strong>"เมนูแนะนำ"</strong> — Dine AI วิเคราะห์รีวิวแนะนำเมนู</li>
+            <li>Social discovery (Umamii) — "เพื่อนคุณชอบร้านนี้"</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">ที่ไม่เอา:</p>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-2); font-size: 14px;">
+            <li>Social graph แบบเต็ม (ต้อง community ใหญ่)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="background: var(--green-soft); border-color: var(--green);">
+      <h3 style="color: var(--green);">🏘️ เฉพาะ "เที่ยงกิน" — ต่างจังหวัด</h3>
+      <p style="font-size: 14px; color: var(--text-2); margin-bottom: 0;">จุดต่างที่ไม่มีใครเหมือน:</p>
+      <ul style="margin: 8px 0 0; padding-left: 18px; font-size: 14px; color: var(--text);">
+        <li><strong>"คนท้องถิ่นแนะนำ"</strong> — badge พิเศษสำหรับร้านที่ user ในจังหวัด vote</li>
+        <li><strong>"เปิดเช้าตี 4-5"</strong> — ตลาดเช้า ก๋วยเตี๋ยวเช้า (เฉพาะ ตจว.)</li>
+        <li><strong>"ร้านริมทาง/ริมปั๊ม"</strong> — สำหรับคนขับรถทางไกล</li>
+        <li><strong>"ของฝากประจำจังหวัด"</strong> — น้ำพริก แหนม หมูยอ ของเฉพาะถิ่น</li>
+        <li><strong>"เส้นทางทัวร์อาหาร"</strong> — เชียงใหม่ 1 วัน / ภูเก็ต 1 วัน</li>
+        <li><strong>Travel mode</strong> — "กำลังไปเชียงใหม่" preload ทั้งจังหวัด offline</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SETUP/REFRESH -->
+  <section>
+    <div class="section-head"><span class="section-num">07</span><h2>Setup & Refresh Workflow</h2></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>🛠️ ครั้งแรก (one-time setup)</h3>
+        <ol class="timeline" style="margin-top: 14px;">
+          <li>
+            <strong>1. สร้าง Foursquare API key</strong>
+            <p>ฟรี · ไม่ต้องใส่บัตรเครดิต</p>
+          </li>
+          <li>
+            <strong>2. รัน setup script</strong>
+            <p><code>node setup.mjs --lat 13.7563 --lng 100.5018 --radius 10000</code></p>
+          </li>
+          <li>
+            <strong>3. Filter + เก็บลง Room DB</strong>
+            <p>rating ≥ 4.0, has reviews, ในรัศมี 10 กม.</p>
+          </li>
+          <li>
+            <strong>4. Verify ในแอป</strong>
+            <p>เปิดแอป · เห็นร้านครบ · กดเปิด Maps ได้</p>
+          </li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>🔄 Refresh (ทุกสัปดาห์/เดือน)</h3>
+        <ol class="timeline" style="margin-top: 14px;">
+          <li>
+            <strong>1. รัน refresh script</strong>
+            <p><code>node setup.mjs --refresh</code></p>
+          </li>
+          <li>
+            <strong>2. Diff กับข้อมูลเดิม</strong>
+            <p>เพิ่มร้านใหม่ · อัพเดท rating · ลบร้านปิด</p>
+          </li>
+          <li>
+            <strong>3. Push to Room DB</strong>
+            <p>Auto-merge ไม่ทับ favorites</p>
+          </li>
+          <li>
+            <strong>4. (Phase 2) Sync ผ่าน Supabase</strong>
+            <p>Realtime ไปอีกเครื่องอัตโนมัติ</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- COST COMPARISON -->
+  <section>
+    <div class="section-head"><span class="section-num">08</span><h2>Cost Reality Check</h2></div>
+    <div class="card">
+      <div class="bench"><span class="bench-label">Foursquare (Phase 1)</span><div class="bench-track"><div class="bench-fill" style="width: 0.3%; background: var(--green);"></div></div><span class="bench-val">$0</span></div>
+      <div class="bench"><span class="bench-label">Google Places (Phase 2)</span><div class="bench-track"><div class="bench-fill" style="width: 0.5%; background: var(--green);"></div></div><span class="bench-val">$0*</span></div>
+      <div class="bench"><span class="bench-label">Supabase (free tier)</span><div class="bench-track"><div class="bench-fill" style="width: 0%; background: var(--green);"></div></div><span class="bench-val">$0</span></div>
+      <div class="bench"><span class="bench-label">Google Maps SDK</span><div class="bench-track"><div class="bench-fill" style="width: 0%; background: var(--green);"></div></div><span class="bench-val">$0</span></div>
+      <div class="bench" style="border-top: 1px solid var(--line-soft); padding-top: 14px; margin-top: 6px;"><span class="bench-label" style="font-weight: 600;">รวม</span><div class="bench-track"></div><span class="bench-val" style="font-weight: 600; color: var(--green);">$0</span></div>
+      <p style="font-size: 13px; color: var(--muted); margin-top: 16px; margin-bottom: 0;">* สำหรับ 1-2 users (ใช้ &lt;1% ของ $200 free credit). ถ้าเกิน 1,000 users/เดือน จะเริ่มคิดตามจริง</p>
+    </div>
+  </section>
+
+  <!-- 6-WEEK TIMELINE -->
+  <section>
+    <div class="section-head"><span class="section-num">09</span><h2>6-Week Build Plan (Travel Mode First)</h2></div>
+    <div class="card">
+      <ol class="timeline">
+        <li>
+          <strong>Week 1 — Data Layer (เชียงใหม่ เป็น pilot)</strong>
+          <p>Setup script (Foursquare) · Room DB schema รวม <code>corridor_cache</code> + <code>routes</code> · เก็บ 100-300 ร้านเชียงใหม์ + <strong>ร้านดังริมทาง</strong> (ทางหลวง + ทางด่วน) · Manual seed: ของฝาก + ร้านเช้า + ปั๊มฯ</p>
+        </li>
+        <li>
+          <strong>Week 2 — Travel Mode Core (หัวใจของแอป)</strong>
+          <p>GPS permission + auto-detect driving · Province picker (เชียงใหม์) · <strong>Travel Mode UI</strong> (big buttons) · "จะไปไหน?" input · Corridor query · <strong>Top 5-10 จุดแวะ + ETA + detour</strong> · Deep link Google Maps</p>
+        </li>
+        <li>
+          <strong>Week 3 — AI + Wongnai-style categories</strong>
+          <p>AI ranking formula 40/30/15/10/5 (ปรับ weight ตาม mode) · Categories แบบ local (ก๋วยเตี๋ยว/ส้มตำ/ข้าวซอย/น้ำตก/ปิ้งย่าง) · "วันนี้กินอะไรดี?" random · Quick presets 5-6 อัน</p>
+        </li>
+        <li>
+          <strong>Week 4 — Rural Features + Offline Corridor</strong>
+          <p>"คนท้องถิ่นแนะนำ" badge · Contextual Attributes (WiFi/ที่จอด/Pet/เปิดดึก/รับบัตร) · "เปิดเช้า" "ร้านริมทาง" "ของฝาก" presets · <strong>Pre-load corridor ทั้งเส้นทาง offline</strong></p>
+        </li>
+        <li>
+          <strong>Week 5 — Polish + Driving Test + Ship</strong>
+          <p>Favorites + Share · User votes ("อร่อยจริง") · AI Personalization · <strong>Test จริงขับรถกรุงเทพ→เชียงใหม่</strong> · APK smoke test · Ship</p>
+        </li>
+        <li>
+          <strong>Week 6 — Add Province 2 + Phase 2 เริ่ม</strong>
+          <p>เพิ่มจังหวัดที่ 2 · เริ่ม Phase 2: Google Places via Edge Function (ถ้าต้องการร้านเล็กร้านซอยเพิ่ม)</p>
+        </li>
+      </ol>
+    </div>
+
+    <div class="card" style="margin-top: 16px; background: var(--primary-soft); border-color: var(--primary);">
+      <h3 style="margin-top: 0;">📍 Phase Map</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 14px;">
+        <div>
+          <span class="badge green">Phase 1 (Week 1-5)</span>
+          <p style="font-size: 13px; margin: 6px 0 0;">Local-first MVP · 1 จังหวัด · Foursquare · $0</p>
+        </div>
+        <div>
+          <span class="badge amber">Phase 1.5 (Week 3-4)</span>
+          <p style="font-size: 13px; margin: 6px 0 0;">+Wongnai features + Rural presets</p>
+        </div>
+        <div>
+          <span class="badge">Phase 2 (Week 6+)</span>
+          <p style="font-size: 13px; margin: 6px 0 0;">Google Places + AI chat + Multi-province</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY COMMANDS -->
+  <section>
+    <div class="section-head"><span class="section-num">10</span><h2>Quick Reference — คำสั่งสำคัญ</h2></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>🛠️ Setup Script (Phase 1)</h3>
+        <pre><code># ครั้งแรก
+node setup.mjs \
+  --lat 13.7563 \
+  --lng 100.5018 \
+  --radius 10000
+
+# Refresh รายสัปดาห์
+node setup.mjs --refresh
+
+# Output → restaurants.json
+# → import เข้า Room DB</code></pre>
+      </div>
+      <div class="card">
+        <h3>☁️ Edge Function (Phase 2)</h3>
+        <pre><code># ตั้ง secret ครั้งเดียว
+supabase secrets set \
+  GOOGLE_PLACES_API_KEY=AIza...
+
+# Deploy
+supabase functions deploy \
+  places-search
+
+# Test
+curl -X POST \
+  $SUPABASE_URL/functions/v1/places-search \
+  -d '{"lat":13.75,"lng":100.5,"radius":5000}'</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>เที่ยงกิน · Workflow v3 (Final) · Travel Mode (หลัก) + Near-me Mode · Phase 1 = Local-First MVP ($0) · Phase 1.5 = +Wongnai/Rural · Phase 2 = Google Places via Edge Function</p>
+  </footer>
+
+</div>
+
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', fontFamily: 'Outfit', securityLevel: 'loose', flowchart: { curve: 'basis', padding: 16 } });
+
+  function showPhase(id) {
+    document.querySelectorAll('.phase-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.phase-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function showMode(id) {
+    document.querySelectorAll('.phase-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.phase-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>

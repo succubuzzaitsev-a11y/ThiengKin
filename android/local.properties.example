@@ -1,0 +1,2 @@
+# ตัวอย่าง — copy เป็น local.properties แล้วใส่ path จริง
+sdk.dir=C\:\\Users\\YOUR_USERNAME\\AppData\\Local\\Android\\Sdk

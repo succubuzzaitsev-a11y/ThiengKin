@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Backup rules — exclude caches & DB, but allow restore of settings (none yet) -->
+<full-backup-content>
+    <exclude domain="database" path="thiengkin.db-journal" />
+    <exclude domain="cache" path="." />
+</full-backup-content>

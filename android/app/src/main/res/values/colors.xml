@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ink">#FF0F0F0F</color>
+    <color name="paper">#FFFAFAFA</color>
+    <color name="red">#FFDC2626</color>
+    <color name="mustard">#FFFACC15</color>
+    <color name="green">#FF16A34A</color>
+
+    <!-- App dark mode (Travel) -->
+    <color name="app_bg">#FF0F0F0F</color>
+    <color name="app_card">#FF1A1A1A</color>
+    <color name="app_line">#FF2A2A2A</color>
+
+    <!-- Launcher background -->
+    <color name="ic_launcher_background">#FFDC2626</color>
+</resources>

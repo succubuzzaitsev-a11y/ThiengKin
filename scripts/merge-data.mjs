@@ -1,7 +1,8 @@
 // merge-data.mjs
 // เที่ยงกิน · Chiang Mai Final Data Merge
-// รวม Foursquare (filtered) + Manual seed → final dataset
-// Input:  ../data/chiangmai-restaurants-filtered.json
+// รวม Foursquare + Manual seed → final dataset
+// Input:  ../data/chiangmai-restaurants.json (Foursquare — ใช้ unfiltered เพราะ filter โดน rate limit)
+//         ../data/chiangmai-restaurants-filtered.json (ถ้ามี — มี rating)
 //         ../seed/chiangmai-manual.json
 // Output: ../data/chiangmai-restaurants-final.json
 
@@ -15,7 +16,9 @@ const __dirname = path.dirname(__filename);
 const DATA_DIR = path.resolve(__dirname, '..', 'data');
 const SEED_DIR = path.resolve(__dirname, '..', 'seed');
 
-const FOURSQUARE_FILE = path.join(DATA_DIR, 'chiangmai-restaurants-filtered.json');
+// ใช้ filtered ถ้ามี (มี rating), ไม่งั้น fallback ไป unfiltered
+const FOURSQUARE_FILTERED = path.join(DATA_DIR, 'chiangmai-restaurants-filtered.json');
+const FOURSQUARE_RAW = path.join(DATA_DIR, 'chiangmai-restaurants.json');
 const MANUAL_FILE = path.join(SEED_DIR, 'chiangmai-manual.json');
 const OUTPUT_FILE = path.join(DATA_DIR, 'chiangmai-restaurants-final.json');
 
@@ -42,11 +45,12 @@ function dedupeById(places) {
   return Array.from(seen.values());
 }
 
-function main() {
+async function main() {
   console.log('🍜 เที่ยงกิน · Chiang Mai Final Merge');
   console.log('━'.repeat(50));
 
-  const foursquare = readIfExists(FOURSQUARE_FILE, 'Foursquare data');
+  const foursquare = readIfExists(FOURSQUARE_FILTERED, 'Foursquare (filtered)')
+                   || readIfExists(FOURSQUARE_RAW, 'Foursquare (raw)');
   const manual = readIfExists(MANUAL_FILE, 'Manual seed');
 
   if (!foursquare && !manual) {

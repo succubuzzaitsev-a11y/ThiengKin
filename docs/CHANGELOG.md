@@ -133,6 +133,29 @@
 
 ---
 
+## v3.5 (2026-07-11 18:49)
+**Theme:** UI Direction Locked — ทางตรง (Direct Path)
+
+- **New mockup:** `docs/MOCKUP-v3.html` (7 screens, single HTML file)
+- **Design system v3.0:**
+  - **Font:** Sarabun เดียว (display 800, body 400) — ไม่ pair serif+sans
+  - **สี:** 4 สี ink `#0F0F0F` · paper `#FAFAFA` · red `#DC2626` · mustard `#FACC15` (semantic green `#16A34A`)
+  - **Texture:** 0% — ไม่ใช้ SVG noise
+  - **Layout:** Single column scroll — ไม่ใช้ bento
+  - **Image:** Gray "FOOD" placeholder — ไม่ใช้ gradient + emoji
+- **7 screens:** Travel Home · Route Result · Restaurant Detail · Near-me · Loading · Empty/Offline · Favorites
+- **Why:** v2.4 "Anti-AI Pass" ใช้ Fraunces + IBM Plex + paper grain + bento ซึ่งกลายเป็น AI 2024-2025 cliché ไปแล้ว
+  v3.0 กลับด้าน → "ทำน้อย แต่แม่น" + ใช้ Thai-native aesthetic (Sarabun 1 ตัว, สีตรงของแบรนด์ Thieng Tham)
+- **Route line** เป็น hero element (เพราะแอปนี้คือ "ทาง") — ไม่ใช่ decoration
+- **Font sizing:** ทุก heading ใส่ `white-space: nowrap` + `text-overflow: ellipsis` กัน wrap (greeting ลด 24→22px)
+- **Screen 7:** Favorites (แทน Province picker / Review submitted)
+- **Files:**
+  - `docs/MOCKUP-v3.html` ← design source of truth
+  - `docs/MOCKUP.md` ← deprecate v2.2 (อ้างอิง v3.0 แทน)
+  - Android implementation จะตามมาเมื่อ lock components
+
+---
+
 ## 🔮 Upcoming
 
 ### v3.4 (planned)

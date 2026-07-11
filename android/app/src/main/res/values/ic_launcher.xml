@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- AAPT2 needs this item in values/ to point to launcher resources -->
+    <!-- Reference: https://developer.android.com/training/multiscreen/screendensities -->
+    <!-- mipmap-anydpi-v26 (adaptive) + mipmap-anydpi (inset) provides coverage for API 24+ -->
+</resources>

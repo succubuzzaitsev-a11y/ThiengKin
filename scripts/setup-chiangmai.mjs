@@ -1,45 +1,40 @@
 // setup-chiangmai.mjs
 // เที่ยงกิน · Chiang Mai Restaurant Setup Script
-// ดึงร้านอาหารในเชียงใหม่จาก Foursquare Places API
+// ดึงร้านอาหารในเชียงใหม่จาก Foursquare Places API (NEW: places-api.foursquare.com)
 // Output: chiangmai-restaurants.json
 
 const FOURSQUARE_API_KEY = process.env.FOURSQUARE_API_KEY || 'YOUR_API_KEY_HERE';
 
 // Chiang Mai: Old City center
 const CHIANG_MAI_CENTER = { lat: 18.7883, lng: 98.9853 };
-const RADIUS_METERS = 25000; // 25 km — covers Old City + Hang Dong + Mae Rim + San Kamphaeng
+const RADIUS_METERS = 25000; // 25 km
 
-// Foursquare food categories
-// 13065 = Restaurant, 13032 = Café, 13003 = Bakery, 13034 = Coffee Shop
-const FOOD_CATEGORIES = '13065,13032,13003,13034';
+// New Foursquare Places API — May 2026
+// IMPORTANT: `categories` param is IGNORED by new API → use `query` + RELEVANCE
+const FOOD_QUERIES = ['restaurant', 'cafe', 'thai', 'noodle', 'coffee', 'street_food'];
+const MAX_PAGES_PER_QUERY = 3; // 3 × 50 = 150 per query
+const PER_PAGE = 50;
 
-// Travel-mode hot categories
-const TRAVEL_HOT_CATEGORIES = {
-  13065: 'restaurant',
-  13032: 'cafe',
-  13003: 'bakery',
-  13034: 'coffee',
-  13002: 'thai',
-  13004: 'noodle',
-  13005: 'street_food'
-};
+const API_BASE = 'https://places-api.foursquare.com';
+const API_VERSION = '2025-06-17';
 
-async function searchFoursquare(offset = 0) {
+async function searchFoursquare(query, offset = 0) {
   const params = new URLSearchParams({
     ll: `${CHIANG_MAI_CENTER.lat},${CHIANG_MAI_CENTER.lng}`,
     radius: RADIUS_METERS,
-    categories: FOOD_CATEGORIES,
-    limit: 50,
+    query: query,
+    limit: PER_PAGE,
     offset: offset,
-    sort: 'POPULARITY'
+    sort: 'RELEVANCE'
   });
 
-  const url = `https://api.foursquare.com/v3/places/search?${params}`;
-  console.log(`   GET ${url.replace(FOURSQUARE_API_KEY, 'KEY')}`);
+  const url = `${API_BASE}/places/search?${params}`;
+  console.log(`   GET ${url.replace(FOURSQUARE_API_KEY, 'KEY').substring(0, 110)}...`);
 
   const response = await fetch(url, {
     headers: {
-      'Authorization': FOURSQUARE_API_KEY,
+      'Authorization': `Bearer ${FOURSQUARE_API_KEY}`,
+      'X-Places-Api-Version': API_VERSION,
       'Accept': 'application/json'
     }
   });
@@ -52,25 +47,65 @@ async function searchFoursquare(offset = 0) {
   }
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`Foursquare ${response.status}: ${text}`);
+    throw new Error(`Foursquare ${response.status}: ${text.substring(0, 200)}`);
   }
 
   return response.json();
 }
 
+// V2-style food categories mapping
+const V2_CATEGORY_MAP = {
+  'Asian Restaurant': 'restaurant',
+  'Thai Restaurant': 'thai',
+  'Noodle Restaurant': 'noodle',
+  'Café': 'cafe',
+  'Coffee Shop': 'coffee',
+  'Bakery': 'bakery',
+  'Breakfast Spot': 'cafe',
+  'Street Food': 'street_food',
+  'Som Tum Restaurant': 'thai',
+  'Italian Restaurant': 'restaurant',
+  'Vegan and Vegetarian Restaurant': 'restaurant',
+  'Japanese Restaurant': 'restaurant',
+  'Chinese Restaurant': 'restaurant',
+  'Indian Restaurant': 'restaurant',
+  'Korean Restaurant': 'restaurant',
+  'Mexican Restaurant': 'restaurant',
+  'American Restaurant': 'restaurant',
+  'Seafood Restaurant': 'restaurant',
+  'BBQ Joint': 'restaurant',
+  'Pizza Place': 'restaurant',
+  'Burger Joint': 'restaurant',
+  'Food Court': 'restaurant',
+  'Food Truck': 'street_food',
+  'Snack Place': 'street_food',
+  'Tea Room': 'cafe',
+  'Dessert Shop': 'cafe',
+  'Ice Cream Shop': 'cafe',
+  'Juice Bar': 'cafe',
+  'Bubble Tea Shop': 'cafe',
+  'Pastry Shop': 'bakery',
+  'Cafeteria': 'restaurant',
+  'Diner': 'restaurant',
+  'Steakhouse': 'restaurant',
+  'Sushi Restaurant': 'restaurant',
+  'Ramen Restaurant': 'noodle',
+  'Dim Sum Restaurant': 'restaurant',
+  'Hotpot Restaurant': 'restaurant',
+};
+
 function transformPlace(place) {
-  const categoryId = place.categories?.[0]?.id;
   const categoryName = place.categories?.[0]?.name || 'ร้านอาหาร';
-  const categorySlug = TRAVEL_HOT_CATEGORIES[categoryId] || 'restaurant';
+  const categorySlug = V2_CATEGORY_MAP[categoryName] || 'restaurant';
 
   return {
-    id: place.fsq_id,
+    id: place.fsq_place_id,
     name: place.name,
     name_th: place.name,
     category: categoryName,
     category_slug: categorySlug,
-    lat: place.geocodes?.main?.latitude,
-    lng: place.geocodes?.main?.longitude,
+    lat: place.latitude,
+    lng: place.longitude,
     address: place.location?.formatted_address || place.location?.address || '',
     district: place.location?.locality || '',
     province: place.location?.region || 'Chiang Mai',
@@ -79,58 +114,57 @@ function transformPlace(place) {
     website: place.website || null,
     social: place.social_media || {},
     hours: place.hours?.display || null,
-    hours_popular: place.hours?.popular || null,
     rating: null,
     review_count: 0,
-    price: place.price || null,
+    price: place.price ?? null,
+    fsq_url: place.link || null,
     fetched_at: new Date().toISOString()
   };
 }
 
 async function fetchAllPages() {
   const allPlaces = [];
-  let offset = 0;
-  const MAX_PAGES = 4;
-  let totalEstimate = 0;
+  const seenIds = new Set();
 
-  for (let page = 0; page < MAX_PAGES; page++) {
-    console.log(`\n📄 Page ${page + 1}/${MAX_PAGES} (offset ${offset})...`);
+  for (const query of FOOD_QUERIES) {
+    console.log(`\n🔍 Query: "${query}"`);
+    for (let page = 0; page < MAX_PAGES_PER_QUERY; page++) {
+      const offset = page * PER_PAGE;
+      try {
+        const data = await searchFoursquare(query, offset);
+        const places = data.results || [];
 
-    try {
-      const data = await searchFoursquare(offset);
-      const places = data.results || [];
-      totalEstimate = data.context?.total || totalEstimate;
+        if (places.length === 0) {
+          console.log(`   ⏹️  No more results`);
+          break;
+        }
 
-      if (places.length === 0) {
-        console.log('   ⏹️  No more results');
+        let newCount = 0;
+        for (const p of places) {
+          if (p.fsq_place_id && !seenIds.has(p.fsq_place_id)) {
+            seenIds.add(p.fsq_place_id);
+            allPlaces.push(transformPlace(p));
+            newCount++;
+          }
+        }
+
+        console.log(`   ✅ Got ${places.length} (${newCount} new)`);
+
+        if (places.length < PER_PAGE) break;
+        await new Promise(r => setTimeout(r, 1100));
+      } catch (error) {
+        console.error(`   ❌ ${error.message}`);
+        if (error.message.includes('Rate limit')) {
+          await new Promise(r => setTimeout(r, 60000));
+          page--;
+          continue;
+        }
         break;
       }
-
-      const transformed = places.map(transformPlace);
-      allPlaces.push(...transformed);
-
-      console.log(`   ✅ Got ${places.length} places`);
-
-      if (places.length < 50) {
-        console.log('   ⏹️  Last page');
-        break;
-      }
-
-      offset += 50;
-      await new Promise(r => setTimeout(r, 1000));
-    } catch (error) {
-      console.error(`   ❌ ${error.message}`);
-      if (error.message.includes('Rate limit')) {
-        console.log('   ⏸️  รอ 60s แล้วลองใหม่...');
-        await new Promise(r => setTimeout(r, 60000));
-        page--;
-        continue;
-      }
-      break;
     }
   }
 
-  return { allPlaces, totalEstimate };
+  return allPlaces;
 }
 
 async function main() {
@@ -138,52 +172,45 @@ async function main() {
   console.log('━'.repeat(50));
   console.log(`📍 Center: ${CHIANG_MAI_CENTER.lat}, ${CHIANG_MAI_CENTER.lng} (Old City)`);
   console.log(`📏 Radius: ${RADIUS_METERS / 1000} km`);
-  console.log(`🍽️  Categories: Restaurant, Café, Bakery, Coffee`);
+  console.log(`🔍 Queries: ${FOOD_QUERIES.join(', ')}`);
+  console.log(`📄 Max pages per query: ${MAX_PAGES_PER_QUERY} × ${PER_PAGE} = ${MAX_PAGES_PER_QUERY * PER_PAGE}`);
   console.log();
 
   if (FOURSQUARE_API_KEY === 'YOUR_API_KEY_HERE') {
     console.error('❌ ไม่พบ FOURSQUARE_API_KEY\n');
     console.log('📝 วิธีตั้ง:');
-    console.log('   1. สมัครฟรีที่ https://foursquare.com/products/places-api/');
-    console.log('   2. สร้าง Project + API Key (100K calls/month ฟรี)');
+    console.log('   1. สมัครที่ https://foursquare.com/products/places-api/');
+    console.log('   2. สร้าง Project + API Key');
     console.log('   3. รัน:');
-    console.log('      $env:FOURSQUARE_API_KEY="your_key"  (PowerShell)');
-    console.log('      export FOURSQUARE_API_KEY="your_key" (bash)');
+    console.log('      $env:FOURSQUARE_API_KEY="your_key"');
     console.log('   4. node setup-chiangmai.mjs');
     process.exit(1);
   }
 
   const refresh = process.argv.includes('--refresh');
-  if (refresh) {
-    console.log('🔄 Refresh mode — ดึงข้อมูลใหม่ทั้งหมด\n');
-  }
+  if (refresh) console.log('🔄 Refresh mode\n');
 
-  const { allPlaces, totalEstimate } = await fetchAllPages();
-
-  const unique = Array.from(new Map(allPlaces.map(p => [p.id, p])).values());
+  const allPlaces = await fetchAllPages();
 
   console.log('\n' + '━'.repeat(50));
   console.log(`📊 สรุป:`);
-  console.log(`   Total in Chiang Mai (Foursquare): ~${totalEstimate}`);
-  console.log(`   Fetched: ${unique.length} unique restaurants`);
+  console.log(`   Total unique: ${allPlaces.length}`);
 
-  if (unique.length < 50) {
-    console.log(`\n⚠️  Warning: Foursquare coverage ในเชียงใหม์ค่อนข้างบาง (${unique.length} ร้าน)`);
-    console.log('   แนะนำ: เสริมด้วย manual curation ใน Phase 1.5');
-  }
+  const byCat = {};
+  allPlaces.forEach(p => { byCat[p.category_slug] = (byCat[p.category_slug] || 0) + 1; });
+  console.log(`   By category:`, byCat);
 
   const output = {
     metadata: {
       city: 'Chiang Mai',
       center: CHIANG_MAI_CENTER,
       radius_m: RADIUS_METERS,
-      categories: FOOD_CATEGORIES,
-      source: 'Foursquare Places API v3',
+      queries: FOOD_QUERIES,
+      source: 'Foursquare Places API v3 (places-api.foursquare.com)',
       fetched_at: new Date().toISOString(),
-      total_in_city_estimate: totalEstimate,
-      fetched_count: unique.length
+      fetched_count: allPlaces.length
     },
-    restaurants: unique
+    restaurants: allPlaces
   };
 
   const fs = await import('fs');
@@ -194,10 +221,8 @@ async function main() {
   console.log(`\n💾 Saved: ${filename} (${sizeKB} KB)`);
   console.log('\n🎉 Next steps:');
   console.log('   1. node filter-data.mjs   (rating filter + cleanup)');
-  console.log('   2. import เข้า Android Room DB');
-  console.log('   3. เสริม manual curation (ร้านดังที่ Foursquare ไม่มี)');
-  console.log('\n   💡 Tip: ดู preview:');
-  console.log('      node -e "const d=require(\'./chiangmai-restaurants.json\'); console.log(d.restaurants.slice(0,3))"');
+  console.log('   2. node merge-data.mjs    (merge with manual seed)');
+  console.log('   3. import เข้า Android Room DB');
 }
 
 main().catch(err => {

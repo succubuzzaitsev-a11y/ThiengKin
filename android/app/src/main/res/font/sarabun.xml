@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Downloadable Fonts config — Compose reads from GoogleFont.Provider in Type.kt -->
+<!-- This file is reserved for future bundled fallback if Google Fonts unavailable -->
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- Empty: Sarabun loads via Google Downloadable Fonts at runtime -->
+    <!-- If you need offline fallback, add <font> children here with bundled TTF in res/font/ -->
+</font-family>

@@ -23,9 +23,9 @@ const MIN_RATING = 4.0;
 const MIN_REVIEW_COUNT = 1; // มีรีวิวอย่างน้อย 1
 const DELAY_MS = 1100; // 1.1s between calls (Foursquare rate limit)
 
-// Place Details fields ที่ต้องการ
+// Place Details fields ที่ต้องการ (new Places API field names)
 const DETAIL_FIELDS = [
-  'fsq_id',
+  'fsq_place_id',
   'name',
   'rating',
   'stats',
@@ -38,11 +38,16 @@ const DETAIL_FIELDS = [
   'tips'
 ].join(',');
 
+// Foursquare Places API (NEW — May 2026)
+const FOURSQUARE_API_BASE = 'https://places-api.foursquare.com';
+const FOURSQUARE_API_VERSION = '2025-06-17';
+
 async function fetchPlaceDetails(fsqId) {
-  const url = `https://api.foursquare.com/v3/places/${fsqId}?fields=${DETAIL_FIELDS}`;
+  const url = `${FOURSQUARE_API_BASE}/places/${fsqId}?fields=${DETAIL_FIELDS}`;
   const response = await fetch(url, {
     headers: {
-      'Authorization': FOURSQUARE_API_KEY,
+      'Authorization': `Bearer ${FOURSQUARE_API_KEY}`,
+      'X-Places-Api-Version': FOURSQUARE_API_VERSION,
       'Accept': 'application/json'
     }
   });

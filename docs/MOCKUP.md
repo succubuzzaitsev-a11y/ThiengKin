@@ -1,9 +1,27 @@
-# เที่ยงกิน — Pro UI Mockup v2.2
+# เที่ยงกิน — UI Mockup
 
 > **"เปิดแอปก็เจอร้าน"**
 > ธีมสี: 🔴 แดง + 🟡 เหลือง (จากโลโก้ Thieng Tham Development)
+
+---
+
+## ⚠️ Design direction: v3.0 (ทางตรง) — locked 2026-07-11
+
+**ดู mockup ปัจจุบัน:** [**MOCKUP-v3.html**](./MOCKUP-v3.html) (7 screens, single HTML)
+
+**Design system:**
+- 1 font: Sarabun (display 800, body 400) — ไม่ pair serif+sans
+- 4 colors: ink `#0F0F0F` · paper `#FAFAFA` · red `#DC2626` · mustard `#FACC15`
+- 0 texture · single column · real photo placeholders
+
+**v2.2 (เนื้อหาด้านล่าง) เลิกใช้แล้ว** — เก็บไว้เป็น history เท่านั้น
+
+---
+
+# [DEPRECATED] เที่ยงกิน — Pro UI Mockup v2.2
+
 > Material Design 3 · 8dp grid · Real Thai restaurant data
-> ดู HTML version: [MOCKUP.html](../MOCKUP.html) (interactive)
+> เก็บไว้อ้างอิง — ดู v3.0 ด้านบนแทน
 
 ---
 

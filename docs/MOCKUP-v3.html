@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เที่ยงกิน — UI Mockup v3.0 (ทางตรง / Direct Path) · 7 Screens</title>
+<meta name="description" content="v3.0 — Confident Thai Roadside. One typeface, 4 colors, no texture, no bento. 7 screens, all functions from v2.4.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0F0F0F;
+    --ink-2: #5A5A5A;
+    --ink-3: #9A9A9A;
+    --paper: #FAFAFA;
+    --paper-2: #F2F2F2;
+    --line: #E5E5E5;
+    --line-2: #D0D0D0;
+    --red: #DC2626;
+    --red-2: #B91C1C;
+    --mustard: #FACC15;
+    --green: #16A34A;
+
+    --app-ink: #FAFAFA;
+    --app-ink-2: rgba(250, 250, 250, 0.6);
+    --app-ink-3: rgba(250, 250, 250, 0.3);
+    --app-bg: #0F0F0F;
+    --app-card: #1A1A1A;
+    --app-card-2: #242424;
+    --app-line: #2A2A2A;
+    --app-red: #EF4444;
+    --app-green: #4ADE80;
+
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px;
+    --s-6: 24px; --s-7: 32px; --s-8: 40px; --s-9: 56px; --s-10: 80px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); color: var(--ink); }
+  body {
+    font-family: 'Sarabun', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: 'Sarabun', sans-serif; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+  h1 { font-size: clamp(48px, 7vw, 96px); line-height: 0.95; letter-spacing: -0.04em; }
+  h2 { font-size: clamp(32px, 4vw, 48px); line-height: 1; letter-spacing: -0.03em; }
+  h3 { font-size: 22px; line-height: 1.15; }
+  p { color: var(--ink-2); }
+
+  .container { max-width: 1480px; margin: 0 auto; padding: 56px 32px 80px; }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 20px; margin-bottom: 56px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+  .logo .red { color: var(--red); }
+  .topbar .meta { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+
+  .hero { margin-bottom: 80px; max-width: 900px; }
+  .hero .kicker {
+    display: inline-block; padding: 6px 12px; background: var(--ink); color: var(--paper);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero h1 { margin-bottom: 24px; }
+  .hero h1 em { font-style: normal; color: var(--red); }
+  .hero .lede { font-size: 20px; line-height: 1.5; color: var(--ink-2); max-width: 640px; font-weight: 400; }
+  .hero .lede strong { color: var(--ink); font-weight: 700; }
+
+  .why { margin-bottom: 80px; padding: 40px; background: var(--ink); color: var(--paper); }
+  .why h2 { color: var(--paper); font-size: 28px; margin-bottom: 24px; }
+  .why h2 em { color: var(--mustard); font-style: normal; }
+  .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .why-item .num { font-size: 13px; color: var(--mustard); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .why-item h4 { color: var(--paper); font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .why-item p { color: rgba(250, 250, 250, 0.65); font-size: 14px; line-height: 1.55; }
+  .why-item p s { color: rgba(250, 250, 250, 0.35); }
+  .why-item p code { font-family: 'Sarabun', sans-serif; background: rgba(250, 250, 250, 0.1); padding: 2px 6px; border-radius: 3px; font-size: 12.5px; color: var(--mustard); }
+
+  section { margin-bottom: 80px; }
+  .section-head { margin-bottom: 40px; }
+  .section-head .kicker { font-size: 12px; color: var(--ink-2); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }
+  .section-head h2 { max-width: 800px; }
+  .section-head h2 em { font-style: normal; color: var(--red); }
+  .section-head p { font-size: 17px; max-width: 640px; margin-top: 16px; }
+
+  /* === PHONE GRID (7 screens) === */
+  .phones-row { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; }
+  .phones-row.tight { gap: 18px; }
+
+  .phone-frame { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .phone-caption { text-align: center; max-width: 280px; }
+  .phone-caption .num { font-size: 11px; color: var(--red); font-weight: 700; letter-spacing: 0.12em; margin-bottom: 4px; }
+  .phone-caption h4 { font-size: 14px; font-weight: 800; margin-bottom: 4px; color: var(--ink); letter-spacing: -0.01em; }
+  .phone-caption p { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+
+  .phone {
+    width: 360px; height: 740px; background: #000; border-radius: 44px;
+    padding: 10px; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.3);
+  }
+  .phone-screen { width: 100%; height: 100%; background: var(--app-bg); border-radius: 36px; overflow: hidden; position: relative; }
+  .island { width: 110px; height: 30px; background: #000; border-radius: 18px; margin: 8px auto 0; position: relative; z-index: 10; }
+  .phone-status { display: flex; justify-content: space-between; align-items: center; padding: 14px 32px 0; font-size: 14px; font-weight: 700; color: var(--app-ink); font-feature-settings: "tnum"; }
+  .phone-status .right { display: flex; gap: 6px; align-items: center; }
+  .phone-content { padding: 8px 20px 20px; color: var(--app-ink); height: calc(100% - 44px); overflow: hidden; display: flex; flex-direction: column; }
+
+  /* === UI common === */
+  .ui-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 0 6px; }
+  .ui-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(220, 38, 38, 0.15); color: var(--app-red); border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: 0.01em; white-space: nowrap; }
+  .ui-pill .dot { width: 6px; height: 6px; background: var(--app-red); border-radius: 50%; flex-shrink: 0; }
+  .ui-pill.yellow { background: rgba(250, 204, 21, 0.15); color: var(--mustard); }
+  .ui-pill.yellow .dot { background: var(--mustard); }
+  .ui-pill.green { background: rgba(74, 222, 128, 0.12); color: var(--app-green); }
+  .ui-pill.green .dot { background: var(--app-green); }
+  .ui-pill.gray { background: rgba(250, 250, 250, 0.08); color: var(--app-ink-2); }
+  .ui-pill.gray .dot { background: var(--app-ink-2); }
+
+  .ui-avatar { width: 34px; height: 34px; background: var(--ink-2); border-radius: 50%; color: var(--paper); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* === GREETING — single line, no wrap === */
+  .ui-greeting {
+    font-size: 22px; font-weight: 800; color: var(--app-ink);
+    margin: 8px 0 4px; line-height: 1.2; letter-spacing: -0.02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ui-greeting.lg { font-size: 24px; }
+  .ui-subtitle { font-size: 13px; color: var(--app-ink-2); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* === ROUTE LINE === */
+  .ui-route {
+    background: var(--app-card); border: 1px solid var(--app-line);
+    border-radius: 14px; padding: 14px 16px; margin: 12px 0;
+  }
+  .ui-route-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 8px; }
+  .ui-route-from, .ui-route-to { font-size: 13px; font-weight: 700; color: var(--app-ink); white-space: nowrap; }
+  .ui-route-to { color: var(--app-red); }
+  .ui-route-dist { font-size: 11px; color: var(--app-ink-3); font-weight: 500; white-space: nowrap; }
+  .ui-route-line { position: relative; height: 4px; background: var(--app-line); border-radius: 2px; }
+  .ui-route-line .fill { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background: var(--app-red); border-radius: 2px; }
+  .ui-route-stops { display: flex; justify-content: space-between; margin-top: 8px; }
+  .ui-route-stops .stop { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .ui-route-stops .stop .dot { width: 8px; height: 8px; background: var(--app-red); border-radius: 50%; }
+  .ui-route-stops .stop .dot.empty { background: transparent; border: 1.5px solid var(--app-ink-3); }
+  .ui-route-stops .stop .name { font-size: 9.5px; color: var(--app-ink-2); font-weight: 500; white-space: nowrap; }
+
+  /* === INPUT === */
+  .ui-input {
+    background: var(--app-card); border: 1px solid var(--app-line);
+    border-radius: 12px; padding: 13px 16px; display: flex; align-items: center; gap: 10px;
+    margin: 6px 0 10px;
+  }
+  .ui-input .icon { width: 16px; height: 16px; color: var(--app-ink-2); flex-shrink: 0; }
+  .ui-input .text { font-size: 14px; color: var(--app-ink); font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ui-input .placeholder { color: var(--app-ink-3); }
+  .ui-input .arrow { color: var(--app-red); font-weight: 700; flex-shrink: 0; }
+
+  /* === CHIPS === */
+  .ui-chips { display: flex; gap: 6px; margin: 0 0 12px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .ui-chips::-webkit-scrollbar { display: none; }
+  .ui-chip { flex-shrink: 0; padding: 7px 12px; background: var(--app-card); border: 1px solid var(--app-line); border-radius: 999px; font-size: 12px; color: var(--app-ink); font-weight: 600; white-space: nowrap; }
+  .ui-chip.active { background: var(--app-red); color: white; border-color: var(--app-red); }
+
+  /* === LABEL === */
+  .ui-label { display: flex; align-items: center; justify-content: space-between; margin: 12px 0 8px; }
+  .ui-label .left { font-size: 14px; font-weight: 800; color: var(--app-ink); white-space: nowrap; }
+  .ui-label .right { font-size: 12px; color: var(--app-ink-2); font-weight: 600; white-space: nowrap; }
+
+  /* === RESTAURANT CARD === */
+  .rc {
+    background: var(--app-card); border: 1px solid var(--app-line);
+    border-radius: 14px; padding: 14px; margin-bottom: 10px;
+    display: flex; gap: 12px;
+  }
+  .rc-photo {
+    width: 88px; height: 88px; background: var(--app-card-2);
+    border: 1px solid var(--app-line); border-radius: 10px;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    color: var(--app-ink-3); font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  }
+  .rc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
+  .rc-row1 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .rc-eta { font-size: 11px; color: var(--mustard); font-weight: 700; font-feature-settings: "tnum"; white-space: nowrap; }
+  .rc-dist { font-size: 11px; color: var(--app-ink-3); font-feature-settings: "tnum"; white-space: nowrap; }
+  .rc-name { font-size: 15px; font-weight: 700; color: var(--app-ink); line-height: 1.2; margin: 4px 0 6px; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rc-meta { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--app-ink-2); flex-wrap: nowrap; overflow: hidden; }
+  .rc-meta .star { color: var(--mustard); }
+  .rc-meta .dot { width: 3px; height: 3px; background: var(--app-ink-3); border-radius: 50%; flex-shrink: 0; }
+  .rc-meta .open { color: var(--app-green); font-weight: 700; white-space: nowrap; }
+  .rc-meta .text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rc-actions { display: flex; gap: 6px; margin-top: 8px; }
+  .rc-btn { padding: 8px 10px; border-radius: 8px; font-size: 11.5px; font-weight: 700; text-align: center; cursor: pointer; border: none; white-space: nowrap; }
+  .rc-btn-primary { background: var(--app-red); color: white; flex: 1; }
+  .rc-btn-ghost { background: var(--app-card-2); color: var(--app-ink); padding: 8px; flex: 0 0 32px; }
+  .rc-detour { font-size: 10.5px; color: var(--mustard); font-weight: 700; white-space: nowrap; }
+
+  /* === DETAIL === */
+  .ui-detail-img {
+    width: 100%; height: 180px; background: var(--app-card-2);
+    border: 1px solid var(--app-line); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--app-ink-3); font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    margin: 10px 0 12px;
+  }
+  .ui-detail-name { font-size: 22px; font-weight: 800; color: var(--app-ink); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ui-detail-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--app-ink-2); margin-bottom: 12px; white-space: nowrap; overflow: hidden; }
+  .ui-detail-meta .star { color: var(--mustard); }
+  .ui-detail-meta .dot { width: 3px; height: 3px; background: var(--app-ink-3); border-radius: 50%; flex-shrink: 0; }
+
+  .ui-summary {
+    background: var(--app-card); border: 1px solid var(--app-line);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
+  }
+  .ui-summary .label { font-size: 10px; color: var(--mustard); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .ui-summary .text { font-size: 13px; color: var(--app-ink); line-height: 1.5; }
+  .ui-summary .text em { color: var(--app-red); font-style: normal; font-weight: 700; }
+
+  .ui-menu-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--app-line); font-size: 13px; gap: 12px; }
+  .ui-menu-row:last-child { border-bottom: none; }
+  .ui-menu-row .name { color: var(--app-ink); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+  .ui-menu-row .price { color: var(--app-ink-2); font-feature-settings: "tnum"; white-space: nowrap; flex-shrink: 0; }
+
+  .ui-cta {
+    width: 100%; padding: 14px; background: var(--app-red); color: white;
+    border: none; border-radius: 12px; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px;
+    cursor: pointer; white-space: nowrap;
+  }
+  .ui-cta:active { background: var(--red-2); }
+  .ui-cta-ghost {
+    width: 100%; padding: 12px; background: transparent; color: var(--app-ink);
+    border: 1px solid var(--app-line); border-radius: 12px; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px;
+    white-space: nowrap;
+  }
+
+  /* === SKELETON === */
+  .sk-line { background: var(--app-card-2); border-radius: 4px; height: 12px; margin: 6px 0; position: relative; overflow: hidden; }
+  .sk-line::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%); animation: shimmer 1.8s infinite; }
+  @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+  .sk-line.short { width: 35%; }
+  .sk-line.mid { width: 65%; }
+  .sk-card { padding: 14px; background: var(--app-card); border: 1px solid var(--app-line); border-radius: 14px; margin-bottom: 10px; display: flex; gap: 12px; }
+  .sk-photo { width: 88px; height: 88px; background: var(--app-card-2); border-radius: 10px; flex-shrink: 0; position: relative; overflow: hidden; }
+  .sk-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%); animation: shimmer 1.8s infinite; }
+
+  /* === EMPTY / OFFLINE === */
+  .ui-empty { text-align: center; padding: 20px 16px; margin-top: 8px; }
+  .ui-empty-icon { width: 80px; height: 80px; margin: 0 auto 16px; background: var(--app-card); border: 1px solid var(--app-line); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--app-ink-3); }
+  .ui-empty-icon .icon { width: 36px; height: 36px; }
+  .ui-empty h3 { font-size: 20px; font-weight: 800; color: var(--app-ink); margin-bottom: 8px; line-height: 1.2; white-space: nowrap; }
+  .ui-empty p { font-size: 13px; color: var(--app-ink-2); line-height: 1.5; max-width: 240px; margin: 0 auto 20px; }
+
+  .ui-info {
+    background: var(--app-card); border: 1px solid var(--app-line);
+    border-radius: 12px; padding: 12px 14px; margin: 10px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .ui-info .icon { width: 18px; height: 18px; color: var(--mustard); flex-shrink: 0; }
+  .ui-info .text { font-size: 12.5px; color: var(--app-ink); line-height: 1.45; flex: 1; }
+  .ui-info .text strong { color: var(--mustard); font-weight: 700; }
+
+  /* === FAVORITES (light) === */
+  .ui-tabs { display: flex; gap: 0; margin: 10px 0; border-bottom: 1px solid var(--line); }
+  .ui-tab { flex: 1; padding: 8px 4px; font-size: 12px; font-weight: 700; color: var(--ink-2); text-align: center; border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; }
+  .ui-tab.active { color: var(--ink); border-bottom-color: var(--red); }
+  .ui-tab-num { font-size: 10px; color: var(--ink-3); margin-left: 2px; }
+
+  /* === LIGHT VARIANTS === */
+  .phone.light .phone-screen { background: var(--paper); }
+  .phone.light .ui-pill { background: rgba(220, 38, 38, 0.08); color: var(--red); }
+  .phone.light .ui-pill .dot { background: var(--red); }
+  .phone.light .ui-pill.yellow { background: rgba(217, 165, 33, 0.12); color: #B45309; }
+  .phone.light .ui-pill.yellow .dot { background: #B45309; }
+  .phone.light .ui-pill.green { background: rgba(22, 163, 74, 0.1); color: var(--green); }
+  .phone.light .ui-pill.green .dot { background: var(--green); }
+  .phone.light .ui-pill.gray { background: var(--paper-2); color: var(--ink-2); }
+  .phone.light .ui-pill.gray .dot { background: var(--ink-2); }
+  .phone.light .ui-avatar { background: var(--ink-3); color: var(--paper); }
+  .phone.light .ui-greeting { color: var(--ink); }
+  .phone.light .ui-subtitle { color: var(--ink-2); }
+  .phone.light .ui-route { background: white; border-color: var(--line); }
+  .phone.light .ui-route-from { color: var(--ink); }
+  .phone.light .ui-route-to { color: var(--red); }
+  .phone.light .ui-route-dist { color: var(--ink-3); }
+  .phone.light .ui-route-line { background: var(--line); }
+  .phone.light .ui-route-line .fill { background: var(--red); }
+  .phone.light .ui-input { background: white; border-color: var(--line); }
+  .phone.light .ui-input .text { color: var(--ink); }
+  .phone.light .ui-input .placeholder { color: var(--ink-3); }
+  .phone.light .ui-input .arrow { color: var(--red); }
+  .phone.light .ui-chip { background: white; border-color: var(--line); color: var(--ink); }
+  .phone.light .ui-chip.active { background: var(--red); color: white; border-color: var(--red); }
+  .phone.light .ui-label .left { color: var(--ink); }
+  .phone.light .ui-label .right { color: var(--ink-2); }
+  .phone.light .rc { background: white; border-color: var(--line); }
+  .phone.light .rc-photo { background: var(--paper-2); border-color: var(--line); }
+  .phone.light .rc-eta { color: var(--red); }
+  .phone.light .rc-dist { color: var(--ink-3); }
+  .phone.light .rc-name { color: var(--ink); }
+  .phone.light .rc-meta { color: var(--ink-2); }
+  .phone.light .rc-meta .star { color: var(--mustard); }
+  .phone.light .rc-meta .open { color: var(--green); }
+  .phone.light .rc-btn-ghost { background: var(--paper-2); color: var(--ink); }
+  .phone.light .rc-detour { color: var(--red); }
+  .phone.light .ui-detail-img { background: var(--paper-2); border-color: var(--line); }
+  .phone.light .ui-detail-name { color: var(--ink); }
+  .phone.light .ui-detail-meta { color: var(--ink-2); }
+  .phone.light .ui-summary { background: white; border-color: var(--line); }
+  .phone.light .ui-summary .label { color: var(--red); }
+  .phone.light .ui-summary .text { color: var(--ink); }
+  .phone.light .ui-menu-row { border-color: var(--line); }
+  .phone.light .ui-menu-row .name { color: var(--ink); }
+  .phone.light .ui-cta-ghost { color: var(--ink); border-color: var(--line); }
+  .phone.light .phone-status { color: var(--ink); }
+  .phone.light .ui-tab { color: var(--ink-2); border-color: var(--paper); }
+  .phone.light .ui-tab.active { color: var(--ink); border-color: var(--red); }
+  .phone.light .ui-tab-num { color: var(--ink-3); }
+  .phone.light .ui-info { background: white; border-color: var(--line); }
+  .phone.light .ui-info .text { color: var(--ink); }
+  .phone.light .ui-info .text strong { color: #B45309; }
+  .phone.light .sk-card { background: white; border-color: var(--line); }
+  .phone.light .sk-photo { background: var(--paper-2); }
+  .phone.light .sk-line { background: var(--paper-2); }
+  .phone.light .sk-line::after { background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%); }
+
+  /* === DESIGN TOKENS === */
+  .tokens { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; }
+  .token-card { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+  .token-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 16px; }
+  .swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .sw { display: flex; flex-direction: column; gap: 6px; }
+  .sw-color { width: 100%; aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--line); }
+  .sw-name { font-size: 11px; font-weight: 700; }
+  .sw-hex { font-size: 10px; color: var(--ink-3); font-weight: 500; }
+
+  .type-sample { padding: 12px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 80px 1fr; align-items: baseline; gap: 16px; }
+  .type-sample:last-child { border-bottom: none; }
+  .type-sample .name { font-size: 11px; color: var(--ink-3); font-weight: 700; }
+  .type-sample .spec { color: var(--ink); }
+  .type-sample .spec.h1 { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+  .type-sample .spec.h2 { font-size: 22px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+  .type-sample .spec.h3 { font-size: 17px; font-weight: 800; }
+  .type-sample .spec.body { font-size: 14px; font-weight: 400; }
+  .type-sample .spec.caption { font-size: 12px; color: var(--ink-2); }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--ink); font-size: 12px; color: var(--ink-2); display: flex; justify-content: space-between; }
+  footer strong { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <div class="logo">เที่ยงกิน<span class="red">.</span></div>
+    <div class="meta">v3.0 · ทางตรง · 7 screens · 11 JUL 2026</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="kicker">v3.0 · ทางตรง · 7 screens</div>
+    <h1>ดูเหมือน<br>แอป<em>ไทย</em>.</h1>
+    <p class="lede">
+      v2.4 พยายาม "ดูพรีเมียม" ด้วย editorial newspaper + Fraunces + warm cream + bento —
+      แต่ทั้งหมดนั้นคือ <strong>AI design portfolio's 2024 starter pack</strong>
+      v3.0 เลย <strong>กลับด้าน</strong>: ใช้ Sarabun ตัวเดียว, 4 สี, ไม่มี texture, single column —
+      แล้วให้ <strong>route line จริงๆ</strong> เป็นตัวเอกของดีไซน์
+    </p>
+  </div>
+
+  <!-- WHY V3.0 -->
+  <div class="why">
+    <h2>3 สิ่งที่ v3.0 <em>ไม่ทำ</em> (เพราะ AI ทำ)</h2>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="num">01</div>
+        <h4>ไม่ pair serif + sans</h4>
+        <p><s>Fraunces + IBM Plex</s><br>ใช้ <code>Sarabun</code> ตัวเดียว — น้ำหนัก 800/700/400 ทำหน้าที่แทน serif</p>
+      </div>
+      <div class="why-item">
+        <div class="num">02</div>
+        <h4>ไม่ใส่ texture</h4>
+        <p><s>SVG noise 3-5% ทุกการ์ด</s><br>พื้นเรียบ ขอบ 1px — premium = ไม่ปลอมเป็นกระดาษ</p>
+      </div>
+      <div class="why-item">
+        <div class="num">03</div>
+        <h4>ไม่ทำ bento</h4>
+        <p><s>1 hero + 2 medium + 4 small</s><br>Single column scroll — Travel = primary, card stack เป็นหลัก</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== ROW 1: Travel, Route Result, Detail ========== -->
+  <section>
+    <div class="section-head">
+      <div class="kicker">Row 1 · Primary Flow (Dark)</div>
+      <h2>Travel Home · Route Result · <em>Restaurant Detail</em></h2>
+      <p>3 หน้าหลักที่ user เจอบ่อยสุด — ทั้งหมดอยู่ในโหมดมืดเพราะใช้ตอนขับรถ</p>
+    </div>
+
+    <div class="phones-row">
+
+      <!-- Phone 1: Travel Home -->
+      <div class="phone-frame">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <div class="phone-status">
+              <span>9:41</span>
+              <div class="right">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V10L12 2 2 10v12zm2-9.5V20h4v-7h8v7h4v-7.5l-8-6.5-8 6.5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 21h-2v-7h2v7z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="ui-head">
+                <div class="ui-pill"><span class="dot"></span>กำลังขับรถ</div>
+                <div class="ui-avatar">ส</div>
+              </div>
+              <div class="ui-greeting">จะไปไหนดีวันนี้?</div>
+              <div class="ui-subtitle">5 จุดแวะบนทางหลวง ใกล้คุณ</div>
+
+              <div class="ui-route">
+                <div class="ui-route-top">
+                  <div class="ui-route-from">กรุงเทพ</div>
+                  <div class="ui-route-dist">700 กม. · 8 ชม.</div>
+                  <div class="ui-route-to">เชียงใหม่</div>
+                </div>
+                <div class="ui-route-line"><div class="fill"></div></div>
+                <div class="ui-route-stops">
+                  <div class="stop"><div class="dot"></div><div class="name">กรุงเทพ</div></div>
+                  <div class="stop"><div class="dot empty"></div><div class="name">นครปฐม</div></div>
+                  <div class="stop"><div class="dot"></div><div class="name">กำแพงเพชร</div></div>
+                  <div class="stop"><div class="dot empty"></div><div class="name">ลำปาง</div></div>
+                  <div class="stop"><div class="dot"></div><div class="name">เชียงใหม่</div></div>
+                </div>
+              </div>
+
+              <div class="ui-input">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span class="text placeholder">เปลี่ยนจุดหมาย...</span>
+                <span class="arrow">→</span>
+              </div>
+
+              <div class="ui-chips">
+                <div class="ui-chip active">ทั้งหมด</div>
+                <div class="ui-chip">ริมทาง</div>
+                <div class="ui-chip">เปิดเช้า</div>
+                <div class="ui-chip">คนท้องถิ่น</div>
+                <div class="ui-chip">ของฝาก</div>
+              </div>
+
+              <div class="ui-label">
+                <div class="left">ใกล้คุณ · เรียงตาม ETA</div>
+                <div class="right">ดูทั้งหมด</div>
+              </div>
+
+              <div class="rc">
+                <div class="rc-photo">FOOD</div>
+                <div class="rc-body">
+                  <div>
+                    <div class="rc-row1">
+                      <div class="rc-eta">อีก 12 นาที</div>
+                      <div class="rc-dist">800 ม.</div>
+                    </div>
+                    <div class="rc-name">ร้านลุงโภชนา</div>
+                    <div class="rc-meta">
+                      <span class="text"><span class="star">★</span> 4.7</span>
+                      <span class="dot"></span>
+                      <span class="text">280 รีวิว</span>
+                      <span class="dot"></span>
+                      <span class="open">เปิดอยู่</span>
+                    </div>
+                  </div>
+                  <div class="rc-actions">
+                    <div class="rc-btn rc-btn-primary">นำทาง</div>
+                    <div class="rc-btn rc-btn-ghost">♡</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <div class="num">SCREEN 01</div>
+          <h4>Travel Home</h4>
+          <p>Auto-detect + route line + 5 จุดแวะเรียงตาม ETA</p>
+        </div>
+      </div>
+
+      <!-- Phone 2: Route Result -->
+      <div class="phone-frame">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <div class="phone-status">
+              <span>9:41</span>
+              <div class="right">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V10L12 2 2 10v12zm2-9.5V20h4v-7h8v7h4v-7.5l-8-6.5-8 6.5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 21h-2v-7h2v7z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="ui-head">
+                <div class="ui-pill yellow"><span class="dot"></span>บนเส้นทาง</div>
+                <div class="ui-avatar">←</div>
+              </div>
+              <div class="ui-greeting">5 จุดแวะแนะนำ</div>
+              <div class="ui-subtitle">กรุงเทพ → เชียงใหม่ · 700 กม.</div>
+
+              <div class="ui-route">
+                <div class="ui-route-top">
+                  <div class="ui-route-from">กรุงเทพ</div>
+                  <div class="ui-route-dist">+58 นาที detour</div>
+                  <div class="ui-route-to">เชียงใหม่</div>
+                </div>
+                <div class="ui-route-line">
+                  <div class="fill" style="width: 35%; background: linear-gradient(90deg, var(--app-red) 0%, var(--app-red) 35%, var(--mustard) 35%, var(--mustard) 60%, var(--app-ink-3) 60%, var(--app-ink-3) 100%);"></div>
+                </div>
+                <div class="ui-route-stops">
+                  <div class="stop"><div class="dot"></div><div class="name">กรุงเทพ</div></div>
+                  <div class="stop"><div class="dot empty"></div><div class="name">นครปฐม</div></div>
+                  <div class="stop"><div class="dot"></div><div class="name">กำแพงเพชร</div></div>
+                  <div class="stop"><div class="dot empty"></div><div class="name">ลำปาง</div></div>
+                  <div class="stop"><div class="dot"></div><div class="name">เชียงใหม่</div></div>
+                </div>
+              </div>
+
+              <div class="ui-chips">
+                <div class="ui-chip active">แนะนำ</div>
+                <div class="ui-chip">คนท้องถิ่น</div>
+                <div class="ui-chip">เปิดอยู่</div>
+                <div class="ui-chip">เรียง detour น้อย</div>
+              </div>
+
+              <div class="rc">
+                <div class="rc-photo">FOOD</div>
+                <div class="rc-body">
+                  <div>
+                    <div class="rc-row1">
+                      <div class="rc-eta">อีก 30 นาที</div>
+                      <div class="rc-detour">+8 นาที</div>
+                    </div>
+                    <div class="rc-name">ร้านลุงโภชนา</div>
+                    <div class="rc-meta">
+                      <span class="text"><span class="star">★</span> 4.7</span>
+                      <span class="dot"></span>
+                      <span class="text">280 รีวิว</span>
+                      <span class="dot"></span>
+                      <span class="open">เปิดอยู่</span>
+                    </div>
+                  </div>
+                  <div class="rc-actions">
+                    <div class="rc-btn rc-btn-primary">นำทาง</div>
+                    <div class="rc-btn rc-btn-ghost">♡</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rc">
+                <div class="rc-photo">FOOD</div>
+                <div class="rc-body">
+                  <div>
+                    <div class="rc-row1">
+                      <div class="rc-eta">อีก 1ชม. 15 นาที</div>
+                      <div class="rc-detour">+5 นาที</div>
+                    </div>
+                    <div class="rc-name">ก๋วยเตี๋ยวลูกชาย</div>
+                    <div class="rc-meta">
+                      <span class="text"><span class="star">★</span> 4.8</span>
+                      <span class="dot"></span>
+                      <span class="text">1.2K รีวิว</span>
+                      <span class="dot"></span>
+                      <span class="open">เปิดอยู่</span>
+                    </div>
+                  </div>
+                  <div class="rc-actions">
+                    <div class="rc-btn rc-btn-primary">นำทาง</div>
+                    <div class="rc-btn rc-btn-ghost">♡</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <div class="num">SCREEN 02</div>
+          <div class="phone-caption">
+            <h4>Route Result</h4>
+            <p>5 จุดแวะเรียงตาม ETA · detour time ชัด · สลับคนท้องถิ่น/เปิดอยู่</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 3: Restaurant Detail -->
+      <div class="phone-frame">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <div class="phone-status">
+              <span>9:41</span>
+              <div class="right">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V10L12 2 2 10v12zm2-9.5V20h4v-7h8v7h4v-7.5l-8-6.5-8 6.5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 21h-2v-7h2v7z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="ui-head">
+                <div class="ui-pill yellow"><span class="dot"></span>คนท้องถิ่นแนะนำ</div>
+                <div class="ui-avatar">♡</div>
+              </div>
+
+              <div class="ui-detail-img">FOOD PHOTO</div>
+
+              <div class="ui-detail-name">ร้านลุงโภชนา</div>
+              <div class="ui-detail-meta">
+                <span><span class="star">★</span> <strong style="color: var(--app-ink);">4.7</strong></span>
+                <span class="dot"></span>
+                <span>280 รีวิว</span>
+                <span class="dot"></span>
+                <span>เปิด 32 ปี</span>
+              </div>
+
+              <div class="ui-summary">
+                <div class="label">สรุปรีวิว (Ai)</div>
+                <div class="text">ลูกค้าชอบ <em>รสชาติจัดจ้าน</em> และ <em>ราคาถูก</em> เหมาะกับคนขับรถทางไกล — แนะนำ <em>ข้าวราดแกง</em></div>
+              </div>
+
+              <div class="ui-label">
+                <div class="left">เมนูเด่น</div>
+                <div class="right">ทั้งหมด →</div>
+              </div>
+              <div class="ui-menu-row"><span class="name">ข้าวราดแกง</span><span class="price">45 บาท</span></div>
+              <div class="ui-menu-row"><span class="name">ไข่เจียว</span><span class="price">30 บาท</span></div>
+              <div class="ui-menu-row"><span class="name">ต้มยำกุ้ง</span><span class="price">120 บาท</span></div>
+
+              <div class="ui-cta">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                นำทางไปร้านนี้
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <div class="num">SCREEN 03</div>
+          <h4>Restaurant Detail</h4>
+          <p>รูป · เมนู · สรุปรีวิว (Ai) · ปุ่มนำทางใหญ่</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== ROW 2: Near-me, Loading, Empty ========== -->
+  <section>
+    <div class="section-head">
+      <div class="kicker">Row 2 · States (Light + Dark)</div>
+      <h2>Near-me · <em>Loading</em> · Empty/Offline</h2>
+      <p>โหมดจอดรถ + state ที่ user เจอแต่ละวัน — ไม่ใช่ afterthought</p>
+    </div>
+
+    <div class="phones-row">
+
+      <!-- Phone 4: Near-me (light) -->
+      <div class="phone-frame">
+        <div class="phone light">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <div class="phone-status">
+              <span>9:41</span>
+              <div class="right">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V10L12 2 2 10v12zm2-9.5V20h4v-7h8v7h4v-7.5l-8-6.5-8 6.5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 21h-2v-7h2v7z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="ui-head">
+                <div class="ui-pill"><span class="dot"></span>ใกล้คุณ</div>
+                <div class="ui-avatar">ส</div>
+              </div>
+              <div class="ui-greeting">ร้านแถวนี้</div>
+              <div class="ui-subtitle">เชียงใหม่ · ในรัศมี 3 กม.</div>
+
+              <div class="ui-input">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <span class="text placeholder">ค้นหาร้าน...</span>
+              </div>
+
+              <div class="ui-chips">
+                <div class="ui-chip active">ทั้งหมด</div>
+                <div class="ui-chip">ก๋วยเตี๋ยว</div>
+                <div class="ui-chip">ข้าวราดแกง</div>
+                <div class="ui-chip">กาแฟ</div>
+                <div class="ui-chip">เปิดดึก</div>
+              </div>
+
+              <div class="ui-label">
+                <div class="left">12 ร้าน · เรียงตามระยะ</div>
+                <div class="right">กรอง ▾</div>
+              </div>
+
+              <div class="rc">
+                <div class="rc-photo">FOOD</div>
+                <div class="rc-body">
+                  <div>
+                    <div class="rc-row1">
+                      <div class="rc-eta">300 ม.</div>
+                      <div class="rc-dist">เดิน 4 นาที</div>
+                    </div>
+                    <div class="rc-name">ข้าวซอยลำดวน</div>
+                    <div class="rc-meta">
+                      <span class="text"><span class="star">★</span> 4.6</span>
+                      <span class="dot"></span>
+                      <span class="text">420 รีวิว</span>
+                      <span class="dot"></span>
+                      <span class="open">เปิดอยู่</span>
+                    </div>
+                  </div>
+                  <div class="rc-actions">
+                    <div class="rc-btn rc-btn-primary">นำทาง</div>
+                    <div class="rc-btn rc-btn-ghost">♡</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rc">
+                <div class="rc-photo">FOOD</div>
+                <div class="rc-body">
+                  <div>
+                    <div class="rc-row1">
+                      <div class="rc-eta">800 ม.</div>
+                      <div class="rc-dist">เดิน 10 นาที</div>
+                    </div>
+                    <div class="rc-name">ไก่ย่างป้าต้อย</div>
+                    <div class="rc-meta">
+                      <span class="text"><span class="star">★</span> 4.5</span>
+                      <span class="dot"></span>
+                      <span class="text">180 รีวิว</span>
+                      <span class="dot"></span>
+                      <span class="open">เปิดอยู่</span>
+                    </div>
+                  </div>
+                  <div class="rc-actions">
+                    <div class="rc-btn rc-btn-primary">นำทาง</div>
+                    <div class="rc-btn rc-btn-ghost">♡</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <div class="num">SCREEN 04</div>
+          <h4>Near-me</h4>
+          <p>โหมดจอดรถ · filter เต็ม · เรียงตามระยะ</p>
+        </div>
+      </div>
+
+      <!-- Phone 5: Loading -->
+      <div class="phone-frame">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <div class="phone-status">
+              <span>9:41</span>
+              <div class="right">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V10L12 2 2 10v12zm2-9.5V20h4v-7h8v7h4v-7.5l-8-6.5-8 6.5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 21h-2v-7h2v7z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="ui-head">
+                <div class="ui-pill gray"><span class="dot"></span>กำลังโหลด</div>
+                <div class="ui-avatar">ส</div>
+              </div>
+              <div class="ui-greeting">กำลังหาร้านบนเส้นทาง...</div>
+              <div class="ui-subtitle">คาดว่าจะเจอ 5-10 ร้าน ใน 2 วิ</div>
+
+              <div class="sk-card">
+                <div class="sk-photo"></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div class="sk-line short"></div>
+                  <div class="sk-line mid"></div>
+                  <div class="sk-line short"></div>
+                </div>
+              </div>
+
+              <div class="sk-card">
+                <div class="sk-photo"></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div class="sk-line short"></div>
+                  <div class="sk-line mid"></div>
+                  <div class="sk-line short"></div>
+                </div>
+              </div>
+
+              <div class="sk-card">
+                <div class="sk-photo"></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div class="sk-line short"></div>
+                  <div class="sk-line mid"></div>
+                  <div class="sk-line short"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <div class="num">SCREEN 05</div>
+          <h4>Loading State</h4>
+          <p>Skeleton โชว์โครงจริง · "คาดว่าจะเจอ 5-10 ร้าน" ลด perceived wait</p>
+        </div>
+      </div>
+
+      <!-- Phone 6: Empty/Offline -->
+      <div class="phone-frame">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <div class="phone-status">
+              <span>9:41</span>
+              <div class="right">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V10L12 2 2 10v12zm2-9.5V20h4v-7h8v7h4v-7.5l-8-6.5-8 6.5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 21h-2v-7h2v7z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="ui-head">
+                <div class="ui-pill green"><span class="dot"></span>Offline</div>
+                <div class="ui-avatar">ส</div>
+              </div>
+              <div class="ui-greeting">เน็ตหลุด แต่ยังมีร้าน</div>
+              <div class="ui-subtitle">ใช้ร้านที่โหลดไว้ล่วงหน้า 47 ร้าน</div>
+
+              <div class="ui-info">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+                <div class="text">โหลดข้อมูลไว้ตอน <strong>เชื่อมต่อ WiFi ก่อนออกเดินทาง</strong> จะมีร้านใช้แม้ไม่มีสัญญาณ</div>
+              </div>
+
+              <div class="ui-empty">
+                <div class="ui-empty-icon">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/><path d="M5 13a10 10 0 0 1 5.24-2.76"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                </div>
+                <h3>ใช้ร้าน offline</h3>
+                <p>ร้านที่โหลดไว้ก่อนออกเดินทาง ใช้ได้ทันทีแม้ไม่มีสัญญาณ</p>
+                <div class="ui-cta">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  ใช้ร้าน 47 ร้าน
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <div class="num">SCREEN 06</div>
+          <h4>Empty / Offline</h4>
+          <p>"เปิดแอปต้องเจอ" — แม้เน็ตหลุด ก็มีร้านให้</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== ROW 3: Favorites (centered) ========== -->
+  <section>
+    <div class="section-head">
+      <div class="kicker">Row 3 · Bonus (Light)</div>
+      <h2><em>Favorites</em> · ร้านที่บันทึกไว้</h2>
+      <p>สำหรับ power user ที่กลับมาเช็คร้านเดิม — เรียงตามที่บันทึกล่าสุด</p>
+    </div>
+
+    <div class="phones-row">
+      <div class="phone-frame">
+        <div class="phone light">
+          <div class="phone-screen">
+            <div class="island"></div>
+            <div class="phone-status">
+              <span>9:41</span>
+              <div class="right">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V10L12 2 2 10v12zm2-9.5V20h4v-7h8v7h4v-7.5l-8-6.5-8 6.5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 21h-2v-7h2v7z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="ui-head">
+                <div class="ui-pill yellow"><span class="dot"></span>รายการโปรด</div>
+                <div class="ui-avatar">ส</div>
+              </div>
+              <div class="ui-greeting">ร้านที่บันทึกไว้</div>
+              <div class="ui-subtitle">12 ร้าน · เรียงตามที่บันทึกล่าสุด</div>
+
+              <div class="ui-tabs">
+                <div class="ui-tab active">ล่าสุด <span class="ui-tab-num">12</span></div>
+                <div class="ui-tab">ตามจังหวัด</div>
+                <div class="ui-tab">ตาม rating</div>
+              </div>
+
+              <div class="rc">
+                <div class="rc-photo">FOOD</div>
+                <div class="rc-body">
+                  <div>
+                    <div class="rc-row1">
+                      <div class="rc-eta">2 วันก่อน</div>
+                      <div class="rc-dist">เชียงใหม่</div>
+                    </div>
+                    <div class="rc-name">ข้าวซอยลำดวน</div>
+                    <div class="rc-meta">
+                      <span class="text"><span class="star">★</span> 4.6</span>
+                      <span class="dot"></span>
+                      <span class="text">420 รีวิว</span>
+                      <span class="dot"></span>
+                      <span class="open">เปิดอยู่</span>
+                    </div>
+                  </div>
+                  <div class="rc-actions">
+                    <div class="rc-btn rc-btn-primary">นำทาง</div>
+                    <div class="rc-btn rc-btn-ghost" style="background: var(--red); color: white;">♥</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rc">
+                <div class="rc-photo">FOOD</div>
+                <div class="rc-body">
+                  <div>
+                    <div class="rc-row1">
+                      <div class="rc-eta">1 สัปดาห์ก่อน</div>
+                      <div class="rc-dist">นครปฐม</div>
+                    </div>
+                    <div class="rc-name">ก๋วยเตี๋ยวลูกชาย</div>
+                    <div class="rc-meta">
+                      <span class="text"><span class="star">★</span> 4.8</span>
+                      <span class="dot"></span>
+                      <span class="text">1.2K รีวิว</span>
+                      <span class="dot"></span>
+                      <span class="open">เปิดอยู่</span>
+                    </div>
+                  </div>
+                  <div class="rc-actions">
+                    <div class="rc-btn rc-btn-primary">นำทาง</div>
+                    <div class="rc-btn rc-btn-ghost" style="background: var(--red); color: white;">♥</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rc">
+                <div class="rc-photo">FOOD</div>
+                <div class="rc-body">
+                  <div>
+                    <div class="rc-row1">
+                      <div class="rc-eta">2 สัปดาห์ก่อน</div>
+                      <div class="rc-dist">กำแพงเพชร</div>
+                    </div>
+                    <div class="rc-name">ร้านลุงโภชนา</div>
+                    <div class="rc-meta">
+                      <span class="text"><span class="star">★</span> 4.7</span>
+                      <span class="dot"></span>
+                      <span class="text">280 รีวิว</span>
+                      <span class="dot"></span>
+                      <span class="open">เปิดอยู่</span>
+                    </div>
+                  </div>
+                  <div class="rc-actions">
+                    <div class="rc-btn rc-btn-primary">นำทาง</div>
+                    <div class="rc-btn rc-btn-ghost" style="background: var(--red); color: white;">♥</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <div class="num">SCREEN 07</div>
+          <h4>Favorites</h4>
+          <p>ร้านที่บันทึกไว้ · 3 sort tabs (ล่าสุด/จังหวัด/rating)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESIGN TOKENS -->
+  <section>
+    <div class="section-head">
+      <div class="kicker">Design System</div>
+      <h2><em>4</em> สี, <em>1</em> font, <em>0</em> texture</h2>
+      <p>เท่าที่จำเป็นจริงๆ — ไม่ใช่เท่าที่ "น่าจะดูดี" เพราะ AI แนะนำ</p>
+    </div>
+
+    <div class="tokens">
+      <div class="token-card">
+        <h3>สี — 4 สี</h3>
+        <div class="swatches">
+          <div class="sw">
+            <div class="sw-color" style="background: #0F0F0F;"></div>
+            <div class="sw-name">Ink</div>
+            <div class="sw-hex">#0F0F0F</div>
+          </div>
+          <div class="sw">
+            <div class="sw-color" style="background: #FAFAFA;"></div>
+            <div class="sw-name">Paper</div>
+            <div class="sw-hex">#FAFAFA</div>
+          </div>
+          <div class="sw">
+            <div class="sw-color" style="background: #DC2626;"></div>
+            <div class="sw-name">Red · Brand</div>
+            <div class="sw-hex">#DC2626</div>
+          </div>
+          <div class="sw">
+            <div class="sw-color" style="background: #FACC15;"></div>
+            <div class="sw-name">Mustard</div>
+            <div class="sw-hex">#FACC15</div>
+          </div>
+        </div>
+        <p style="margin-top: 16px; font-size: 12.5px; line-height: 1.55;">
+          Semantic เสริม: <strong style="color: var(--ink);">เขียว #16A34A</strong> = "เปิดอยู่" (universal signal)<br>
+          <strong style="color: var(--ink);">แดง = action, เหลือง = rating + active state, เขียว = open</strong>
+        </p>
+      </div>
+
+      <div class="token-card">
+        <h3>Font — Sarabun ตัวเดียว</h3>
+        <div class="type-sample">
+          <div class="name">H1 · 22</div>
+          <div class="spec h1">จะไปไหนดีวันนี้?</div>
+        </div>
+        <div class="type-sample">
+          <div class="name">H2 · 22</div>
+          <div class="spec h2">ร้านลุงโภชนา</div>
+        </div>
+        <div class="type-sample">
+          <div class="name">H3 · 17</div>
+          <div class="spec h3">ร้านแถวนี้</div>
+        </div>
+        <div class="type-sample">
+          <div class="name">Body · 14</div>
+          <div class="spec body">ลูกค้าชอบรสชาติจัดจ้าน และราคาถูก</div>
+        </div>
+        <div class="type-sample">
+          <div class="name">Caption · 12</div>
+          <div class="spec caption">5 จุดแวะบนทางหลวง ใกล้คุณ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DECISION TABLE -->
+  <section>
+    <div class="section-head">
+      <div class="kicker">v2.4 → v3.0</div>
+      <h2>5 ตัดสินใจที่ <em>ลด AI smell</em></h2>
+    </div>
+    <div style="background: white; border: 1px solid var(--line); border-radius: 14px; overflow: hidden;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <thead>
+          <tr style="background: var(--ink); color: var(--paper);">
+            <th style="padding: 14px 20px; text-align: left; font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">Decision</th>
+            <th style="padding: 14px 20px; text-align: left; font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">v2.4 (AI)</th>
+            <th style="padding: 14px 20px; text-align: left; font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mustard);">v3.0 (ทางตรง)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top: 1px solid var(--line);">
+            <td style="padding: 14px 20px; font-weight: 700;">Font</td>
+            <td style="padding: 14px 20px; color: var(--ink-2);">Fraunces + IBM Plex + JetBrains Mono</td>
+            <td style="padding: 14px 20px; color: var(--ink); font-weight: 700;">Sarabun ตัวเดียว (800/700/400)</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--line); background: var(--paper-2);">
+            <td style="padding: 14px 20px; font-weight: 700;">สี</td>
+            <td style="padding: 14px 20px; color: var(--ink-2);">12 tokens · warm tints · sage · gold</td>
+            <td style="padding: 14px 20px; color: var(--ink); font-weight: 700;">4 สี: ink · paper · #DC2626 · #FACC15</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--line);">
+            <td style="padding: 14px 20px; font-weight: 700;">Texture</td>
+            <td style="padding: 14px 20px; color: var(--ink-2);">SVG noise 3-5% ทุกการ์ด</td>
+            <td style="padding: 14px 20px; color: var(--ink); font-weight: 700;">ไม่มี texture เลย</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--line); background: var(--paper-2);">
+            <td style="padding: 14px 20px; font-weight: 700;">Layout</td>
+            <td style="padding: 14px 20px; color: var(--ink-2);">Bento (1 hero + 2 medium + 4 small)</td>
+            <td style="padding: 14px 20px; color: var(--ink); font-weight: 700;">Single column scroll</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--line);">
+            <td style="padding: 14px 20px; font-weight: 700;">Image</td>
+            <td style="padding: 14px 20px; color: var(--ink-2);">Gradient + emoji icon (AI default)</td>
+            <td style="padding: 14px 20px; color: var(--ink); font-weight: 700;">Gray "FOOD" placeholder — สำหรับรูปจริง</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div>เที่ยงกิน · v3.0 ทางตรง</div>
+    <div><strong>7 screens</strong> · <strong>1 component</strong> · <strong>0 texture</strong></div>
+  </footer>
+
+</div>
+</body>
+</html>

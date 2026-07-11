@@ -19,6 +19,16 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
+
+        // Foursquare Places API key (Pro tier, default fields = FREE)
+        // - ถ้า key ว่าง → Repository จะ skip FSQ fetch (ทำงานได้แค่ OSM)
+        // - วิธีตั้ง: สร้าง Foursquare Developer Account → https://foursquare.com/products/places-api/
+        //   → คัดลอก API Key → ใส่ใน gradle.properties หรือ env FOURSQUARE_API_KEY
+        val foursquareKey: String =
+            (findProperty("FOURSQUARE_API_KEY") as? String)
+                ?: System.getenv("FOURSQUARE_API_KEY")
+                ?: ""
+        buildConfigField("String", "FOURSQUARE_API_KEY", "\"$foursquareKey\"")
     }
 
     buildTypes {
@@ -93,4 +103,8 @@ dependencies {
 
     // Serialization (สำหรับ JSON import)
     implementation(libs.kotlinx.serialization.json)
+
+    // HTTP (OSM Overpass + Foursquare)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
 }

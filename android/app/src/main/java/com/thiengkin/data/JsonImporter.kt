@@ -66,6 +66,11 @@ class JsonImporter(
         photoUrl = null,
         menuText = null,
         aiSummary = null,
+        // Phase 2 defaults (manual seed ไม่มี city)
+        cityId = "",
+        openingHours = null,
+        capacity = null,
+        sourceUpdatedAt = null,
     )
 
     @Serializable

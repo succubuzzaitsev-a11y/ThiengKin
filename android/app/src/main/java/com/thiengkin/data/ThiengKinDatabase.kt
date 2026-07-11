@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [Restaurant::class],
-    version = 2,
+    version = 3,  // v3: + city_id, opening_hours, capacity, source_updated_at
     exportSchema = false,
 )
 @TypeConverters(Converters::class)

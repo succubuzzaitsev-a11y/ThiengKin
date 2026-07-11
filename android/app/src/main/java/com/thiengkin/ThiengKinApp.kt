@@ -8,6 +8,7 @@ import com.thiengkin.data.LocationRepository
 import com.thiengkin.data.RestaurantDao
 import com.thiengkin.data.RestaurantRepository
 import com.thiengkin.data.ThiengKinDatabase
+import com.thiengkin.data.remote.FoursquareClient
 import com.thiengkin.ui.screens.travel.TravelHomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
  * 1. Room database (singleton)
  * 2. JSON importer (runs once on first launch)
  * 3. Repository singleton (wired into TravelHomeViewModel.defaultRepository)
+ *    - Phase 2: มี OsmClient + FoursquareClient (optional)
  * 4. LocationRepository (singleton — current GPS fix)
  *
  * Phase 1.5 (planned): replace singletons with Hilt @Inject
@@ -50,7 +52,20 @@ class ThiengKinApp : Application() {
         database = ThiengKinDatabase.get(this)
         val dao: RestaurantDao = database.restaurantDao()
 
-        repository = RestaurantRepository(dao)
+        // Foursquare client — null ถ้าไม่ได้ตั้ง API key
+        val fsqKey = BuildConfig.FOURSQUARE_API_KEY
+        val fsqClient = if (fsqKey.isNotBlank()) {
+            Log.i(TAG, "Foursquare client ENABLED (key configured)")
+            FoursquareClient(apiKey = fsqKey)
+        } else {
+            Log.w(TAG, "Foursquare client DISABLED (no API key in BuildConfig)")
+            null
+        }
+
+        repository = RestaurantRepository(
+            dao = dao,
+            fsqClient = fsqClient,
+        )
         jsonImporter = JsonImporter(this, dao)
         locationRepository = LocationRepository(this)
 
@@ -58,7 +73,7 @@ class ThiengKinApp : Application() {
         TravelHomeViewModel.defaultRepository = repository
         TravelHomeViewModel.defaultLocationRepository = locationRepository
 
-        // First-launch import
+        // First-launch import (manual seed from assets/seed-restaurants.json)
         appScope.launch {
             val result = jsonImporter.importIfEmpty()
             Log.i(

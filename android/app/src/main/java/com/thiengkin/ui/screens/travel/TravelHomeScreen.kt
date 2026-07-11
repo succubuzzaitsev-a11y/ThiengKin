@@ -19,14 +19,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,6 +63,7 @@ import com.thiengkin.ui.theme.S4
  *
  * Phase 1: ไม่มี route detection — แสดง "ร้านใกล้คุณ" เรียงตาม rating
  * Phase 1.5: เพิ่ม route detection (current location → destination on map)
+ * Phase 2: เพิ่ม OSM Overpass + Foursquare Free (city-scoped) + refresh button
  */
 @Composable
 fun TravelHomeScreen(
@@ -69,143 +75,257 @@ fun TravelHomeScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    // Auto-request location on first composition:
-    // - ถ้ามี permission แล้ว → onRequestLocationPermission() จะเรียก requestLocation() ทันที
-    // - ถ้ายังไม่มี → จะ launch system dialog
-    // ทำครั้งเดียวตอนเข้าหน้า (key=Unit ไม่เปลี่ยน)
+    // Show refresh message via Snackbar
+    LaunchedEffect(state.refreshMessage) {
+        state.refreshMessage?.let { msg ->
+            snackbarHostState.showSnackbar(msg)
+            viewModel.clearRefreshMessage()
+        }
+    }
+
+    // Auto-request location on first composition
     LaunchedEffect(Unit) {
         onRequestLocationPermission()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = S4),
-    ) {
-        // Top: pill + avatar
-        Row(
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = S3, bottom = S2),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = S4),
         ) {
-            Pill(text = "อร่อยวันนี้", variant = PillVariant.Red)
-            Box(
+            // Top: pill + avatar
+            Row(
                 modifier = Modifier
-                    .size(34.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurfaceVariant),
-                contentAlignment = Alignment.Center,
+                    .fillMaxWidth()
+                    .padding(top = S3, bottom = S2),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("ส", style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.background)
-            }
-        }
-
-        // Greeting
-        Text(
-            text = "จะกินอะไรดีวันนี้?",
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            maxLines = 1,
-        )
-
-        // Location card (replaces hardcoded "กรุงเทพ → เชียงใหม่" route line)
-        // Phase 1.5: location-aware แบบ generic (ไม่ hardcode เชียงใหม่)
-        CurrentLocationCard(
-            location = state.location,
-            onRequestPermission = onRequestLocationPermission,
-            onRetry = {
-                // ถ้ายังไม่มี permission → ขอก่อน (ไม่งั้น requestLocation() จะโดน fallback)
-                val granted = ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                ) == PackageManager.PERMISSION_GRANTED
-                if (granted) {
-                    viewModel.requestLocation()
-                } else {
-                    onRequestLocationPermission()
+                Pill(text = "อร่อยวันนี้", variant = PillVariant.Red)
+                Box(
+                    modifier = Modifier
+                        .size(34.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.onSurfaceVariant),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("ส", style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.background)
                 }
-            },
-            modifier = Modifier.padding(top = S3),
-        )
+            }
 
-        // City selector — เลือกเมืองสำหรับ fallback location
-        CitySelector(
-            selected = state.selectedCity,
-            onCitySelected = { viewModel.setCity(it) },
-            modifier = Modifier.padding(top = S2),
-        )
+            // Greeting
+            Text(
+                text = "จะกินอะไรดีวันนี้?",
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+            )
 
-        // Search input
-        SearchInput(
-            leadingIcon = Icons.Filled.Search,
-            placeholder = "ค้นหาร้าน...",
-            showArrow = false,
-            modifier = Modifier.padding(top = S3, bottom = S2),
-        )
+            // Location card
+            CurrentLocationCard(
+                location = state.location,
+                onRequestPermission = onRequestLocationPermission,
+                onRetry = {
+                    val granted = ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                    ) == PackageManager.PERMISSION_GRANTED
+                    if (granted) {
+                        viewModel.requestLocation()
+                    } else {
+                        onRequestLocationPermission()
+                    }
+                },
+                modifier = Modifier.padding(top = S3),
+            )
 
-        // Filter chips
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(S2),
-            contentPadding = PaddingValues(bottom = S3),
-        ) {
-            items(
-                listOf("ทั้งหมด", "ริมทาง", "เปิดเช้า", "คนท้องถิ่น", "ของฝาก")
-            ) { label ->
-                FilterChip(
-                    text = label,
-                    active = state.activeFilter == label,
-                    onClick = { viewModel.setFilter(label) },
+            // City selector + refresh button
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = S2),
+                horizontalArrangement = Arrangement.spacedBy(S2),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                CitySelector(
+                    selected = state.selectedCity,
+                    onCitySelected = { viewModel.setCity(it) },
+                    modifier = Modifier.weight(1f),
+                )
+                // Refresh button
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .clickable(enabled = !state.refreshing) { viewModel.refresh() },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    if (state.refreshing) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    } else {
+                        Icon(
+                            Icons.Filled.Refresh,
+                            contentDescription = "รีเฟรชข้อมูลเมือง",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(20.dp),
+                        )
+                    }
+                }
+            }
+
+            // Search input
+            SearchInput(
+                leadingIcon = Icons.Filled.Search,
+                placeholder = "ค้นหาร้าน...",
+                showArrow = false,
+                modifier = Modifier.padding(top = S3, bottom = S2),
+            )
+
+            // Filter chips
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(S2),
+                contentPadding = PaddingValues(bottom = S3),
+            ) {
+                items(
+                    listOf("ทั้งหมด", "ริมทาง", "เปิดเช้า", "คนท้องถิ่น", "ของฝาก")
+                ) { label ->
+                    FilterChip(
+                        text = label,
+                        active = state.activeFilter == label,
+                        onClick = { viewModel.setFilter(label) },
+                    )
+                }
+            }
+
+            // Section label
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = S2),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "ใกล้คุณ",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Text(
+                    text = "ดูจุดแวะ →",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.surface)
+                        .clickable { onRouteClick() }
+                        .padding(horizontal = S2 + 2.dp, vertical = S1 + 2.dp),
                 )
             }
-        }
 
-        // Section label
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = S2),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "ใกล้คุณ",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-            Text(
-                text = "ดูจุดแวะ →",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-                    .clickable { onRouteClick() }
-                    .padding(horizontal = S2 + 2.dp, vertical = S1 + 2.dp),
-            )
-        }
-
-        // Restaurant list
-        if (state.loading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            // Restaurant list
+            if (state.loading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                }
+            } else if (state.restaurants.isEmpty()) {
+                EmptyState(
+                    refreshing = state.refreshing,
+                    onRefresh = { viewModel.refresh() },
+                )
+            } else {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(S2)) {
+                    items(state.restaurants, key = { it.id }) { restaurant ->
+                        RestaurantCard(
+                            restaurant = restaurant,
+                            etaText = etaTextFor(restaurant.etaMinutes),
+                            distText = distTextFor(restaurant.distanceMeters),
+                            onNavigate = {
+                                onNavigate(restaurant.lat, restaurant.lng, restaurant.name)
+                            },
+                            onFavoriteToggle = { viewModel.toggleFavorite(restaurant.id) },
+                            onClick = { onRestaurantClick(restaurant.id) },
+                        )
+                    }
+                }
             }
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(S2)) {
-                items(state.restaurants, key = { it.id }) { restaurant ->
-                    RestaurantCard(
-                        restaurant = restaurant,
-                        etaText = etaTextFor(restaurant.etaMinutes),
-                        distText = distTextFor(restaurant.distanceMeters),
-                        onNavigate = {
-                            onNavigate(restaurant.lat, restaurant.lng, restaurant.name)
-                        },
-                        onFavoriteToggle = { viewModel.toggleFavorite(restaurant.id) },
-                        onClick = { onRestaurantClick(restaurant.id) },
+        }
+
+        // Snackbar host (bottom)
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+        ) { data ->
+            Snackbar(
+                snackbarData = data,
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+/**
+ * Empty state — เมื่อยังไม่มีข้อมูล (cache ว่าง + fetch ยังไม่เสร็จ)
+ */
+@Composable
+private fun EmptyState(
+    refreshing: Boolean,
+    onRefresh: () -> Unit,
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(S3),
+        ) {
+            if (refreshing) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(40.dp),
+                )
+                Text(
+                    text = "กำลังดึงข้อมูลร้านอาหารจาก OSM...",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                Text(
+                    text = "🍜",
+                    style = MaterialTheme.typography.displayLarge,
+                )
+                Text(
+                    text = "ยังไม่มีข้อมูลร้านอาหาร",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Text(
+                    text = "แตะปุ่มรีเฟรชเพื่อดึงข้อมูลจาก OpenStreetMap",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(MaterialTheme.colorScheme.primary)
+                        .clickable { onRefresh() }
+                        .padding(horizontal = S4, vertical = S2),
+                ) {
+                    Text(
+                        text = "รีเฟรช",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             }

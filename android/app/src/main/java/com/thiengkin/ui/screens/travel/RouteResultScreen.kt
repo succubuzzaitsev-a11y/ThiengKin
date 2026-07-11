@@ -116,7 +116,7 @@ fun RouteResultScreen(
             val top = state.restaurants.first()
             RouteLine(
                 from = "📍 คุณ",
-                to = top.district?.take(8) ?: "เชียงใหม่",
+                to = top.district?.take(8) ?: "ที่อยู่ปัจจุบัน",
                 distText = routeDistText(state.location, top),
                 stops = state.restaurants.mapIndexed { idx, r ->
                     RouteStop(
@@ -177,12 +177,12 @@ fun RouteResultScreen(
 /**
  * Subtitle — แสดง location + count
  * - Real GPS: "📍 {address} · 5 ร้านคัดสรร"
- * - Fallback: "เชียงใหม่ (ค่าเริ่มต้น) · 5 ร้านคัดสรร"
+ * - Fallback: "ที่อยู่ปัจจุบัน (ได้จาก GPS) · 5 ร้านคัดสรร"
  */
 private fun routeSubtitle(location: LocationState, restaurants: List<com.thiengkin.data.Restaurant>): String {
     val locLabel = when (location) {
         is LocationState.Granted -> location.address
-            ?: if (location.isFallback) "เชียงใหม่ (ค่าเริ่มต้น)" else "ตำแหน่งปัจจุบัน"
+            ?: if (location.isFallback) "ที่อยู่ปัจจุบัน (ได้จาก GPS)" else "ตำแหน่งปัจจุบัน"
         else -> "กำลังระบุตำแหน่ง..."
     }
     val count = restaurants.size

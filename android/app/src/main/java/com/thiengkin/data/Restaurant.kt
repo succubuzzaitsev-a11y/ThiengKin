@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 /**
  * Restaurant — Room entity
  *
- * Schema matches chiangmai-restaurants-final.json (292 ร้าน: 257 Foursquare + 35 manual)
+ * Schema matches seed-restaurants.json (assets/)
  * Field names use snake_case in DB (matching JSON), camelCase in Kotlin.
  */
 @Entity(tableName = "restaurants")
@@ -38,10 +38,10 @@ data class Restaurant(
     val address: String? = null,            // "ถนนพระปกเกล้า ตำบลพระสิงห์"
 
     @ColumnInfo(name = "district")
-    val district: String? = null,           // "Mueang Chiang Mai"
+    val district: String? = null,           // "Mueang District" | etc.
 
     @ColumnInfo(name = "province")
-    val province: String? = null,           // "Chiang Mai"
+    val province: String? = null,           // "Province" | etc.
 
     @ColumnInfo(name = "tel")
     val tel: String? = null,

@@ -8,10 +8,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 /**
- * Import chiangmai-restaurants-final.json (assets/) → Room
+ * Import seed-restaurants.json (assets/) → Room
  *
  * ทำครั้งเดียวตอน first launch (เช็คจาก row count)
- * ถ้า import สำเร็จ → rowCount = 292
+ * ถ้า import สำเร็จ → rowCount ตามไฟล์
  * ถ้า fail → log error + return false (app ยังเปิดได้ แต่ list ว่าง)
  */
 class JsonImporter(
@@ -103,6 +103,6 @@ class JsonImporter(
 
     companion object {
         private const val TAG = "JsonImporter"
-        const val ASSET_FILE = "chiangmai-restaurants-final.json"
+        const val ASSET_FILE = "seed-restaurants.json"
     }
 }

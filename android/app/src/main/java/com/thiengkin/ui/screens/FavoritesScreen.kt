@@ -153,10 +153,7 @@ private fun favoritesSubtitle(mode: FavoritesSort, count: Int): String {
 private fun districtLabel(district: String?): String =
     when {
         district == null -> "—"
-        district.contains("Mueang Chiang Mai", ignoreCase = true) -> "📍 เมืองเชียงใหม่"
-        district.contains("Mae Rim", ignoreCase = true) -> "📍 แม่ริม"
-        district.contains("Hang Dong", ignoreCase = true) -> "📍 หางดง"
-        district.contains("Lamphun", ignoreCase = true) -> "📍 ลำพูน"
+        district.contains("Mueang", ignoreCase = true) -> "📍 เมือง$district"
         else -> "📍 $district"
     }
 

@@ -9,3 +9,5 @@
 7. **ใช้ภาษาไทยในการสื่อสาร**
 8. **ใช้ Playwright สำหรับ browser automation** (สร้าง GitHub/Supabase)
 9. **ทำงานให้เร็ว (ที่บอกล่าสุด)**
+10.**ไม่แน่ใจให้ถาม ก่อนลงมือทำมั่ว
+11.**ห้ามใช้: น่านะ/น่าจะ/อาจจะ/ไม่แน่ใจ/maybe/probably/might be/I think/hypothesis

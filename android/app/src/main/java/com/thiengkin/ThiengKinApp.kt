@@ -2,6 +2,7 @@ package com.thiengkin
 
 import android.app.Application
 import android.util.Log
+import com.thiengkin.data.Cities
 import com.thiengkin.data.JsonImporter
 import com.thiengkin.data.LocationRepository
 import com.thiengkin.data.RestaurantDao
@@ -65,6 +66,11 @@ class ThiengKinApp : Application() {
                 "JSON import: skipped=${result.skipped} count=${result.count} error=${result.error}",
             )
         }
+
+        // Set default city — Phase 1.5 ใช้ Bangkok เป็น fallback เริ่มต้น
+        // (Phase 2: เปลี่ยนเป็นโหลดจาก DataStore ตามที่ user เลือกไว้ครั้งล่าสุด)
+        locationRepository.setSelectedCity(Cities.DEFAULT)
+        Log.i(TAG, "Default city set: ${Cities.DEFAULT.nameTh}")
     }
 
     companion object {

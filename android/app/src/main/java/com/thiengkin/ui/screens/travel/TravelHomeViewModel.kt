@@ -2,6 +2,7 @@ package com.thiengkin.ui.screens.travel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.thiengkin.data.City
 import com.thiengkin.data.LocationRepository
 import com.thiengkin.data.LocationState
 import com.thiengkin.data.Restaurant
@@ -20,6 +21,7 @@ data class TravelHomeState(
     val restaurants: List<Restaurant> = emptyList(),
     val activeFilter: String = "ทั้งหมด",
     val location: LocationState = LocationState.Idle,
+    val selectedCity: City? = null,
 )
 
 /**
@@ -71,6 +73,7 @@ class TravelHomeViewModel(
             restaurants = sorted.take(10),
             activeFilter = filter,
             location = location,
+            selectedCity = locationRepository.getSelectedCity(),
         )
     }.stateIn(
         scope = viewModelScope,
@@ -93,6 +96,15 @@ class TravelHomeViewModel(
 
     fun onPermissionDenied() {
         locationRepository.markDenied()
+    }
+
+    /**
+     * เปลี่ยนเมืองที่ใช้เป็น fallback location
+     * - อัปเดต LocationRepository (override fallback lat/lng)
+     * - ถ้ายังไม่มี GPS fix จริง → apply fallback ใหม่ทันที
+     */
+    fun setCity(city: City) {
+        locationRepository.setSelectedCity(city)
     }
 
     companion object {

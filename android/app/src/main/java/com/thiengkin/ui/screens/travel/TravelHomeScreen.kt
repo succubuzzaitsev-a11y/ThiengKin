@@ -40,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.thiengkin.data.LocationState
 import com.thiengkin.data.distanceMeters
 import com.thiengkin.data.etaMinutes
+import com.thiengkin.ui.components.CitySelector
 import com.thiengkin.ui.components.FilterChip
 import com.thiengkin.ui.components.Pill
 import com.thiengkin.ui.components.PillVariant
@@ -113,6 +114,7 @@ fun TravelHomeScreen(
         )
 
         // Location card (replaces hardcoded "กรุงเทพ → เชียงใหม่" route line)
+        // Phase 1.5: location-aware แบบ generic (ไม่ hardcode เชียงใหม่)
         CurrentLocationCard(
             location = state.location,
             onRequestPermission = onRequestLocationPermission,
@@ -129,6 +131,13 @@ fun TravelHomeScreen(
                 }
             },
             modifier = Modifier.padding(top = S3),
+        )
+
+        // City selector — เลือกเมืองสำหรับ fallback location
+        CitySelector(
+            selected = state.selectedCity,
+            onCitySelected = { viewModel.setCity(it) },
+            modifier = Modifier.padding(top = S2),
         )
 
         // Search input
@@ -210,7 +219,7 @@ fun TravelHomeScreen(
  * - Idle: "แตะเพื่อระบุตำแหน่ง"
  * - Loading: spinner + "กำลังระบุตำแหน่ง..."
  * - Granted (real): "📍 {address}" + lat/lng
- * - Granted (fallback): "📍 เชียงใหม่ (ค่าเริ่มต้น)" + "แตะเพื่อลอง GPS จริง"
+ * - Granted (fallback): "📍 ที่อยู่ปัจจุบัน (ได้จาก GPS)" + "แตะเพื่อลอง GPS จริง"
  */
 @Composable
 private fun CurrentLocationCard(

@@ -1,8 +1,8 @@
 {
   "source": "mueang-nonthaburi",
-  "provinceId": "mueang_nonthaburi",
-  "districtId": null,
-  "parsedAt": "2026-07-12T16:20:16.855Z",
+  "provinceId": "nonthaburi",
+  "districtId": "nonthaburi_mueang_nonthaburi",
+  "parsedAt": "2026-07-12T16:28:32.686Z",
   "elapsedSeconds": 0.01,
   "total": 277,
   "parsed": 179,

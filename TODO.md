@@ -2,10 +2,10 @@
 
 > Action items + session handoff — ลบ/complete เมื่อทำเสร็จ
 
-**Last updated:** 2026-07-12 18:15 (Asia/Bangkok)
+**Last updated:** 2026-07-12 19:15 (Asia/Bangkok)
 **Project root:** `D:\thiengKin`
 **Git branch:** `main`
-**Latest commit:** `3e9a131` (M0: Thailand geography data)
+**Latest commit:** `14edf81` (M1.a: schema migration Province/District)
 
 ---
 
@@ -28,11 +28,29 @@
 - **Commit:** `3e9a131` (2026-07-12)
 
 ### M1 · Schema migration (4-6 ชม.)
-- [ ] `City.kt` → `Province.kt` + `District.kt` (ใหม่ทั้งหมด)
-- [ ] `Restaurant.cityId` → `provinceId` + `districtId` (migration script)
-- [ ] `RestaurantDao.observeByCity()` → `observeByProvince(provinceId)` + `observeByDistrict(districtId)`
-- [ ] `RestaurantRepository.refreshCity(cityId)` → `refreshArea(bbox, provinceId, districtId)`
-- [ ] TravelHomeViewModel: selectedCity → selectedProvince + selectedDistrict
+
+#### M1.a · Data layer (Province/District tables) ✅ DONE
+- [x] `Province.kt` + `District.kt` Room entities (77 + 928)
+- [x] `ProvinceDao` + `DistrictDao` (Flow + suspend)
+- [x] `GeographyRepository` parse `assets/thailand-geography.json` → seed tables on first launch
+- [x] Bundle JSON: `android/app/src/main/assets/thailand-geography.json` (508 KB)
+- [x] `Restaurant.provinceId` + `districtId` (additive — `cityId` kept for back-compat)
+- [x] `RestaurantDao.observeByProvince()` + `observeByDistrict()` + province-scoped count/latest/delete
+- [x] `RestaurantRepository.refreshArea(provinceId, districtId?, bbox, ...)` generic fetch
+- [x] `RestaurantRepository.observeByProvince/observeByDistrict` (legacy `observeByCity` kept)
+- [x] Importers: `OsmImporter` + `FoursquareImporter` accept `provinceId + districtId?`
+- [x] DB v3 → v4 (`fallbackToDestructiveMigration` — wipe OK in Phase 1)
+- [x] `ThiengKinApp` wires `GeographyRepository` + triggers `importIfEmpty()` on first launch
+- [x] `gradle assembleDebug` → BUILD SUCCESSFUL in 23s
+- **Commit:** `14edf81` (2026-07-12)
+
+#### M1.b · UI migration (next)
+- [ ] `City.kt` deprecated/removed (still used by CitySelector + TravelHomeViewModel)
+- [ ] `TravelHomeViewModel`: `selectedCity` → `selectedProvince` + `selectedDistrict`
+- [ ] Switch `refreshCity()` call site to `refreshArea(provinceId, districtId?, bbox)`
+- [ ] `LocationRepository.setSelectedCity` → `setSelectedProvince` (or keep both with bridge)
+- [ ] `JsonImporter` removed (no bundled seed — OSM on-demand only)
+- [ ] Build pass + APK smoke test
 
 ### M2 · Supabase setup (6-8 ชม.)
 - [ ] Create Supabase project (re-use account `pornchaisic-cloud`)
@@ -69,10 +87,11 @@
 ## 📋 Session handoff (2026-07-12 — pivot to nationwide)
 
 ### Where we are
-- **M0 done:** `data/thailand-geography.json` (77 provinces + 928 districts + 7 regions) — แทน hardcoded 10-city list
+- **M0 done:** `data/thailand-geography.json` (77 provinces + 928 districts + 7 regions) — bundled ใน assets/
+- **M1.a done:** Room schema v3 → v4, เพิ่ม Province/District tables + Restaurant.provinceId/districtId + `GeographyRepository` seed on first launch + `RestaurantRepository.refreshArea()` generic
 - **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — แต่ใน design ใหม่ OSM เป็นหลัก FSQ เป็น optional enhancement
-- **Build:** `gradle compileDebugKotlin` → คาดว่ายัง pass (M0 แค่เพิ่ม data file, ไม่แตะ Android)
-- **Next:** M1 — schema migration (City.kt → Province.kt + District.kt, restaurant.cityId → provinceId/districtId)
+- **Build:** `gradle assembleDebug` → BUILD SUCCESSFUL in 23s (M1.a verified)
+- **Next:** M1.b — UI migration (City.kt → Province picker, TravelHomeViewModel.selectedProvince)
 
 ### Quick start tomorrow
 ```powershell
@@ -80,24 +99,27 @@
 $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
 $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 
-# 2. Verify build ยัง pass หลัง M0
+# 2. Verify build ยัง pass หลัง M1.a
 cd D:\thiengKin\android
-.\gradlew.bat compileDebugKotlin
+.\gradlew.bat assembleDebug
 
-# 3. ดู plan ใหม่
-code D:\thiengKin\TODO.md
+# 3. ดู entities ใหม่
+code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\Province.kt
+code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\District.kt
+code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\GeographyRepository.kt
 
-# 4. เริ่ม M1 (schema migration)
+# 4. เริ่ม M1.b (UI migration)
 code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\City.kt
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\Restaurant.kt
+code D:\thiengKin\android\app\src\main\java\com\thiengkin\ui\screens\travel\TravelHomeViewModel.kt
+code D:\thiengKin\android\app\src\main\java\com\thiengkin\ui\components\CitySelector.kt
 ```
 
 ### Working dir context
 - **Git config:** `pornchaisic-cloud <succubuzzaitsev@gmail.com>` (ตรงกับ commit history)
 - **No git remote configured** (local-only repo) — push ไม่ได้จนกว่าจะ add remote
 - **JAVA_HOME** ไม่ได้ตั้งใน PowerShell session — ต้อง set เองทุกครั้ง (หรือใส่ใน `$PROFILE`)
-- **Working tree:** clean (M0 committed at `3e9a131`)
-- **Old design (10 cities + FSQ seed) is SUPERSEDED** — แต่โค้ดยังอยู่ จะลบตอน M1
+- **Working tree:** M1.a committed at `14edf81` (15 files, +21,772 / -20)
+- **City.kt ยังอยู่** — ใช้โดย LocationRepository + CitySelector + TravelHomeViewModel (M1.b จะลบ)
 
 ---
 
@@ -144,7 +166,8 @@ Client + Repository ส่ง FSQ v3 ถูกต้องแล้ว:
 
 | Date | Commit | What |
 |------|--------|------|
-| 2026-07-12 | `3e9a131` | **feat(data): M0 Thailand province + district reference data (77p/928d/7r)** |
+| 2026-07-12 | `14edf81` | **feat(android): M1.a schema migration — Province/District tables + Restaurant.provinceId/districtId** |
+| 2026-07-12 | `3e9a131` | feat(data): M0 Thailand province + district reference data (77p/928d/7r) |
 | 2026-07-12 | `4aae900` | docs: mark P0 (FoursquareClient v3) as done in TODO.md |
 | 2026-07-12 | `4837679` | fix(android): FoursquareClient v3 wire format + Repository query loop (P0) |
 | 2026-07-12 | `e93bac3` | docs: add TODO.md (this file) |

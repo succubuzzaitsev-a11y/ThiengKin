@@ -33,13 +33,15 @@ import java.util.concurrent.Executors
  * Phase 1.5: เปลี่ยนเป็น FusedLocationProviderClient ถ้าต้องการ accuracy ดีกว่า
  *
  * **Graceful fallback** — ถ้า GPS ไม่พร้อม (permission denied / provider off / ไม่มี fix ใน 5s)
- * → ใช้ตำแหน่งเริ่มต้น (จาก City selector) เพื่อให้แอปรันได้
+ * → ใช้ตำแหน่งเริ่มต้น (จาก Province selector) เพื่อให้แอปรันได้
  *
  * Flow:
  * 1. requestLocation() → check permission → check provider
- * 2. ถ้าไม่ผ่าน → applyFallback(reason) ใช้ [DEFAULT_LAT]/[DEFAULT_LNG]
+ * 2. ถ้าไม่ผ่าน → applyFallback(reason) ใช้ [selectedProvince.centroid] หรือ [DEFAULT_LAT]/[DEFAULT_LNG]
  * 3. ถ้าผ่าน → getLastKnownLocation (instant) → ถ้าไม่มี → requestSingleFix (5s timeout)
  * 4. เมื่อได้ fix → async reverse geocode → emit Granted(lat, lng, address, isFallback=false)
+ *
+ * M1.b: selectedProvince + selectedDistrict แทน selectedCity (nationwide scope)
  */
 class LocationRepository(private val context: Context) {
 
@@ -56,13 +58,19 @@ class LocationRepository(private val context: Context) {
     val state: StateFlow<LocationState> = _state.asStateFlow()
 
     /**
-     * Selected city — ใช้เป็น fallback เมื่อ GPS ไม่พร้อม
+     * Selected province — ใช้เป็น fallback location เมื่อ GPS ไม่พร้อม
+     * Selected district (optional) — drill-down ในจังหวัด
      *
      * Phase 1.5: เก็บใน memory เท่านั้น (reset เมื่อ kill app) — Phase 2 จะ persist ใน DataStore
-     * ตั้งค่าผ่าน [setSelectedCity] เมื่อ user เลือกจาก CitySelector
+     * ตั้งค่าผ่าน [setSelectedProvince] เมื่อ user เลือกจาก ProvincePicker
+     *
+     * M1.b: เปลี่ยนจาก `selectedCity: City?` (Phase 1.5 — 10 เมือง) เป็น `selectedProvince + selectedDistrict`
      */
     @Volatile
-    private var selectedCity: City? = null
+    private var selectedProvince: Province? = null
+
+    @Volatile
+    private var selectedDistrict: District? = null
 
     fun requestLocation() {
         // Cancel any pending timeout from previous request
@@ -100,22 +108,26 @@ class LocationRepository(private val context: Context) {
     }
 
     /**
-     * Update selected city — ใช้เป็น fallback location เมื่อ GPS ไม่พร้อม
+     * Update selected province (+ optional district) — ใช้เป็น fallback location เมื่อ GPS ไม่พร้อม
      *
      * ถ้าปัจจุบันอยู่ใน fallback state → apply ใหม่ทันที
-     * ถ้ามี GPS fix จริงอยู่แล้ว → keep real GPS, save city ไว้ใช้ตอน fallback ครั้งหน้า
+     * ถ้ามี GPS fix จริงอยู่แล้ว → keep real GPS, save province ไว้ใช้ตอน fallback ครั้งหน้า
      */
-    fun setSelectedCity(city: City) {
-        selectedCity = city
+    fun setSelectedProvince(province: Province, district: District? = null) {
+        selectedProvince = province
+        selectedDistrict = district
         val current = _state.value
         if (current is LocationState.Granted && current.isFallback) {
-            // Already in fallback — re-apply with new city
-            applyFallback(reason = current.fallbackReason ?: "เปลี่ยนเมือง")
+            // Already in fallback — re-apply with new province
+            applyFallback(reason = current.fallbackReason ?: "เปลี่ยนจังหวัด")
         }
     }
 
-    /** Current selected city (nullable). ใช้สำหรับ UI display. */
-    fun getSelectedCity(): City? = selectedCity
+    /** Current selected province (nullable). ใช้สำหรับ UI display. */
+    fun getSelectedProvince(): Province? = selectedProvince
+
+    /** Current selected district (nullable). Drill-down ภายในจังหวัด. */
+    fun getSelectedDistrict(): District? = selectedDistrict
 
     /** Manually mark denied (e.g. user said "no") — call from Activity after permission prompt. */
     fun markDenied() {
@@ -238,11 +250,12 @@ class LocationRepository(private val context: Context) {
         singleUpdateListener?.let { locationManager.removeUpdates(it) }
         singleUpdateListener = null
 
-        // ใช้ city ที่ user เลือก ถ้ามี — ไม่งั้นใช้ DEFAULT_LAT/LNG (0.0, 0.0)
-        val city = selectedCity
-        val lat = city?.lat ?: DEFAULT_LAT
-        val lng = city?.lng ?: DEFAULT_LNG
-        val address = city?.let { "${it.nameTh} (เมืองที่เลือก)" }
+        // ใช้จังหวัดที่ user เลือก ถ้ามี — ไม่งั้นใช้ DEFAULT_LAT/LNG (0.0, 0.0)
+        // (M1.b: Province.centroidLat/Lng แทน City.lat/lng)
+        val province = selectedProvince
+        val lat = province?.centroidLat ?: DEFAULT_LAT
+        val lng = province?.centroidLng ?: DEFAULT_LNG
+        val address = province?.let { "${it.nameTh} (จังหวัดที่เลือก)" }
             ?: "ที่อยู่ปัจจุบัน (ได้จาก GPS)"
         userLat = lat
         userLng = lng
@@ -285,8 +298,8 @@ class LocationRepository(private val context: Context) {
     companion object {
         private const val TAG = "LocationRepository"
 
-        // Default fallback — 0.0,0.0 (Phase 1.5)
-        // City selector จะ override ค่าเหล่านี้ตอน first launch / เมื่อ user เปลี่ยนเมือง
+        // Default fallback — 0.0,0.0 (Phase 1)
+        // Province selector จะ override ค่าเหล่านี้ตอน first launch / เมื่อ user เปลี่ยนจังหวัด
         // ใช้ 0.0 เพื่อให้ UI แสดง "ที่อยู่ปัจจุบัน (ได้จาก GPS)" แทน hardcode
         const val DEFAULT_LAT = 0.0
         const val DEFAULT_LNG = 0.0

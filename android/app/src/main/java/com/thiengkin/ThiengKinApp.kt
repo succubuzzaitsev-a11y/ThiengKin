@@ -2,10 +2,10 @@ package com.thiengkin
 
 import android.app.Application
 import android.util.Log
-import com.thiengkin.data.Cities
+import com.thiengkin.data.DistrictDao
 import com.thiengkin.data.GeographyRepository
-import com.thiengkin.data.JsonImporter
 import com.thiengkin.data.LocationRepository
+import com.thiengkin.data.ProvinceDao
 import com.thiengkin.data.RestaurantDao
 import com.thiengkin.data.RestaurantRepository
 import com.thiengkin.data.ThiengKinDatabase
@@ -21,10 +21,15 @@ import kotlinx.coroutines.launch
  *
  * Bootstraps:
  * 1. Room database (singleton)
- * 2. JSON importer (runs once on first launch)
+ * 2. GeographyRepository — seed provinces + districts (M1.a — bundled JSON, runs once on first launch)
  * 3. Repository singleton (wired into TravelHomeViewModel.defaultRepository)
  *    - Phase 2: มี OsmClient + FoursquareClient (optional)
  * 4. LocationRepository (singleton — current GPS fix)
+ *
+ * M1.b:
+ *  - Drop JsonImporter (no bundled seed — OSM on-demand only)
+ *  - Wire ProvinceDao + DistrictDao into ViewModel
+ *  - Set default province = Bangkok (load from DB after seed)
  *
  * Phase 1.5 (planned): replace singletons with Hilt @Inject
  */
@@ -38,14 +43,17 @@ class ThiengKinApp : Application() {
     lateinit var repository: RestaurantRepository
         private set
 
-    lateinit var jsonImporter: JsonImporter
-        private set
-
     lateinit var geographyRepository: GeographyRepository
         private set
 
     lateinit var locationRepository: LocationRepository
         private set
+
+    /**
+     * Default province id เมื่อ first launch — ใช้ Bangkok (id="bangkok") เป็น fallback ก่อน
+     * ถ้า Bangkok ยังไม่ได้ seed (race condition) → set ทีหลังใน geography import callback
+     */
+    private val defaultProvinceId = "bangkok"
 
     override fun onCreate() {
         super.onCreate()
@@ -55,8 +63,8 @@ class ThiengKinApp : Application() {
 
         database = ThiengKinDatabase.get(this)
         val dao: RestaurantDao = database.restaurantDao()
-        val provinceDao = database.provinceDao()
-        val districtDao = database.districtDao()
+        val provinceDao: ProvinceDao = database.provinceDao()
+        val districtDao: DistrictDao = database.districtDao()
 
         // Foursquare client — null ถ้าไม่ได้ตั้ง API key
         val fsqKey = BuildConfig.FOURSQUARE_API_KEY
@@ -72,36 +80,44 @@ class ThiengKinApp : Application() {
             dao = dao,
             fsqClient = fsqClient,
         )
-        jsonImporter = JsonImporter(this, dao)
         geographyRepository = GeographyRepository(this, provinceDao, districtDao)
         locationRepository = LocationRepository(this)
 
         // Wire singletons into ViewModels (used as default params)
         TravelHomeViewModel.defaultRepository = repository
         TravelHomeViewModel.defaultLocationRepository = locationRepository
+        TravelHomeViewModel.defaultProvinceDao = provinceDao
+        TravelHomeViewModel.defaultDistrictDao = districtDao
 
         // First-launch: seed provinces + districts (M1.a — bundled JSON)
+        // หลัง seed เสร็จ → set default province (Bangkok) ใน LocationRepository
         appScope.launch {
             val result = geographyRepository.importIfEmpty()
             Log.i(
                 TAG,
                 "Geography import: skipped=${result.skipped} provinces=${result.provinces} districts=${result.districts} error=${result.error}",
             )
+            if (!result.skipped) {
+                // Fresh seed — set default province
+                setDefaultProvince(provinceDao)
+            } else {
+                // Already seeded — still ensure default province is set (in case kill app before user picked)
+                if (locationRepository.getSelectedProvince() == null) {
+                    setDefaultProvince(provinceDao)
+                }
+            }
         }
+    }
 
-        // First-launch import (manual seed from assets/seed-restaurants.json) — legacy, will be removed in M1.b
-        appScope.launch {
-            val result = jsonImporter.importIfEmpty()
-            Log.i(
-                TAG,
-                "JSON import: skipped=${result.skipped} count=${result.count} error=${result.error}",
-            )
+    /** Set default province (Bangkok) — load from DB then push to LocationRepository */
+    private suspend fun setDefaultProvince(provinceDao: ProvinceDao) {
+        val province = provinceDao.getById(defaultProvinceId)
+        if (province != null) {
+            locationRepository.setSelectedProvince(province)
+            Log.i(TAG, "Default province set: ${province.nameTh}")
+        } else {
+            Log.w(TAG, "Default province '$defaultProvinceId' not found in DB — check seed data")
         }
-
-        // Set default city — Phase 1.5 ใช้ Bangkok เป็น fallback เริ่มต้น
-        // (Phase 2: เปลี่ยนเป็นโหลดจาก DataStore ตามที่ user เลือกไว้ครั้งล่าสุด)
-        locationRepository.setSelectedCity(Cities.DEFAULT)
-        Log.i(TAG, "Default city set: ${Cities.DEFAULT.nameTh}")
     }
 
     companion object {

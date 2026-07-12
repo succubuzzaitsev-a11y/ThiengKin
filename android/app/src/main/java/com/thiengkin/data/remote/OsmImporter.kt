@@ -54,7 +54,6 @@ class OsmImporter {
     /**
      * @param rawJson Overpass API response (JSON)
      * @param provinceId Province.id (e.g. "bangkok", "chiang_mai") — tagged on every record
-     *                    M1.a: also stored in cityId column for back-compat with observeByCity
      * @param districtId District.id (e.g. "phra_nakhon") — optional, ใช้ตอน drill-down
      * @param nowMs timestamp (millis) — set on source_updated_at
      * @return list of Restaurant with source="osm"
@@ -139,9 +138,6 @@ class OsmImporter {
             photoUrl = tags.getString("contact:image") ?: tags.getString("image"),
             menuText = null,
             aiSummary = null,
-            // M1.a: dual-tag (cityId = legacy key, provinceId + districtId = new nationwide keys)
-            // M1.b จะ drop cityId และใช้ provinceId เป็นหลัก
-            cityId = provinceId,
             provinceId = provinceId,
             districtId = districtId,
             openingHours = tags.getString("opening_hours"),

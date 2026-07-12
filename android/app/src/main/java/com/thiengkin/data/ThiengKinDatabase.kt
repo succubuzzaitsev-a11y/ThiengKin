@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [Restaurant::class, Province::class, District::class],
-    version = 4,  // v4: + Province, District tables + Restaurant.province_id, district_id
+    version = 5,  // v5: - Restaurant.city_id (M1.b — nationwide uses province_id + district_id only)
     exportSchema = false,
 )
 @TypeConverters(Converters::class)

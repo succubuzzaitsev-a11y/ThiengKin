@@ -45,32 +45,7 @@ interface RestaurantDao {
         minLng: Double, maxLng: Double,
     ): Flow<List<Restaurant>>
 
-    // === Phase 2: City-scoped queries (legacy — M1.a keep for back-compat) ===
-
-    /**
-     * ดึงร้านตาม city_id + optional source filter
-     * - cityId=""  → ดึง manual (ไม่มี city) เท่านั้น
-     * - cityId="bkk" + source=null → ทั้งหมดในกรุงเทพ (manual + osm + foursquare)
-     * - cityId="bkk" + source="osm" → OSM เท่านั้น
-     */
-    @Query("""
-        SELECT * FROM restaurants
-        WHERE (:cityId = '' OR city_id = :cityId OR (city_id = '' AND source = 'manual'))
-          AND (:source IS NULL OR source = :source)
-        ORDER BY rating DESC, review_count DESC
-    """)
-    fun observeByCity(cityId: String, source: String? = null): Flow<List<Restaurant>>
-
-    @Query("SELECT COUNT(*) FROM restaurants WHERE city_id = :cityId AND source = :source")
-    suspend fun countByCityAndSource(cityId: String, source: String): Int
-
-    @Query("SELECT MAX(source_updated_at) FROM restaurants WHERE city_id = :cityId AND source = :source")
-    suspend fun latestUpdateByCityAndSource(cityId: String, source: String): Long?
-
-    @Query("DELETE FROM restaurants WHERE city_id = :cityId AND source = :source")
-    suspend fun deleteByCityAndSource(cityId: String, source: String): Int
-
-    // === Phase 3 (M1.a): Province/District-scoped queries — หลักใน nationwide mode ===
+    // === Phase 3 (M1): Province/District-scoped queries — หลักใน nationwide mode ===
 
     /**
      * ดึงร้านตาม province_id (ทั้ง province — ไม่ filter district)

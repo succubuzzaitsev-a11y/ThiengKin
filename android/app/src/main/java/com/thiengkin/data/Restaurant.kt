@@ -7,11 +7,11 @@ import androidx.room.PrimaryKey
 /**
  * Restaurant — Room entity
  *
- * Schema matches seed-restaurants.json (assets/) + OSM/FSQ fields
- * Field names use snake_case in DB (matching JSON), camelCase in Kotlin.
+ * Schema matches OSM/FSQ fields.
+ * Field names use snake_case in DB, camelCase in Kotlin.
  *
- * Phase 2: + city_id, opening_hours, capacity, source_updated_at
- * Phase 3 (M1): + province_id, district_id (M1.a additive — city_id kept for back-compat)
+ * Phase 2: + opening_hours, capacity, source_updated_at
+ * Phase 3 (M1): + province_id, district_id (M1.b: dropped city_id — nationwide uses province/district)
  */
 @Entity(tableName = "restaurants")
 data class Restaurant(
@@ -79,11 +79,7 @@ data class Restaurant(
     @ColumnInfo(name = "ai_summary")
     val aiSummary: String? = null,          // future: AI Review Summary
 
-    // === Phase 2 fields (OSM data) ===
-
-    @ColumnInfo(name = "city_id", defaultValue = "")
-    val cityId: String = "",                // "bkk" | "cm" | etc. — legacy (Phase 1.5) — เก็บไว้เพื่อ back-compat
-                                            // ใช้ provinceId + districtId แทน (M1 onward)
+    // === Phase 3 fields (M1 — nationwide) ===
 
     @ColumnInfo(name = "province_id", defaultValue = "")
     val provinceId: String = "",            // "bangkok" | "chiang_mai" — Province.id (M1+)

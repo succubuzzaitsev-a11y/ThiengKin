@@ -45,10 +45,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.thiengkin.data.LocationState
 import com.thiengkin.data.distanceMeters
 import com.thiengkin.data.etaMinutes
-import com.thiengkin.ui.components.CitySelector
 import com.thiengkin.ui.components.FilterChip
 import com.thiengkin.ui.components.Pill
 import com.thiengkin.ui.components.PillVariant
+import com.thiengkin.ui.components.ProvincePicker
 import com.thiengkin.ui.components.RestaurantCard
 import com.thiengkin.ui.components.SearchInput
 import com.thiengkin.ui.theme.S1
@@ -144,7 +144,7 @@ fun TravelHomeScreen(
                 modifier = Modifier.padding(top = S3),
             )
 
-            // City selector + refresh button
+            // Province/District selector + refresh button
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -152,9 +152,16 @@ fun TravelHomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(S2),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                CitySelector(
-                    selected = state.selectedCity,
-                    onCitySelected = { viewModel.setCity(it) },
+                ProvincePicker(
+                    selectedProvince = state.selectedProvince,
+                    selectedDistrict = state.selectedDistrict,
+                    provinces = state.provinces,
+                    districtsForSelectedProvince = state.districtsForSelectedProvince,
+                    onProvinceSelected = { viewModel.setProvince(it, null) },
+                    onDistrictSelected = { district ->
+                        // selectedProvince guaranteed non-null here: picker only shows district list after province selected
+                        state.selectedProvince?.let { province -> viewModel.setProvince(province, district) }
+                    },
                     modifier = Modifier.weight(1f),
                 )
                 // Refresh button
@@ -175,7 +182,7 @@ fun TravelHomeScreen(
                     } else {
                         Icon(
                             Icons.Filled.Refresh,
-                            contentDescription = "รีเฟรชข้อมูลเมือง",
+                            contentDescription = "รีเฟรชข้อมูลจังหวัด",
                             tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(20.dp),
                         )

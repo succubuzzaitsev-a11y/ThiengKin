@@ -145,8 +145,6 @@ class FoursquareImporter {
             photoUrl = null,  // Premium only
             menuText = null,
             aiSummary = null,
-            // M1.a: dual-tag (cityId = legacy key, provinceId + districtId = new nationwide keys)
-            cityId = provinceId,
             provinceId = provinceId,
             districtId = districtId,
             openingHours = null,  // Premium only

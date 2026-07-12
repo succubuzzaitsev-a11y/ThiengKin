@@ -2,10 +2,10 @@
 
 > Action items + session handoff — ลบ/complete เมื่อทำเสร็จ
 
-**Last updated:** 2026-07-12 19:15 (Asia/Bangkok)
+**Last updated:** 2026-07-12 18:45 (Asia/Bangkok)
 **Project root:** `D:\thiengKin`
 **Git branch:** `main`
-**Latest commit:** `14edf81` (M1.a: schema migration Province/District)
+**Latest commit:** `4f0d124` (M1.b: UI migration — drop City, wire ProvincePicker)
 
 ---
 
@@ -44,13 +44,17 @@
 - [x] `gradle assembleDebug` → BUILD SUCCESSFUL in 23s
 - **Commit:** `14edf81` (2026-07-12)
 
-#### M1.b · UI migration (next)
-- [ ] `City.kt` deprecated/removed (still used by CitySelector + TravelHomeViewModel)
-- [ ] `TravelHomeViewModel`: `selectedCity` → `selectedProvince` + `selectedDistrict`
-- [ ] Switch `refreshCity()` call site to `refreshArea(provinceId, districtId?, bbox)`
-- [ ] `LocationRepository.setSelectedCity` → `setSelectedProvince` (or keep both with bridge)
-- [ ] `JsonImporter` removed (no bundled seed — OSM on-demand only)
-- [ ] Build pass + APK smoke test
+#### M1.b · UI migration ✅ DONE
+- [x] `City.kt` deprecated/removed (still used by CitySelector + TravelHomeViewModel)
+- [x] `TravelHomeViewModel`: `selectedCity` → `selectedProvince` + `selectedDistrict`
+- [x] Switch `refreshCity()` call site to `refreshArea(provinceId, districtId?, bbox)`
+- [x] `LocationRepository.setSelectedCity` → `setSelectedProvince` (or keep both with bridge)
+- [x] `JsonImporter` removed (no bundled seed — OSM on-demand only)
+- [x] `ProvincePicker.kt` — 2-step ModalBottomSheet (searchable province → district drill-down)
+- [x] `BoundingBox.kt` — extracted from City.kt, `toBoundingBox()` extension on Province + District
+- [x] Build pass: `gradle :app:compileDebugKotlin --rerun-tasks` → BUILD SUCCESSFUL in 14s
+- [ ] **APK smoke test** (pending — ต้อง install + run on emulator/เครื่องจริง)
+- **Commit:** `4f0d124` (2026-07-12) — +732 / -664 (net -420 — ลบ curated-city code ออก)
 
 ### M2 · Supabase setup (6-8 ชม.)
 - [ ] Create Supabase project (re-use account `pornchaisic-cloud`)
@@ -84,14 +88,16 @@
 
 ---
 
-## 📋 Session handoff (2026-07-12 — pivot to nationwide)
+## 📋 Session handoff (2026-07-12 — M1.b done, M2 ready to start)
 
 ### Where we are
 - **M0 done:** `data/thailand-geography.json` (77 provinces + 928 districts + 7 regions) — bundled ใน assets/
 - **M1.a done:** Room schema v3 → v4, เพิ่ม Province/District tables + Restaurant.provinceId/districtId + `GeographyRepository` seed on first launch + `RestaurantRepository.refreshArea()` generic
+- **M1.b done:** UI migration — ลบ City.kt/CitySelector.kt/JsonImporter.kt + seed-restaurants.json, ProvincePicker ใช้งานได้, TravelHomeViewModel/LocationRepository/ThiengKinApp wire Province/District ครบ
 - **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — แต่ใน design ใหม่ OSM เป็นหลัก FSQ เป็น optional enhancement
-- **Build:** `gradle assembleDebug` → BUILD SUCCESSFUL in 23s (M1.a verified)
-- **Next:** M1.b — UI migration (City.kt → Province picker, TravelHomeViewModel.selectedProvince)
+- **Build:** `gradle :app:compileDebugKotlin --rerun-tasks` → BUILD SUCCESSFUL in 14s (M1.b verified)
+- **APK smoke test:** pending (ต้อง install + run on emulator — user ทำ)
+- **Next:** M2 — Supabase setup (6-8 ชม.)
 
 ### Quick start tomorrow
 ```powershell
@@ -99,27 +105,27 @@
 $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
 $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 
-# 2. Verify build ยัง pass หลัง M1.a
+# 2. Verify build ยัง pass หลัง M1.b
 cd D:\thiengKin\android
 .\gradlew.bat assembleDebug
 
-# 3. ดู entities ใหม่
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\Province.kt
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\District.kt
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\GeographyRepository.kt
+# 3. APK smoke test (ถ้ามี emulator/เครื่องจริง)
+.\gradlew.bat :app:assembleDebug
+# install via adb
+adb install -r app\build\outputs\apk\debug\app-debug.apk
 
-# 4. เริ่ม M1.b (UI migration)
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\City.kt
+# 4. ดู UI migration ใหม่
+code D:\thiengKin\android\app\src\main\java\com\thiengkin\ui\components\ProvincePicker.kt
 code D:\thiengKin\android\app\src\main\java\com\thiengkin\ui\screens\travel\TravelHomeViewModel.kt
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\ui\components\CitySelector.kt
+code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\LocationRepository.kt
 ```
 
 ### Working dir context
 - **Git config:** `pornchaisic-cloud <succubuzzaitsev@gmail.com>` (ตรงกับ commit history)
 - **No git remote configured** (local-only repo) — push ไม่ได้จนกว่าจะ add remote
 - **JAVA_HOME** ไม่ได้ตั้งใน PowerShell session — ต้อง set เองทุกครั้ง (หรือใส่ใน `$PROFILE`)
-- **Working tree:** M1.a committed at `14edf81` (15 files, +21,772 / -20)
-- **City.kt ยังอยู่** — ใช้โดย LocationRepository + CitySelector + TravelHomeViewModel (M1.b จะลบ)
+- **Working tree:** M1.b committed at `4f0d124` (16 files, +732 / -664)
+- **City.kt ถูกลบแล้ว** — Province.centroid ใช้แทน City.lat/lng ทั้งหมด
 
 ---
 
@@ -166,7 +172,9 @@ Client + Repository ส่ง FSQ v3 ถูกต้องแล้ว:
 
 | Date | Commit | What |
 |------|--------|------|
-| 2026-07-12 | `14edf81` | **feat(android): M1.a schema migration — Province/District tables + Restaurant.provinceId/districtId** |
+| 2026-07-12 | `4f0d124` | **feat(android): M1.b UI migration — drop City/CitySelector/JsonImporter, wire ProvincePicker** |
+| 2026-07-12 | `9a0b211` | docs: mark M1.a schema migration done in TODO.md |
+| 2026-07-12 | `14edf81` | feat(android): M1.a schema migration — Province/District tables + Restaurant.provinceId/districtId |
 | 2026-07-12 | `3e9a131` | feat(data): M0 Thailand province + district reference data (77p/928d/7r) |
 | 2026-07-12 | `4aae900` | docs: mark P0 (FoursquareClient v3) as done in TODO.md |
 | 2026-07-12 | `4837679` | fix(android): FoursquareClient v3 wire format + Repository query loop (P0) |

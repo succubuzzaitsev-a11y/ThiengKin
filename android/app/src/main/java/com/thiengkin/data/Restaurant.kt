@@ -10,7 +10,8 @@ import androidx.room.PrimaryKey
  * Schema matches seed-restaurants.json (assets/) + OSM/FSQ fields
  * Field names use snake_case in DB (matching JSON), camelCase in Kotlin.
  *
- * Phase 2 (current): เพิ่ม city_id, opening_hours, capacity, source_updated_at
+ * Phase 2: + city_id, opening_hours, capacity, source_updated_at
+ * Phase 3 (M1): + province_id, district_id (M1.a additive — city_id kept for back-compat)
  */
 @Entity(tableName = "restaurants")
 data class Restaurant(
@@ -81,7 +82,14 @@ data class Restaurant(
     // === Phase 2 fields (OSM data) ===
 
     @ColumnInfo(name = "city_id", defaultValue = "")
-    val cityId: String = "",                // "bkk" | "cm" | etc. — ใช้ filter + cache invalidation
+    val cityId: String = "",                // "bkk" | "cm" | etc. — legacy (Phase 1.5) — เก็บไว้เพื่อ back-compat
+                                            // ใช้ provinceId + districtId แทน (M1 onward)
+
+    @ColumnInfo(name = "province_id", defaultValue = "")
+    val provinceId: String = "",            // "bangkok" | "chiang_mai" — Province.id (M1+)
+
+    @ColumnInfo(name = "district_id")
+    val districtId: String? = null,         // "phra_nakhon" | "amphawa" — District.id (M1+)
 
     @ColumnInfo(name = "opening_hours")
     val openingHours: String? = null,       // "Mo-Fr 10:00-22:00; Sa-Su 11:00-23:00" (OSM)

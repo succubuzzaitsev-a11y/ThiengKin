@@ -3,6 +3,7 @@ package com.thiengkin
 import android.app.Application
 import android.util.Log
 import com.thiengkin.data.Cities
+import com.thiengkin.data.GeographyRepository
 import com.thiengkin.data.JsonImporter
 import com.thiengkin.data.LocationRepository
 import com.thiengkin.data.RestaurantDao
@@ -40,6 +41,9 @@ class ThiengKinApp : Application() {
     lateinit var jsonImporter: JsonImporter
         private set
 
+    lateinit var geographyRepository: GeographyRepository
+        private set
+
     lateinit var locationRepository: LocationRepository
         private set
 
@@ -51,6 +55,8 @@ class ThiengKinApp : Application() {
 
         database = ThiengKinDatabase.get(this)
         val dao: RestaurantDao = database.restaurantDao()
+        val provinceDao = database.provinceDao()
+        val districtDao = database.districtDao()
 
         // Foursquare client — null ถ้าไม่ได้ตั้ง API key
         val fsqKey = BuildConfig.FOURSQUARE_API_KEY
@@ -67,13 +73,23 @@ class ThiengKinApp : Application() {
             fsqClient = fsqClient,
         )
         jsonImporter = JsonImporter(this, dao)
+        geographyRepository = GeographyRepository(this, provinceDao, districtDao)
         locationRepository = LocationRepository(this)
 
         // Wire singletons into ViewModels (used as default params)
         TravelHomeViewModel.defaultRepository = repository
         TravelHomeViewModel.defaultLocationRepository = locationRepository
 
-        // First-launch import (manual seed from assets/seed-restaurants.json)
+        // First-launch: seed provinces + districts (M1.a — bundled JSON)
+        appScope.launch {
+            val result = geographyRepository.importIfEmpty()
+            Log.i(
+                TAG,
+                "Geography import: skipped=${result.skipped} provinces=${result.provinces} districts=${result.districts} error=${result.error}",
+            )
+        }
+
+        // First-launch import (manual seed from assets/seed-restaurants.json) — legacy, will be removed in M1.b
         appScope.launch {
             val result = jsonImporter.importIfEmpty()
             Log.i(

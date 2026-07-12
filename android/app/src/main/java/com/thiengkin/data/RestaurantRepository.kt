@@ -37,8 +37,16 @@ class RestaurantRepository(
 
     fun observeFavorites(): Flow<List<Restaurant>> = dao.observeFavorites()
 
-    /** Phase 2: ดึงร้านในเมืองที่ระบุ — manual + osm + foursquare ทั้งหมด */
+    /** Phase 2: ดึงร้านในเมืองที่ระบุ — manual + osm + foursquare ทั้งหมด (legacy — M1.a keep for back-compat) */
     fun observeByCity(cityId: String): Flow<List<Restaurant>> = dao.observeByCity(cityId)
+
+    /** Phase 3 (M1.a): ดึงร้านในจังหวัดที่ระบุ — manual + osm + foursquare ทั้งหมด */
+    fun observeByProvince(provinceId: String): Flow<List<Restaurant>> =
+        dao.observeByProvince(provinceId)
+
+    /** Phase 3 (M1.a): ดึงร้านในอำเภอเฉพาะ (drill-down จาก province) */
+    fun observeByDistrict(districtId: String): Flow<List<Restaurant>> =
+        dao.observeByDistrict(districtId)
 
     suspend fun getById(id: String): Restaurant? = dao.getById(id)
 
@@ -73,7 +81,8 @@ class RestaurantRepository(
             try {
                 Log.i(TAG, "OSM refresh: city=$cityId force=$force expired=$osmCacheExpired")
                 val rawJson = osmClient.fetchRestaurants(bbox)
-                val parsed = osmImporter.parse(rawJson, cityId, nowMs)
+                // M1.a: pass cityId as provinceId for back-compat (M1.b will switch to refreshArea with proper mapping)
+                val parsed = osmImporter.parse(rawJson, provinceId = cityId, districtId = null, nowMs = nowMs)
                 if (parsed.isNotEmpty()) {
                     dao.deleteByCityAndSource(cityId, "osm")
                     dao.insertAll(parsed)
@@ -101,7 +110,7 @@ class RestaurantRepository(
                     for (query in FSQ_FOOD_QUERIES) {
                         for (offset in 0 until FSQ_MAX_PAGES * FSQ_PAGE_SIZE step FSQ_PAGE_SIZE) {
                             val rawJson = fsqClient.searchPlaces(query, bbox, FSQ_PAGE_SIZE, offset)
-                            val batch = fsqImporter.parse(rawJson, cityId, nowMs)
+                            val batch = fsqImporter.parse(rawJson, provinceId = cityId, districtId = null, nowMs = nowMs)
                             if (batch.isEmpty()) break
                             for (r in batch) {
                                 if (allParsed.none { it.id == r.id }) allParsed += r
@@ -124,7 +133,7 @@ class RestaurantRepository(
         return RefreshResult(skipped = false, osmCount = dao.countByCityAndSource(cityId, "osm"))
     }
 
-    /** Cache status สำหรับ city — ใช้แสดง "อัปเดตเมื่อ..." */
+    /** Cache status สำหรับ city — ใช้แสดง "อัปเดตเมื่อ..." (legacy) */
     suspend fun cacheStatus(city: City): CacheStatus {
         val cityId = city.id
         val nowMs = System.currentTimeMillis()
@@ -134,6 +143,112 @@ class RestaurantRepository(
             cityId = cityId,
             osmCount = dao.countByCityAndSource(cityId, "osm"),
             fsqCount = dao.countByCityAndSource(cityId, "foursquare"),
+            osmUpdatedAt = osmLatest,
+            fsqUpdatedAt = fsqLatest,
+            nowMs = nowMs,
+        )
+    }
+
+    // === Phase 3 (M1.a): Province-scoped refresh (nationwide) ===
+
+    /**
+     * Generic refresh — ดึงข้อมูลร้านอาหารจาก OSM Overpass + Foursquare สำหรับ area ที่ระบุ
+     *
+     * Cache strategy (เหมือน [refreshCity]):
+     * - ถ้า OSM cache อายุ < [cacheTtlMs] → skip
+     * - ถ้าเก่ากว่า → ลบ cache เก่า + fetch ใหม่
+     *
+     * @param provinceId Province.id (เช่น "bangkok", "chiang_mai") — ใช้ filter + cache invalidation
+     * @param districtId District.id (เช่น "phra_nakhon") — optional, ใช้ tag บน Restaurant เท่านั้น
+     *                   (bbox ของจังหวัดยังใช้สำหรับ query — drill-down UI จะ filter ในภายหลัง)
+     * @param bbox Overpass query bbox (ปกติคือ province.bbox, หรือ sub-bbox สำหรับ drill-down)
+     *
+     * ใช้แทน [refreshCity] ใน M1.b (เมื่อ UI migrate ไปใช้ Province picker)
+     * ปัจจุบัน M1.a: เมธอดนี้พร้อมใช้ แต่ยังไม่ถูกเรียกจาก ViewModel
+     */
+    suspend fun refreshArea(
+        provinceId: String,
+        districtId: String? = null,
+        bbox: BoundingBox,
+        force: Boolean = false,
+        cacheTtlMs: Long = DEFAULT_CACHE_TTL_MS,
+    ): RefreshResult {
+        val nowMs = System.currentTimeMillis()
+
+        // === 1. OSM ===
+        val osmLatest = dao.latestUpdateByProvinceAndSource(provinceId, "osm")
+        val osmCacheExpired = osmLatest == null || (nowMs - osmLatest) > cacheTtlMs
+
+        if (force || osmCacheExpired) {
+            try {
+                Log.i(
+                    TAG,
+                    "OSM refresh: province=$provinceId district=$districtId force=$force expired=$osmCacheExpired",
+                )
+                val rawJson = osmClient.fetchRestaurants(bbox)
+                val parsed = osmImporter.parse(rawJson, provinceId, districtId, nowMs)
+                if (parsed.isNotEmpty()) {
+                    dao.deleteByProvinceAndSource(provinceId, "osm")
+                    dao.insertAll(parsed)
+                    Log.i(TAG, "OSM saved: ${parsed.size} records for $provinceId")
+                }
+            } catch (e: OsmException) {
+                Log.w(TAG, "OSM fetch failed for $provinceId: ${e.message}")
+                return RefreshResult(skipped = true, reason = "OSM: ${e.message}")
+            }
+        } else {
+            Log.d(TAG, "OSM cache hit: province=$provinceId age=${nowMs - osmLatest}ms")
+        }
+
+        // === 2. Foursquare (optional — only if API key configured) ===
+        if (fsqClient != null) {
+            val fsqLatest = dao.latestUpdateByProvinceAndSource(provinceId, "foursquare")
+            val fsqCacheExpired = fsqLatest == null || (nowMs - fsqLatest) > FSQ_CACHE_TTL_MS
+
+            if (force || fsqCacheExpired) {
+                try {
+                    Log.i(
+                        TAG,
+                        "FSQ refresh: province=$provinceId force=$force expired=$fsqCacheExpired",
+                    )
+                    val allParsed = mutableListOf<Restaurant>()
+                    for (query in FSQ_FOOD_QUERIES) {
+                        for (offset in 0 until FSQ_MAX_PAGES * FSQ_PAGE_SIZE step FSQ_PAGE_SIZE) {
+                            val rawJson = fsqClient.searchPlaces(query, bbox, FSQ_PAGE_SIZE, offset)
+                            val batch = fsqImporter.parse(rawJson, provinceId, districtId, nowMs)
+                            if (batch.isEmpty()) break
+                            for (r in batch) {
+                                if (allParsed.none { it.id == r.id }) allParsed += r
+                            }
+                            if (batch.size < FSQ_PAGE_SIZE) break
+                        }
+                    }
+                    if (allParsed.isNotEmpty()) {
+                        dao.deleteByProvinceAndSource(provinceId, "foursquare")
+                        dao.insertAll(allParsed)
+                        Log.i(TAG, "FSQ saved: ${allParsed.size} records for $provinceId")
+                    }
+                } catch (e: FoursquareException) {
+                    Log.w(TAG, "FSQ fetch failed for $provinceId: ${e.message}")
+                }
+            }
+        }
+
+        return RefreshResult(
+            skipped = false,
+            osmCount = dao.countByProvinceAndSource(provinceId, "osm"),
+        )
+    }
+
+    /** Cache status สำหรับ province — ใช้แสดง "อัปเดตเมื่อ..." (M1.a+) */
+    suspend fun cacheStatusByProvince(provinceId: String): CacheStatus {
+        val nowMs = System.currentTimeMillis()
+        val osmLatest = dao.latestUpdateByProvinceAndSource(provinceId, "osm")
+        val fsqLatest = dao.latestUpdateByProvinceAndSource(provinceId, "foursquare")
+        return CacheStatus(
+            cityId = provinceId,  // field name retained for back-compat
+            osmCount = dao.countByProvinceAndSource(provinceId, "osm"),
+            fsqCount = dao.countByProvinceAndSource(provinceId, "foursquare"),
             osmUpdatedAt = osmLatest,
             fsqUpdatedAt = fsqLatest,
             nowMs = nowMs,

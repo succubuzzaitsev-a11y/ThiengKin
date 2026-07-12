@@ -45,7 +45,7 @@ interface RestaurantDao {
         minLng: Double, maxLng: Double,
     ): Flow<List<Restaurant>>
 
-    // === Phase 2: City-scoped queries ===
+    // === Phase 2: City-scoped queries (legacy — M1.a keep for back-compat) ===
 
     /**
      * ดึงร้านตาม city_id + optional source filter
@@ -69,6 +69,44 @@ interface RestaurantDao {
 
     @Query("DELETE FROM restaurants WHERE city_id = :cityId AND source = :source")
     suspend fun deleteByCityAndSource(cityId: String, source: String): Int
+
+    // === Phase 3 (M1.a): Province/District-scoped queries — หลักใน nationwide mode ===
+
+    /**
+     * ดึงร้านตาม province_id (ทั้ง province — ไม่ filter district)
+     * - provinceId="" → ดึง manual (ไม่มี province) เท่านั้น
+     * - provinceId="bangkok" + source=null → ทั้งหมดในกรุงเทพ
+     * - provinceId="bangkok" + source="osm" → OSM เท่านั้น
+     */
+    @Query("""
+        SELECT * FROM restaurants
+        WHERE (:provinceId = '' OR province_id = :provinceId OR (province_id = '' AND source = 'manual'))
+          AND (:source IS NULL OR source = :source)
+        ORDER BY rating DESC, review_count DESC
+    """)
+    fun observeByProvince(provinceId: String, source: String? = null): Flow<List<Restaurant>>
+
+    /**
+     * ดึงร้านในอำเภอเฉพาะ (drill-down)
+     * - districtId="" → ไม่ควรเรียก (ใช้ observeByProvince แทน)
+     * - districtId="phra_nakhon" → ร้านในเขตพระนคร
+     */
+    @Query("""
+        SELECT * FROM restaurants
+        WHERE district_id = :districtId
+          AND (:source IS NULL OR source = :source)
+        ORDER BY rating DESC, review_count DESC
+    """)
+    fun observeByDistrict(districtId: String, source: String? = null): Flow<List<Restaurant>>
+
+    @Query("SELECT COUNT(*) FROM restaurants WHERE province_id = :provinceId AND source = :source")
+    suspend fun countByProvinceAndSource(provinceId: String, source: String): Int
+
+    @Query("SELECT MAX(source_updated_at) FROM restaurants WHERE province_id = :provinceId AND source = :source")
+    suspend fun latestUpdateByProvinceAndSource(provinceId: String, source: String): Long?
+
+    @Query("DELETE FROM restaurants WHERE province_id = :provinceId AND source = :source")
+    suspend fun deleteByProvinceAndSource(provinceId: String, source: String): Int
 
     // === Favorites ===
     @Query("SELECT * FROM restaurants WHERE is_favorite = 1 ORDER BY name ASC")

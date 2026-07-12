@@ -53,23 +53,35 @@ class OsmImporter {
 
     /**
      * @param rawJson Overpass API response (JSON)
-     * @param cityId city id (e.g. "bkk") — tagged on every record
+     * @param provinceId Province.id (e.g. "bangkok", "chiang_mai") — tagged on every record
+     *                    M1.a: also stored in cityId column for back-compat with observeByCity
+     * @param districtId District.id (e.g. "phra_nakhon") — optional, ใช้ตอน drill-down
      * @param nowMs timestamp (millis) — set on source_updated_at
      * @return list of Restaurant with source="osm"
      */
-    fun parse(rawJson: String, cityId: String, nowMs: Long): List<Restaurant> {
+    fun parse(
+        rawJson: String,
+        provinceId: String,
+        districtId: String? = null,
+        nowMs: Long,
+    ): List<Restaurant> {
         return try {
             val root = json.parseToJsonElement(rawJson).jsonObject
             val elements = root["elements"]?.jsonArray ?: return emptyList()
 
-            elements.mapNotNull { el -> parseElement(el, cityId, nowMs) }
+            elements.mapNotNull { el -> parseElement(el, provinceId, districtId, nowMs) }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to parse Overpass JSON", e)
             emptyList()
         }
     }
 
-    private fun parseElement(el: JsonElement, cityId: String, nowMs: Long): Restaurant? {
+    private fun parseElement(
+        el: JsonElement,
+        provinceId: String,
+        districtId: String?,
+        nowMs: Long,
+    ): Restaurant? {
         val obj = el.jsonObject
         val type = obj["type"]?.jsonPrimitive?.contentOrNull ?: return null
         val id = obj["id"]?.jsonPrimitive?.contentOrNull?.toString() ?: return null
@@ -127,7 +139,11 @@ class OsmImporter {
             photoUrl = tags.getString("contact:image") ?: tags.getString("image"),
             menuText = null,
             aiSummary = null,
-            cityId = cityId,
+            // M1.a: dual-tag (cityId = legacy key, provinceId + districtId = new nationwide keys)
+            // M1.b จะ drop cityId และใช้ provinceId เป็นหลัก
+            cityId = provinceId,
+            provinceId = provinceId,
+            districtId = districtId,
             openingHours = tags.getString("opening_hours"),
             capacity = tags.getString("capacity")?.toIntOrNull(),
             sourceUpdatedAt = nowMs,

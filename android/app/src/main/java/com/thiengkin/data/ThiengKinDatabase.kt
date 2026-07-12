@@ -7,14 +7,18 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-    entities = [Restaurant::class],
-    version = 3,  // v3: + city_id, opening_hours, capacity, source_updated_at
+    entities = [Restaurant::class, Province::class, District::class],
+    version = 4,  // v4: + Province, District tables + Restaurant.province_id, district_id
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
 abstract class ThiengKinDatabase : RoomDatabase() {
 
     abstract fun restaurantDao(): RestaurantDao
+
+    abstract fun provinceDao(): ProvinceDao
+
+    abstract fun districtDao(): DistrictDao
 
     companion object {
         @Volatile

@@ -61,19 +61,29 @@ class FoursquareImporter {
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    fun parse(rawJson: String, cityId: String, nowMs: Long): List<Restaurant> {
+    fun parse(
+        rawJson: String,
+        provinceId: String,
+        districtId: String? = null,
+        nowMs: Long,
+    ): List<Restaurant> {
         return try {
             val root = json.parseToJsonElement(rawJson).jsonObject
             val results = root["results"]?.jsonArray ?: return emptyList()
 
-            results.mapNotNull { el -> parseResult(el, cityId, nowMs) }
+            results.mapNotNull { el -> parseResult(el, provinceId, districtId, nowMs) }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to parse FSQ JSON", e)
             emptyList()
         }
     }
 
-    private fun parseResult(el: kotlinx.serialization.json.JsonElement, cityId: String, nowMs: Long): Restaurant? {
+    private fun parseResult(
+        el: kotlinx.serialization.json.JsonElement,
+        provinceId: String,
+        districtId: String?,
+        nowMs: Long,
+    ): Restaurant? {
         val obj = el.jsonObject
 
         // FSQ v3: fsq_place_id | FSQ v2: fsq_id (legacy)
@@ -135,7 +145,10 @@ class FoursquareImporter {
             photoUrl = null,  // Premium only
             menuText = null,
             aiSummary = null,
-            cityId = cityId,
+            // M1.a: dual-tag (cityId = legacy key, provinceId + districtId = new nationwide keys)
+            cityId = provinceId,
+            provinceId = provinceId,
+            districtId = districtId,
             openingHours = null,  // Premium only
             capacity = null,
             sourceUpdatedAt = nowMs,

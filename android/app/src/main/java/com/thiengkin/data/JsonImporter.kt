@@ -66,8 +66,11 @@ class JsonImporter(
         photoUrl = null,
         menuText = null,
         aiSummary = null,
-        // Phase 2 defaults (manual seed ไม่มี city)
+        // M1.a: legacy seed ไม่มี city/province info — ทั้งคู่ว่าง
+        // M1.b: seed จะถูกลบทิ้ง (OSM on-demand) — ไม่ต้อง worry
         cityId = "",
+        provinceId = "",
+        districtId = null,
         openingHours = null,
         capacity = null,
         sourceUpdatedAt = null,

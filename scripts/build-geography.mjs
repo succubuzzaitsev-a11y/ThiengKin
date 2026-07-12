@@ -135,8 +135,12 @@ function buildDistricts() {
     const p = f.properties;
     const bbox = computeBbox(f.geometry);
     const provinceId = makeId(p.pro_en);
+    // ID format: {provinceId}_{districtSlug}
+    // Reason: district names can repeat across provinces (e.g. "Chaloem Phra Kiat"
+    // is a special district type that exists in 4+ provinces). Province prefix
+    // guarantees global uniqueness.
     districts.push({
-      id: makeId(p.amp_en),
+      id: `${provinceId}_${makeId(p.amp_en)}`,
       code: p.amp_code,                    // official 4-digit code
       nameTh: p.amp_th,
       nameEn: p.amp_en,

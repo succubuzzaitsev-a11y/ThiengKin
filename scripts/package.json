@@ -7,9 +7,12 @@
   "scripts": {
     "start": "node setup-chiangmai.mjs",
     "refresh": "node setup-chiangmai.mjs --refresh",
-    "filter": "node filter-data.mjs"
+    "filter": "node filter-data.mjs",
+    "build:geo": "node build-geography.mjs",
+    "check:geo": "node check-geography.mjs",
+    "push:geo": "node push-geography.mjs"
   },
-  "keywords": ["chiangmai", "restaurants", "foursquare", "tiankin"],
+  "keywords": ["chiangmai", "restaurants", "foursquare", "tiankin", "osm", "supabase"],
   "author": "",
   "license": "MIT",
   "engines": {

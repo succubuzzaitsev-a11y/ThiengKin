@@ -2,10 +2,26 @@
 
 > Action items + session handoff — ลบ/complete เมื่อทำเสร็จ
 
-**Last updated:** 2026-07-12 18:45 (Asia/Bangkok)
+**Last updated:** 2026-07-12 19:38 (Asia/Bangkok)
 **Project root:** `D:\thiengKin`
 **Git branch:** `main`
 **Latest commit:** `4f0d124` (M1.b: UI migration — drop City, wire ProvincePicker)
+
+---
+
+## ✅ M2 · Supabase setup — DONE (2026-07-12)
+
+- [x] Create Supabase project (account `succubuzzaitsev@gmail.com`, ref `zlntknagzrcoduzxngmx`)
+- [x] Schema migrations: `001_initial_schema.sql` + `002_rls_policies.sql` (applied via `scripts/apply-migrations.mjs`)
+- [x] Push 7 regions + 77 provinces + 928 districts to Supabase (via `scripts/push-geography.mjs`)
+- [x] RLS enabled, public read (anon + authenticated)
+- [x] District IDs made unique with `{provinceId}_{districtSlug}` pattern (fixes chaloem_phra_kiat duplicates)
+- [x] Sync `data/thailand-geography.json` → `android/app/src/main/assets/thailand-geography.json` (IDs changed)
+
+**⚠️ Pending (M2 follow-up):**
+- [ ] Get Supabase **anon / Publishable** key for Android client (`SupabaseClient.kt`)
+- [ ] (security) Rotate Supabase service_role key + account password (both leaked in earlier chat)
+- [ ] (security) Move `Email.txt` plaintext password to password manager; add to `.gitignore` (DONE 2026-07-12)
 
 ---
 
@@ -88,16 +104,21 @@
 
 ---
 
-## 📋 Session handoff (2026-07-12 — M1.b done, M2 ready to start)
+## 📋 Session handoff (2026-07-12 — M1.b + M2 done, M3 ready to start)
 
 ### Where we are
 - **M0 done:** `data/thailand-geography.json` (77 provinces + 928 districts + 7 regions) — bundled ใน assets/
 - **M1.a done:** Room schema v3 → v4, เพิ่ม Province/District tables + Restaurant.provinceId/districtId + `GeographyRepository` seed on first launch + `RestaurantRepository.refreshArea()` generic
 - **M1.b done:** UI migration — ลบ City.kt/CitySelector.kt/JsonImporter.kt + seed-restaurants.json, ProvincePicker ใช้งานได้, TravelHomeViewModel/LocationRepository/ThiengKinApp wire Province/District ครบ
+- **M2 done (2026-07-12 19:38):** Supabase project live at `zlntknagzrcoduzxngmx.supabase.co`
+  - Schema: regions/provinces/districts/restaurants (RLS: public read, no write)
+  - Data: 7+77+928 rows pushed
+  - District IDs: `{provinceId}_{districtSlug}` (unique across provinces)
+  - Scripts: `scripts/apply-migrations.mjs` (DDL) + `scripts/push-geography.mjs` (data)
 - **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — แต่ใน design ใหม่ OSM เป็นหลัก FSQ เป็น optional enhancement
 - **Build:** `gradle :app:compileDebugKotlin --rerun-tasks` → BUILD SUCCESSFUL in 14s (M1.b verified)
 - **APK smoke test:** pending (ต้อง install + run on emulator — user ทำ)
-- **Next:** M2 — Supabase setup (6-8 ชม.)
+- **Next:** M3 — OSM nationwide pipeline (6-8 ชม.)
 
 ### Quick start tomorrow
 ```powershell

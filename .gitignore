@@ -7,6 +7,10 @@ node_modules/
 .env
 .env.local
 .env.*.local
+.env.txt
+thiengKin.env
+thiengKin.env.txt
+*.env.local
 
 # Logs
 *.log
@@ -23,6 +27,9 @@ data/raw-*.geojson
 !data/.gitkeep
 !data/README.md
 !data/thailand-geography.json
+
+# Playwright debug session output (transient)
+scripts/pw-*.json
 
 # Android / Kotlin (Phase 2+)
 android/.gradle/

@@ -17,11 +17,17 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 /**
- * FoursquareClient — Foursquare Places API v3 client (Pro endpoints with default fields)
+ * FoursquareClient — Foursquare Places API v3 client (places-api.foursquare.com)
  *
- * Endpoint: https://api.foursquare.com/v3/places/search
- * Auth: Header `Authorization: <API_KEY>` (FSQ_API_KEY in BuildConfig)
+ * Endpoint: https://places-api.foursquare.com/places/search
+ * Auth: Header `Authorization: Bearer <API_KEY>` (FSQ_API_KEY in BuildConfig)
+ * Version: `X-Places-Api-Version: 2025-06-17`
  * Free tier (verified 2026-07-11): **500 calls/month** (ลดจาก 10,000 เมืื่อ June 1, 2026)
+ *
+ * **สำคัญ (v3 breaking changes จาก v2):**
+ * - Base URL เปลี่ยน: `places-api.foursquare.com` (ไม่ใช่ `api.foursquare.com/v3`)
+ * - Auth header: `Bearer <key>` (ไม่ใช่ `<key>` ตรงๆ)
+ * - `categories` param ถูก IGNORED — ใช้ `query=<text>` + `sort=RELEVANCE` แทน
  *
  * Default fields (Pro): fsq_id, name, geocode, location, categories, chains, link
  * Premium (NOT free): rating, popularity, price, hours, tel, website, email, social_media, photos, tips
@@ -34,26 +40,37 @@ class FoursquareClient(
     private val httpClient: OkHttpClient = OsmClient.defaultClient,
 ) {
     /**
-     * Search places by bbox.
+     * Search places by text query within a bbox (FSQ v3 pattern).
      *
+     * @param query food-related search term (e.g. "restaurant", "cafe", "thai")
+     *              FSQ v3 IGNORES the `categories` param — caller must pass text queries.
      * @param bbox city bounding box
-     * @param limit max results (FSQ allows up to 50 per call)
+     * @param limit max results per call (FSQ allows up to 50)
+     * @param offset pagination offset (default 0)
      * @return raw JSON string — caller parses via [FoursquareImporter]
      */
-    suspend fun searchPlaces(bbox: BoundingBox, limit: Int = 50): String = withContext(Dispatchers.IO) {
+    suspend fun searchPlaces(
+        query: String,
+        bbox: BoundingBox,
+        limit: Int = 50,
+        offset: Int = 0,
+    ): String = withContext(Dispatchers.IO) {
         if (apiKey.isBlank()) {
             throw FoursquareException.MissingApiKey
         }
         val url = BASE_URL.toHttpUrl().newBuilder()
             .addQueryParameter("ll", "${bbox.centerLat},${bbox.centerLng}")
             .addQueryParameter("radius", bbox.radiusMeters.toString())
+            .addQueryParameter("query", query)
             .addQueryParameter("limit", limit.toString())
-            .addQueryParameter("categories", "13065")  // FSQ category: Restaurants + Cafes + Fast Food + Food Court
+            .addQueryParameter("offset", offset.toString())
+            .addQueryParameter("sort", "RELEVANCE")
             .build()
 
         val request = Request.Builder()
             .url(url)
-            .header("Authorization", apiKey)
+            .header("Authorization", "Bearer $apiKey")
+            .header("X-Places-Api-Version", API_VERSION)
             .header("Accept", "application/json")
             .build()
 
@@ -95,7 +112,8 @@ class FoursquareClient(
 
     companion object {
         private const val TAG = "FoursquareClient"
-        private const val BASE_URL = "https://api.foursquare.com/v3/places/search"
+        private const val BASE_URL = "https://places-api.foursquare.com/places/search"
+        private const val API_VERSION = "2025-06-17"
     }
 }
 

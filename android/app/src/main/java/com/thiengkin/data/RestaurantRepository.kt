@@ -95,12 +95,24 @@ class RestaurantRepository(
             if (force || fsqCacheExpired) {
                 try {
                     Log.i(TAG, "FSQ refresh: city=$cityId force=$force expired=$fsqCacheExpired")
-                    val rawJson = fsqClient.searchPlaces(bbox)
-                    val parsed = fsqImporter.parse(rawJson, cityId, nowMs)
-                    if (parsed.isNotEmpty()) {
+                    // FSQ v3: `categories` param is IGNORED — must iterate text queries
+                    // + dedupe by fsq_id. Shape copied from scripts/setup-chiangmai.mjs.
+                    val allParsed = mutableListOf<Restaurant>()
+                    for (query in FSQ_FOOD_QUERIES) {
+                        for (offset in 0 until FSQ_MAX_PAGES * FSQ_PAGE_SIZE step FSQ_PAGE_SIZE) {
+                            val rawJson = fsqClient.searchPlaces(query, bbox, FSQ_PAGE_SIZE, offset)
+                            val batch = fsqImporter.parse(rawJson, cityId, nowMs)
+                            if (batch.isEmpty()) break
+                            for (r in batch) {
+                                if (allParsed.none { it.id == r.id }) allParsed += r
+                            }
+                            if (batch.size < FSQ_PAGE_SIZE) break
+                        }
+                    }
+                    if (allParsed.isNotEmpty()) {
                         dao.deleteByCityAndSource(cityId, "foursquare")
-                        dao.insertAll(parsed)
-                        Log.i(TAG, "FSQ saved: ${parsed.size} records for $cityId")
+                        dao.insertAll(allParsed)
+                        Log.i(TAG, "FSQ saved: ${allParsed.size} records for $cityId")
                     }
                 } catch (e: FoursquareException) {
                     // FSQ failures are non-fatal (quota exhausted etc.)
@@ -136,6 +148,19 @@ class RestaurantRepository(
 
         /** FSQ cache TTL = 30 วัน (free tier 500/เดืือน — ใช้ให้คุ้ม) */
         const val FSQ_CACHE_TTL_MS = 30L * 24 * 60 * 60 * 1000
+
+        /**
+         * FSQ food-related text queries (FSQ v3 ignores `categories` param).
+         * ต้องวน query list + dedupe เพราะ v3 ไม่มี category filter
+         * Shape from scripts/setup-chiangmai.mjs
+         */
+        private val FSQ_FOOD_QUERIES = listOf("restaurant", "cafe", "thai", "noodle", "coffee", "street_food")
+
+        /** FSQ page size (max = 50 ต่อ call) */
+        private const val FSQ_PAGE_SIZE = 50
+
+        /** FSQ max pages ต่อ query (3 × 50 = 150 ต่อ query) */
+        private const val FSQ_MAX_PAGES = 3
     }
 }
 

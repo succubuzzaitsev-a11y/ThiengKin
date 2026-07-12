@@ -16,9 +16,13 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Data outputs (regenerable from scripts)
-data/*.json
+# - chiangmai-restaurants*.json are gitignored (raw + final user data)
+# - thailand-geography.json is committed (province/district reference data)
+data/chiangmai-restaurants*.json
+data/raw-*.geojson
 !data/.gitkeep
 !data/README.md
+!data/thailand-geography.json
 
 # Android / Kotlin (Phase 2+)
 android/.gradle/

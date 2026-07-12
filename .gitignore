@@ -23,6 +23,8 @@ pnpm-debug.log*
 # - chiangmai-restaurants*.json are gitignored (raw + final user data)
 # - thailand-geography.json is committed (province/district reference data)
 # - osm-*.json are gitignored (raw Overpass dumps); osm-*.meta.json summaries are kept
+# - parsed/osm-*.restaurants.json are gitignored (regen from scripts/osm-parse.mjs)
+# - parsed/osm-*.restaurants.meta.json summaries are kept
 data/chiangmai-restaurants*.json
 data/raw-*.geojson
 data/osm-*.json
@@ -30,6 +32,9 @@ data/osm-*.json
 !data/.gitkeep
 !data/README.md
 !data/thailand-geography.json
+data/parsed/osm-*.restaurants.json
+!data/parsed/osm-*.restaurants.meta.json
+!data/parsed/.gitkeep
 
 # Playwright debug session output (transient)
 scripts/pw-*.json

@@ -1,0 +1,30 @@
+{
+  "source": "mueang-nonthaburi",
+  "provinceId": "mueang_nonthaburi",
+  "districtId": null,
+  "parsedAt": "2026-07-12T16:20:16.855Z",
+  "elapsedSeconds": 0.01,
+  "total": 277,
+  "parsed": 179,
+  "skipped": {
+    "unnamed": 98,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 112,
+    "fast_food": 25,
+    "cafe": 46,
+    "food_court": 11,
+    "(none)": 83
+  },
+  "withName": 170,
+  "withNameTh": 56,
+  "withCuisine": 100,
+  "withAddress": 26,
+  "withPhone": 30,
+  "withWebsite": 19,
+  "withHours": 29,
+  "withPhoto": 0
+}

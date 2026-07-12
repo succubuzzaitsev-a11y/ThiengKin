@@ -15,6 +15,10 @@
     "fetch:osm:list": "node osm-fetch.mjs --list",
     "fetch:osm:cm": "node osm-fetch.mjs chiang_mai",
     "fetch:osm:cm-city": "node osm-fetch.mjs chiang_mai --city",
+    "parse:osm": "node osm-parse.mjs",
+    "parse:osm:list": "node osm-parse.mjs --list",
+    "parse:osm:all": "node osm-parse.mjs --all",
+    "parse:osm:cm": "node osm-parse.mjs chiang-mai-city --province chiang_mai --district chiang_mai_city",
     "osm:nearest": "node osm-nearest.mjs"
   },
   "keywords": ["chiangmai", "restaurants", "foursquare", "tiankin", "osm", "supabase"],

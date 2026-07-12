@@ -1,0 +1,31 @@
+{
+  "source": "chiang-mai-city",
+  "provinceId": "chiang_mai",
+  "districtId": "chiang_mai_city",
+  "parsedAt": "2026-07-12T16:20:16.615Z",
+  "elapsedSeconds": 0.14,
+  "total": 5573,
+  "parsed": 3286,
+  "skipped": {
+    "unnamed": 2287,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 1223,
+    "restaurant": 2233,
+    "fast_food": 157,
+    "food_court": 33,
+    "internet_cafe": 3,
+    "(none)": 1924
+  },
+  "withName": 2548,
+  "withNameTh": 534,
+  "withCuisine": 1627,
+  "withAddress": 500,
+  "withPhone": 503,
+  "withWebsite": 273,
+  "withHours": 988,
+  "withPhoto": 1
+}

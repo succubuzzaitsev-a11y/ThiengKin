@@ -10,7 +10,12 @@
     "filter": "node filter-data.mjs",
     "build:geo": "node build-geography.mjs",
     "check:geo": "node check-geography.mjs",
-    "push:geo": "node push-geography.mjs"
+    "push:geo": "node push-geography.mjs",
+    "fetch:osm": "node osm-fetch.mjs",
+    "fetch:osm:list": "node osm-fetch.mjs --list",
+    "fetch:osm:cm": "node osm-fetch.mjs chiang_mai",
+    "fetch:osm:cm-city": "node osm-fetch.mjs chiang_mai --city",
+    "osm:nearest": "node osm-nearest.mjs"
   },
   "keywords": ["chiangmai", "restaurants", "foursquare", "tiankin", "osm", "supabase"],
   "author": "",

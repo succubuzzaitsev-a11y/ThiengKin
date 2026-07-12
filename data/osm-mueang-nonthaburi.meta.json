@@ -1,0 +1,20 @@
+{
+  "label": "mueang-nonthaburi",
+  "bbox": {
+    "s": 13.809592,
+    "w": 100.427422,
+    "n": 13.894898,
+    "e": 100.549568
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.809592,100.427422,13.894898,100.549568);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.809592,100.427422,13.894898,100.549568);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-12T13:27:03.572Z",
+  "elapsedSeconds": 1.1,
+  "counts": {
+    "total": 277,
+    "nodes": 259,
+    "ways": 18,
+    "withName": 170
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

@@ -1,0 +1,20 @@
+{
+  "label": "Chiang Mai",
+  "bbox": {
+    "s": 17.242336,
+    "w": 98.045033,
+    "n": 20.147107,
+    "e": 99.570522
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.242336,98.045033,20.147107,99.570522);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.242336,98.045033,20.147107,99.570522);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-12T13:23:54.328Z",
+  "elapsedSeconds": 18.6,
+  "counts": {
+    "total": 9003,
+    "nodes": 8386,
+    "ways": 617,
+    "withName": 3740
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

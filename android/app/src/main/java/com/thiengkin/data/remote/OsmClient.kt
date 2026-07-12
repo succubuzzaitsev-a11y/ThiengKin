@@ -64,7 +64,7 @@ class OsmClient(
           node["amenity"~"restaurant|cafe|fast_food|food_court"](${bbox.toOverpassString()});
           way["amenity"~"restaurant|cafe|fast_food|food_court"](${bbox.toOverpassString()});
         );
-        out body;
+        out body center;
         >;
         out skel qt;
     """.trimIndent()

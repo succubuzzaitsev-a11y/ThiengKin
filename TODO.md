@@ -152,9 +152,9 @@ required province to be in CITY_BBOX before trying `GEOGRAPHY_FILE`. For 72 prov
   - Verify: GPS prompt, province picker (77 จังหวัด), restaurant list, refresh, search, filter chips
   - Install: `adb install -r app\build\outputs\apk\debug\app-debug.apk`
   - Logcat: `adb logcat -s "ThiengKinApp:*" "TravelHomeVM:*" "RestaurantRepository:*"`
-- [ ] (security) **Rotate Supabase secret key** — leaked in earlier chat (full key in session log, not in repo)
-  - https://supabase.com/dashboard/project/zlntknagzrcoduzxngmx/settings/api → "Secret" → regenerate
-  - ⚠️ Secret key bypasses RLS — must rotate ASAP
+- [x] (security) **Rotate Supabase secret key** — rotated 2026-07-13 (old key redacted from docs)
+  - https://supabase.com/dashboard/project/zlntknagzrcoduzxngmx/settings/api → "Secret" → regenerated
+  - อัพเดต local `.env` / `thiengKin.env` (gitignored) ด้วย — scripts อ่าน key จาก env ไม่ hardcode
 - [ ] (optional) Phase B preparation — auth, reviews, points
 
 ### M5 quick start (when device + anon key ready)

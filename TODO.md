@@ -152,7 +152,7 @@ trying `GEOGRAPHY_FILE`. For the other 72 provinces, condition is false → fall
 
 ---
 
-## 📋 Session handoff (2026-07-13 18:50 — M4 done, ready for M5)
+## 📋 Session handoff (2026-07-13 18:55 — M4 + docs done, M5 in progress)
 
 ### Where we are
 - **M0 done:** `data/thailand-geography.json` (77 provinces + 928 districts + 7 regions) — bundled ใน assets/
@@ -161,21 +161,48 @@ trying `GEOGRAPHY_FILE`. For the other 72 provinces, condition is false → fall
 - **M3 done (commit 8421e94):** OSM fetch/parse/push pipeline + Android client reads from Supabase
   - **33,442 unique OSM rows** in DB nationwide (verified)
   - Supabase primary, Overpass fallback
-- **M4 done (uncommitted):** Province picker UI finalize
+- **M4 done (commit e73678a):** Province picker UI finalize
   - GPS auto-detect → nearest province by centroid (1× per session)
   - Search restaurants by name (substring match, clear button, context-aware empty state)
   - Filter chip remap to OSM-actual (cuisine, category, openingHours) — was broken (Thai custom tags → 0 results)
   - Build verified: `compileDebugKotlin` 21s, `assembleDebug` 15s → APK 18MB
+- **Docs done (commit d55b668):** README + CHANGELOG updated to v4 nationwide state
 - **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — optional enrichment
-- **Next (M5):** APK smoke test (install + run on emulator/เครื่องจริง), TODO cleanup, README update → Ship MVP
+- **Next (M5):** APK smoke test on real device + anon key → Ship MVP
 
 ### Pending items for M5
-- [ ] APK install + run on emulator/เครื่องจริง (verify: GPS prompt, province picker, restaurant list, refresh button)
-- [ ] Set `BuildConfig.SUPABASE_ANON_KEY` (currently empty → Android client falls back to Overpass; works but less efficient)
-  - Get from: https://supabase.com/dashboard/project/zlntknagzrcoduzxngmx/settings/api → "Publishable key"
-  - ใส่ใน `gradle.properties` หรือ env `SUPABASE_ANON_KEY`
-- [ ] TODO cleanup + README update
+- [ ] **APK smoke test on real device** (BLOCKER — no adb device connected, need user)
+  - Verify: GPS prompt, province picker, restaurant list, refresh button, search, filter chips
+  - Build APK: `cd D:\thiengKin\android; .\gradlew.bat :app:assembleDebug` (18 MB)
+  - Install: `adb install -r app\build\outputs\apk\debug\app-debug.apk`
+  - Logcat: `adb logcat -s "ThiengKinApp:*" "TravelHomeVM:*" "RestaurantRepository:*"`
+- [ ] **Set `BuildConfig.SUPABASE_ANON_KEY`** (BLOCKER — needs user-provided key)
+  - Currently empty → Android client falls back to OSM Overpass direct query (works, less efficient)
+  - Get from: https://supabase.com/dashboard/project/zlntknagzrcoduzxngmx/settings/api
+  - Section: "Publishable and secret API keys" → `Publishable` (= old `anon` JWT, starts with `eyJ...`)
+  - ใส่ใน `android/gradle.properties` หรือ env `SUPABASE_ANON_KEY`
+- [ ] Push to GitHub (`origin` มีอยู่แล้ว: `succubuzzaitsev-a11y/ThiengKin`, main ahead 1+1 commits)
 - [ ] (optional) Phase B preparation — auth, reviews, points
+
+### M5 quick start (when device + anon key ready)
+```powershell
+# 1. Set env
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+$env:Path = "$env:JAVA_HOME\bin;C:\Users\Succubuz\AppData\Local\Android\Sdk\platform-tools;$env:Path"
+
+# 2. Put anon key in android/gradle.properties
+# SUPABASE_URL=https://zlntknagzrcoduzxngmx.supabase.co
+# SUPABASE_ANON_KEY=eyJ...  (Publishable key from dashboard)
+
+# 3. Build + install
+cd D:\thiengKin\android
+.\gradlew.bat :app:assembleDebug
+adb install -r app\build\outputs\apk\debug\app-debug.apk
+
+# 4. Smoke test
+adb logcat -s "ThiengKinApp:*" "TravelHomeVM:*" "RestaurantRepository:*"
+# → open app, allow GPS, verify province auto-detect, tap restaurant, refresh, search, filter
+```
 
 ### Quick start tomorrow
 ```powershell

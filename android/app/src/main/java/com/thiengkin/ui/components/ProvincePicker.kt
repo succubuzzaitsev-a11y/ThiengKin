@@ -141,10 +141,16 @@ fun ProvincePicker(
                     query = query,
                     onQueryChange = { query = it },
                     onProvinceClick = { province ->
+                        // M5 fix: select + close immediately (ไม่ auto-advance ไป district)
+                        // user เลือกจังหวัด → ปิด sheet → เห็นรายการร้านทันที
+                        // ถ้าจะ drill-down อำเภอ → กดปุ่ม "เลือกอำเภอใน..." ที่ top ของ list
                         onProvinceSelected(province)
                         onDistrictSelected(null)  // reset district
-                        viewingDistrictsFor = province
-                        query = ""
+                        showSheet = false
+                    },
+                    onDrillIntoDistricts = selectedProvince?.let { p ->
+                        // M5: callback สำหรับ drill-down (sheet ยังเปิดอยู่ → เปลี่ยน view)
+                        { viewingDistrictsFor = p }
                     },
                 )
             } else {
@@ -173,6 +179,7 @@ private fun ProvinceListContent(
     query: String,
     onQueryChange: (String) -> Unit,
     onProvinceClick: (Province) -> Unit,
+    onDrillIntoDistricts: (() -> Unit)? = null,  // M5: ถ้ามี province selected → แสดงปุ่ม "เลือกอำเภอ"
 ) {
     Column(
         modifier = Modifier
@@ -217,6 +224,15 @@ private fun ProvinceListContent(
             LazyColumn(
                 modifier = Modifier.heightIn(max = 480.dp),
             ) {
+                // M5: "เลือกอำเภอ" sticky row ที่ top (เฉพาะตอนมี province selected)
+                if (onDrillIntoDistricts != null && selectedProvince != null && query.isBlank()) {
+                    item(key = "__drill_districts__") {
+                        DistrictDrillRow(
+                            province = selectedProvince,
+                            onClick = onDrillIntoDistricts,
+                        )
+                    }
+                }
                 items(filtered, key = { it.id }) { province ->
                     ProvinceRow(
                         province = province,
@@ -228,6 +244,46 @@ private fun ProvinceListContent(
         }
 
         Spacer(Modifier.height(S4))
+    }
+}
+
+/** M5: Sticky row ที่ top ของ province list — เปิด district drill-down สำหรับ province ที่เลือกอยู่ */
+@Composable
+private fun DistrictDrillRow(
+    province: Province,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.10f))
+            .clickable(onClick = onClick)
+            .padding(horizontal = S3, vertical = S3),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "📂",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(end = S2),
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "เลือกอำเภอใน${province.nameTh}",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                text = "ดูร้านเฉพาะอำเภอที่สนใจ",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Text(
+            text = "▸",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary,
+        )
     }
 }
 

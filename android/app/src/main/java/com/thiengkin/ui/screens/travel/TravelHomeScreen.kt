@@ -355,7 +355,7 @@ private fun EmptyState(
                     color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
-                    text = "แตะปุ่มรีเฟรชเพื่อดึงข้อมูลจาก OpenStreetMap",
+                    text = "แตะปุ่มรีเฟรชเพื่อดึงข้อมูล",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

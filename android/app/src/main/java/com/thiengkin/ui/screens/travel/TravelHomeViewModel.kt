@@ -211,20 +211,35 @@ class TravelHomeViewModel(
     )
 
     init {
-        // Load all provinces (once, kept in memory for picker)
+        // M5 fix: รอ geography seed เสร็จก่อนโหลด provinces + initial selection
+        // (เดิม race condition — ThiengKinApp seed เป็น async, ViewModel อ่าน DB ตอนยังว่าง → picker เห็น list ว่าง)
         viewModelScope.launch {
-            _provinces.value = provinceDao.getAll()
-        }
+            var provinces = provinceDao.getAll()
+            var attempts = 0
+            while (provinces.isEmpty() && attempts < 100) {  // max 5s (50ms × 100)
+                kotlinx.coroutines.delay(50)
+                provinces = provinceDao.getAll()
+                attempts++
+            }
+            _provinces.value = provinces
+            Log.i(TAG, "Loaded ${provinces.size} provinces (after $attempts polls)")
 
-        // Set initial province + district from LocationRepository
-        val initialProvince = locationRepository.getSelectedProvince()
-        val initialDistrict = locationRepository.getSelectedDistrict()
-        if (initialProvince != null) {
-            _selectedProvinceId.value = initialProvince.id
-            _selectedDistrictId.value = initialDistrict?.id
-            viewModelScope.launch {
-                _districts.value = districtDao.getByProvince(initialProvince.id)
-                triggerRefreshIfNeeded(initialProvince, initialDistrict?.id, force = false)
+            // หลัง provinces พร้อม → re-read initial province (อาจเพิ่ง set โดย ThiengKinApp seed completion)
+            if (_selectedProvinceId.value == null) {
+                val initialProvince = locationRepository.getSelectedProvince()
+                val initialDistrict = locationRepository.getSelectedDistrict()
+                if (initialProvince != null) {
+                    Log.i(
+                        TAG,
+                        "Initial province from LocationRepository: ${initialProvince.id} (${initialProvince.nameTh})",
+                    )
+                    _selectedProvinceId.value = initialProvince.id
+                    _selectedDistrictId.value = initialDistrict?.id
+                    _districts.value = districtDao.getByProvince(initialProvince.id)
+                    triggerRefreshIfNeeded(initialProvince, initialDistrict?.id, force = false)
+                } else {
+                    Log.w(TAG, "No initial province — user must pick from picker")
+                }
             }
         }
 
@@ -326,11 +341,9 @@ class TravelHomeViewModel(
     }
 
     private fun triggerRefreshIfNeeded(province: Province, districtId: String?, force: Boolean) {
-        // Skip ถ้ามี refresh job กำลังรันอยู่
-        if (refreshJob?.isActive == true) {
-            Log.d(TAG, "refresh already in progress, skip")
-            return
-        }
+        // M5 fix: cancel previous job ก่อน (เดิม skip → user เปลี่ยนจังหวัดเร็วๆ จะตกหล่น)
+        // ตอนนี้: cancel + launch ใหม่ทันที
+        refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
             _refreshing.value = true
             try {
@@ -348,6 +361,10 @@ class TravelHomeViewModel(
                     "อัปเดตข้อมูลสำเร็จ (${result.osmCount} ร้าน)"
                 }
                 Log.i(TAG, "refresh done: $result")
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                // M5: refresh job ถูก cancel (มีการเปลี่ยน province/district) — ไม่ต้องแสดง error
+                Log.d(TAG, "refresh cancelled (newer refresh started)")
+                throw e
             } catch (e: Exception) {
                 Log.w(TAG, "refresh failed", e)
                 _refreshMessage.value = "ดึงข้อมูลไม่สำเร็จ: ${e.message}"

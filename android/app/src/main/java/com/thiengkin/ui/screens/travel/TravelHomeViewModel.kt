@@ -11,7 +11,6 @@ import com.thiengkin.data.Province
 import com.thiengkin.data.ProvinceDao
 import com.thiengkin.data.Restaurant
 import com.thiengkin.data.RestaurantRepository
-import com.thiengkin.data.distanceMeters
 import com.thiengkin.data.toBoundingBox
 import com.thiengkin.util.Haversine
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,6 +23,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * TravelHomeState — UI state ทั้งหมดของ Travel Home screen
@@ -36,6 +36,7 @@ data class TravelHomeState(
     val refreshing: Boolean = false,
     val restaurants: List<Restaurant> = emptyList(),
     val activeFilter: String = "ทั้งหมด",
+    val searchQuery: String = "",
     val location: LocationState = LocationState.Idle,
     val selectedProvince: Province? = null,
     val selectedDistrict: District? = null,
@@ -69,12 +70,19 @@ class TravelHomeViewModel(
 ) : ViewModel() {
 
     private val _filter = MutableStateFlow("ทั้งหมด")
+    private val _searchQuery = MutableStateFlow("")
     private val _selectedProvinceId = MutableStateFlow<String?>(null)
     private val _selectedDistrictId = MutableStateFlow<String?>(null)
     private val _refreshing = MutableStateFlow(false)
     private val _refreshMessage = MutableStateFlow<String?>(null)
 
     private var refreshJob: Job? = null
+
+    /**
+     * GPS auto-detect guard — เมื่อได้ real fix ครั้งแรกแล้ว จะ switch province อัตโนมัติ
+     * (ทำแค่ครั้งเดียวต่อ session — หลังจากนั้น user เปลี่ยนเอง = ไม่ override)
+     */
+    private var gpsAutoDetectDone = false
 
     /** All 77 provinces — load ครั้งเดียว เก็บใน memory ให้ ProvincePicker ใช้ */
     private val _provinces = MutableStateFlow<List<Province>>(emptyList())
@@ -98,23 +106,46 @@ class TravelHomeViewModel(
             }
         }
 
-    /** Data + filter pipeline (5 flows) */
+    /** Data + filter pipeline (6 flows) */
     private val dataFlow = combine(
         restaurantsFlow,
         _filter,
+        _searchQuery,
         locationRepository.state,
         _refreshing,
         _refreshMessage,
-    ) { all, filter, location, refreshing, refreshMsg ->
-        // 1) Filter by chip
-        val filtered = if (filter == "ทั้งหมด") {
+    ) { values ->
+        @Suppress("UNCHECKED_CAST")
+        val all = values[0] as List<Restaurant>
+        val filter = values[1] as String
+        val query = values[2] as String
+        @Suppress("UNCHECKED_CAST")
+        val location = values[3] as LocationState
+        val refreshing = values[4] as Boolean
+        val refreshMsg = values[5] as String?
+
+        // 1) Search query (M4) — substring match name + nameTh + nameEn + category
+        //    ทำก่อน chip filter เพราะ result set เล็กลง filter เร็วขึ้น
+        val searched = if (query.isBlank()) {
             all
         } else {
-            val tags = FILTER_TO_TAGS[filter].orEmpty()
-            all.filter { r -> tags.any { r.tags.contains(it) } }
+            val q = query.trim()
+            all.filter { r ->
+                r.name.contains(q, ignoreCase = true) ||
+                    (r.nameTh?.contains(q, ignoreCase = true) == true) ||
+                    (r.category?.contains(q, ignoreCase = true) == true)
+            }
         }
 
-        // 2) Sort: real GPS → distance asc, fallback → rating desc
+        // 2) Filter by chip (M4: predicate-based, รองรับทั้ง tags + category + openingHours)
+        val filtered = if (filter == "ทั้งหมด" || filter.isBlank()) {
+            searched
+        } else {
+            val predicate = FILTERS[filter] ?: FILTERS["ทั้งหมด"]!!
+            searched.filter(predicate)
+        }
+
+        // 3) Sort: real GPS → distance asc, fallback → rating desc
         val sorted: List<Restaurant> = when (location) {
             is LocationState.Granted ->
                 if (!location.isFallback) {
@@ -134,6 +165,7 @@ class TravelHomeViewModel(
         DataState(
             restaurants = sorted.take(20),
             filter = filter,
+            query = query,
             location = location,
             refreshing = refreshing,
             refreshMsg = refreshMsg,
@@ -164,6 +196,7 @@ class TravelHomeViewModel(
             refreshing = data.refreshing,
             restaurants = data.restaurants,
             activeFilter = data.filter,
+            searchQuery = data.query,
             location = data.location,
             selectedProvince = lookup.selectedProvince,
             selectedDistrict = lookup.selectedDistrict,
@@ -194,10 +227,61 @@ class TravelHomeViewModel(
                 triggerRefreshIfNeeded(initialProvince, initialDistrict?.id, force = false)
             }
         }
+
+        // M4: GPS auto-detect → เมื่อได้ real fix ครั้งแรก ให้หา province ที่ใกล้ที่สุด
+        //     (centroid distance) แล้ว switch ถ้าต่างจาก default — ทำครั้งเดียวต่อ session
+        viewModelScope.launch {
+            locationRepository.state.collectLatest { location ->
+                if (!gpsAutoDetectDone &&
+                    location is LocationState.Granted &&
+                    !location.isFallback
+                ) {
+                    gpsAutoDetectDone = true
+                    autoSelectProvinceFromGps(location.lat, location.lng)
+                }
+            }
+        }
+    }
+
+    /**
+     * M4: หา province ที่ใกล้ GPS fix ที่สุด (จาก centroid) แล้ว setProvince
+     * - ถ้าใกล้กว่า default Bangkok (>X km) → switch
+     * - ถ้าใกล้เดิม → no-op
+     * - ถ้าไม่เจอเลย (empty list) → no-op
+     */
+    private suspend fun autoSelectProvinceFromGps(lat: Double, lng: Double) {
+        val provinces = _provinces.value.ifEmpty { provinceDao.getAll() }
+        if (provinces.isEmpty()) {
+            Log.w(TAG, "GPS auto-detect skipped: no provinces loaded")
+            return
+        }
+        val nearest = provinces.minByOrNull { p ->
+            Haversine.distanceKm(lat, lng, p.centroidLat, p.centroidLng)
+        } ?: return
+
+        val current = _selectedProvinceId.value
+        if (current == nearest.id) {
+            Log.d(TAG, "GPS auto-detect: already at ${nearest.id} (${nearest.nameTh})")
+            return
+        }
+
+        val distanceKm = Haversine.distanceKm(lat, lng, nearest.centroidLat, nearest.centroidLng)
+        Log.i(
+            TAG,
+            "GPS auto-detect: lat=$lat lng=$lng → ${nearest.id} (${nearest.nameTh}) " +
+                "distance=${"%.1f".format(distanceKm)}km (was=$current)",
+        )
+        // setProvince จะ trigger OSM fetch ใหม่สำหรับ province ใหม่
+        setProvince(nearest, null)
     }
 
     fun setFilter(label: String) {
         _filter.value = label
+    }
+
+    /** M4: search query — substring filter on restaurant name + nameTh + category */
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
     }
 
     fun toggleFavorite(id: String) {
@@ -276,6 +360,7 @@ class TravelHomeViewModel(
     private data class DataState(
         val restaurants: List<Restaurant>,
         val filter: String,
+        val query: String,
         val location: LocationState,
         val refreshing: Boolean,
         val refreshMsg: String?,
@@ -299,14 +384,41 @@ class TravelHomeViewModel(
         lateinit var defaultDistrictDao: DistrictDao
 
         /**
-         * Filter chip → tag mapping
-         * เช็คทั้ง Thai tag และ English tag + OSM-derived tag กันพลาด
+         * Filter chip → predicate (M4: predicate-based filter, ใช้ทั้ง tags + category + openingHours)
+         *
+         * OSM-derived data:
+         * - `r.category` (string) = "ร้านอาหาร" | "คาเฟ่" | "ฟาสต์ฟู้ด" | "ศูนย์อาหาร" (mapped from `amenity` tag)
+         * - `r.tags` (list) = OSM tags เช่น "cuisine:thai", "takeaway:yes", "outdoor_seating", etc.
+         * - `r.openingHours` (string) = "Mo-Fr 07:00-22:00" (OSM standard format, 18% ของ places)
+         *
+         * **M4 design notes:**
+         * - "เปิดเช้า" ใช้ openingHours != null เป็น proxy (curated/active places tend to set hours)
+         *   Phase 2: parse opening_hours string เพื่อ filter เฉพาะ early-morning (06:00-09:00)
+         * - "ของฝาก" map เป็น cafe + bubble tea (กินได้ + กาแฟเป็นของฝากคลาสสิก)
+         *   Phase 2: เพิ่ม dedicated souvenir type (ปัจจุบัน OSM ไม่มี taxonomy นี้)
          */
-        val FILTER_TO_TAGS: Map<String, List<String>> = mapOf(
-            "ริมทาง" to listOf("ริมทาง", "highway", "ริมปั๊ม"),
-            "เปิดเช้า" to listOf("เปิดเช้า", "morning", "early", "opening_hours"),
-            "คนท้องถิ่น" to listOf("คนท้องถิ่น", "local_favorite", "local", "cuisine:thai", "cuisine:noodle"),
-            "ของฝาก" to listOf("ของฝาก", "souvenir"),
+        val FILTERS: Map<String, (Restaurant) -> Boolean> = mapOf(
+            "ทั้งหมด" to { true },
+            // ริมทาง = fast food (ริมถนน) + takeaway (ซื้อกลับได้)
+            "ริมทาง" to { r ->
+                r.category == "ฟาสต์ฟู้ด" ||
+                    r.tags.contains("takeaway:yes") ||
+                    r.tags.contains("takeaway")
+            },
+            // เปิดเช้า = มี opening_hours (proxy: curated places เท่านั้นที่บอกเวลา)
+            "เปิดเช้า" to { r -> r.openingHours != null },
+            // คนท้องถิ่น = Thai / regional / noodle (อาหารท้องถิ่น)
+            "คนท้องถิ่น" to { r ->
+                r.tags.contains("cuisine:thai") ||
+                    r.tags.contains("cuisine:regional") ||
+                    r.tags.contains("cuisine:noodle")
+            },
+            // ของฝาก = cafe + coffee_shop + bubble_tea (กินได้ + กาแฟเป็นของฝาก)
+            "ของฝาก" to { r ->
+                r.category == "คาเฟ่" ||
+                    r.tags.contains("cuisine:coffee_shop") ||
+                    r.tags.contains("cuisine:bubble_tea")
+            },
         )
     }
 }

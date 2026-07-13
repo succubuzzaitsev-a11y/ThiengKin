@@ -2,11 +2,11 @@
 
 > Action items + session handoff — ลบ/complete เมื่อทำเสร็จ
 
-**Last updated:** 2026-07-13 01:05 (Asia/Bangkok)
+**Last updated:** 2026-07-13 18:50 (Asia/Bangkok)
 **Project root:** `D:\thiengKin`
 **Git branch:** `main`
-**Latest commit:** `4f0d124` (M1.b: UI migration — drop City, wire ProvincePicker)
-**Working tree:** M3.d code uncommitted (7 files, +158/-46) — see "🛑 M3.d blocker" below
+**Latest commit:** `8421e94` (M3.d: Android client + nationwide sweep 33,442 rows)
+**Working tree:** M4 changes uncommitted (3 files, +122/-22) — see M4 below
 
 ---
 
@@ -115,14 +115,31 @@ trying `GEOGRAPHY_FILE`. For the other 72 provinces, condition is false → fall
 5. Build verify M3.d: `gradle :app:compileDebugKotlin --rerun-tasks` (JAVA_HOME set first)
 6. Commit: M3.d + sweep results as 1 commit (or 2 if M3.d wants separate checkpoint)
 
-### M4 · Province picker UI (3-4 ชม.)
-- [ ] Searchable province select (ค้นหา Thai/English)
-- [ ] District list within province (chips / list)
-- [ ] GPS reverse geocode → auto-detect province on first launch
-- [ ] "Change location" UI
+### M4 · Province picker UI (3-4 ชม.) ✅ DONE (2026-07-13 18:50)
+- [x] Searchable province select (ค้นหา Thai/English) — `ProvincePicker.kt` (M1.b)
+- [x] District list within province (chips / list) — `DistrictListContent` (M1.b)
+- [x] GPS reverse geocode → auto-detect province on first launch — `TravelHomeViewModel.autoSelectProvinceFromGps()` (M4)
+  - ทำ centroid-based nearest match → `setProvince()` (1× per session, ไม่ override manual changes)
+- [x] "Change location" UI — pill in `TravelHomeScreen` (M1.b)
+- [x] **Search restaurants by name** (M4 bonus) — `SearchInput` refactor + `TravelHomeViewModel.setSearchQuery()`
+  - substring match `name` + `nameTh` + `category`, มี clear button (×), keyboard "Search" action
+  - Empty state context-aware: "ไม่พบร้านที่ค้นหา" + "ล้างคำค้น" button
+- [x] **Fix filter chip mapping → OSM-actual** (M4 bonus) — `FILTERS: Map<String, (Restaurant) -> Boolean>`
+  - "ริมทาง" → fast_food + takeaway (เดิม Thai custom tags = 0 matches)
+  - "เปิดเช้า" → openingHours != null (proxy: curated/active places)
+  - "คนท้องถิ่น" → cuisine:thai + cuisine:regional + cuisine:noodle
+  - "ของฝาก" → cafe + coffee_shop + bubble_tea
+- [x] **Build verify** — `gradle :app:compileDebugKotlin` → SUCCESSFUL in 21s
+- [x] **APK build** — `gradle :app:assembleDebug` → SUCCESSFUL in 15s, APK 18MB
 
-### M5 · Ship MVP (2-3 ชม.)
-- [ ] APK smoke test (offline + online)
+**Files changed (3):**
+- `android/app/src/main/java/com/thiengkin/ui/components/SearchInput.kt` — refactor static → static+editable modes
+- `android/app/src/main/java/com/thiengkin/ui/screens/travel/TravelHomeScreen.kt` — wire SearchInput value+onValueChange, EmptyState context-aware
+- `android/app/src/main/java/com/thiengkin/ui/screens/travel/TravelHomeViewModel.kt` — GPS auto-detect, search query, predicate-based FILTERS
+
+### M5 · Ship MVP (2-3 ชม.) — NEXT
+- [ ] APK smoke test (offline + online) — install + run on emulator/เครื่องจริง
+- [ ] Set `BuildConfig.SUPABASE_ANON_KEY` (currently empty → Overpass fallback)
 - [ ] TODO cleanup
 - [ ] README update
 
@@ -135,31 +152,53 @@ trying `GEOGRAPHY_FILE`. For the other 72 provinces, condition is false → fall
 
 ---
 
-## 📋 Session handoff (2026-07-13 01:05 — M3.d code done, sweep bug found)
+## 📋 Session handoff (2026-07-13 18:50 — M4 done, ready for M5)
 
 ### Where we are
 - **M0 done:** `data/thailand-geography.json` (77 provinces + 928 districts + 7 regions) — bundled ใน assets/
-- **M1.a done:** Room schema v3 → v4, เพิ่ม Province/District tables + Restaurant.provinceId/districtId + `GeographyRepository` seed on first launch + `RestaurantRepository.refreshArea()` generic
-- **M1.b done:** UI migration — ลบ City.kt/CitySelector.kt/JsonImporter.kt + seed-restaurants.json, ProvincePicker ใช้งานได้, TravelHomeViewModel/LocationRepository/ThiengKinApp wire Province/District ครบ
-- **M2 done (2026-07-12 19:38):** Supabase project live at `zlntknagzrcoduzxngmx.supabase.co`
-  - Schema: regions/provinces/districts/restaurants (RLS: public read, no write)
-  - Data: 7+77+928 rows pushed
-  - District IDs: `{provinceId}_{districtSlug}` (unique across provinces)
-  - Scripts: `scripts/apply-migrations.mjs` (DDL) + `scripts/push-geography.mjs` (data)
-- **M3.a/b/c done (committed):** OSM fetch/parse/push pipeline
-- **M3.d code done (uncommitted, build unverified):** Android client reads from Supabase
-  - Files: `SupabaseClient.kt`, `SupabaseImporter.kt` (new), `ThiengKinApp.kt`, `RestaurantRepository.kt`, `build.gradle.kts` (modified)
-  - Pattern: Supabase primary, Overpass fallback (anon-key gated)
-- **M3.d sweep bug found (2026-07-13 00:55):** `osm-fetch.mjs:133` เงื่อนไข `CITY_BBOX[provinceId]` ทำให้ 72/77 จังหวัด fall through ไป chiang_mai city — see "🛑 M3.d blocker"
-- **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — optional enrichment, ไม่ใช่ primary
-- **Build last verified:** `gradle :app:compileDebugKotlin --rerun-tasks` → BUILD SUCCESSFUL in 14s (M1.b, **pre-M3.d**)
-- **APK smoke test:** pending (M3.d build not verified yet — fix bug + sweep first)
-- **Next:** fix bug → re-run sweep → verify build → commit M3.d
+- **M1.a/b done:** schema + UI migration, ProvincePicker ใช้งานได้
+- **M2 done:** Supabase live at `zlntknagzrcoduzxngmx.supabase.co` (7+77+928 geography rows)
+- **M3 done (commit 8421e94):** OSM fetch/parse/push pipeline + Android client reads from Supabase
+  - **33,442 unique OSM rows** in DB nationwide (verified)
+  - Supabase primary, Overpass fallback
+- **M4 done (uncommitted):** Province picker UI finalize
+  - GPS auto-detect → nearest province by centroid (1× per session)
+  - Search restaurants by name (substring match, clear button, context-aware empty state)
+  - Filter chip remap to OSM-actual (cuisine, category, openingHours) — was broken (Thai custom tags → 0 results)
+  - Build verified: `compileDebugKotlin` 21s, `assembleDebug` 15s → APK 18MB
+- **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — optional enrichment
+- **Next (M5):** APK smoke test (install + run on emulator/เครื่องจริง), TODO cleanup, README update → Ship MVP
 
-### Supabase current state (verified 2026-07-13 01:00)
-- restaurants total: **13,888 rows** (all source=osm, all district_id IS NULL)
+### Pending items for M5
+- [ ] APK install + run on emulator/เครื่องจริง (verify: GPS prompt, province picker, restaurant list, refresh button)
+- [ ] Set `BuildConfig.SUPABASE_ANON_KEY` (currently empty → Android client falls back to Overpass; works but less efficient)
+  - Get from: https://supabase.com/dashboard/project/zlntknagzrcoduzxngmx/settings/api → "Publishable key"
+  - ใส่ใน `gradle.properties` หรือ env `SUPABASE_ANON_KEY`
+- [ ] TODO cleanup + README update
+- [ ] (optional) Phase B preparation — auth, reviews, points
+
+### Quick start tomorrow
+```powershell
+# 1. Set JAVA_HOME
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+$env:Path = "$env:JAVA_HOME\bin;$env:Path"
+
+# 2. Build APK
+cd D:\thiengKin\android
+.\gradlew.bat :app:assembleDebug
+# → app/build/outputs/apk/debug/app-debug.apk
+
+# 3. Install (if emulator running)
+adb install -r app\build\outputs\apk\debug\app-debug.apk
+
+# 4. Verify logcat
+adb logcat -s "ThiengKinApp:*" "TravelHomeVM:*" "RestaurantRepository:*"
+```
+
+### Supabase current state (verified 2026-07-13 18:00)
+- restaurants total: **33,442 rows** (all source=osm, 77 จังหวัด)
 - source=foursquare: 0 | source=manual: 0
-- (สูงกว่า 5,199 ที่จำได้ — มี pushes อื่นๆ ที่ไม่ได้บันทึกไว้ใน memory)
+- Bangkok 16,731 + 76 จังหวัด = 33,442 (verified Content-Range)
 
 ### Quick start tomorrow
 ```powershell
@@ -253,6 +292,10 @@ Client + Repository ส่ง FSQ v3 ถูกต้องแล้ว:
 
 | Date | Commit | What |
 |------|--------|------|
+| 2026-07-13 | (M4, uncommitted) | **feat(android): M4 province picker finalize — GPS auto-detect, search by name, OSM-actual filter chips** |
+| 2026-07-13 | `8421e94` | **feat(osm): M3.d Android client + nationwide sweep (77จังหวัด, 33,442 OSM rows)** |
+| 2026-07-13 | `ac6300d` | **feat(osm): M3.c push pipeline — parsed OSM → Supabase restaurants (mirror refreshArea)** |
+| 2026-07-12 | `be810bf` | **feat(supabase): M2 Supabase setup — schema, RLS, geography push (7r/77p/928d)** |
 | 2026-07-12 | `4f0d124` | **feat(android): M1.b UI migration — drop City/CitySelector/JsonImporter, wire ProvincePicker** |
 | 2026-07-12 | `65280f9` | **feat(osm): M3.b parser — Overpass JSON → Restaurant[] (Node mirror of OsmImporter.kt)** |
 | 2026-07-12 | `a1f79fd` | **feat(osm): M3.a Overpass fetcher (province/city/bbox) + OsmClient center** |

@@ -190,10 +190,12 @@ fun TravelHomeScreen(
                 }
             }
 
-            // Search input
+            // Search input (M4 — wires to ViewModel.searchQuery, filters restaurants by name)
             SearchInput(
                 leadingIcon = Icons.Filled.Search,
                 placeholder = "ค้นหาร้าน...",
+                value = state.searchQuery,
+                onValueChange = { viewModel.setSearchQuery(it) },
                 showArrow = false,
                 modifier = Modifier.padding(top = S3, bottom = S2),
             )
@@ -247,7 +249,9 @@ fun TravelHomeScreen(
             } else if (state.restaurants.isEmpty()) {
                 EmptyState(
                     refreshing = state.refreshing,
+                    hasSearchQuery = state.searchQuery.isNotBlank(),
                     onRefresh = { viewModel.refresh() },
+                    onClearSearch = { viewModel.setSearchQuery("") },
                 )
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(S2)) {
@@ -282,12 +286,17 @@ fun TravelHomeScreen(
 }
 
 /**
- * Empty state — เมื่อยังไม่มีข้อมูล (cache ว่าง + fetch ยังไม่เสร็จ)
+ * Empty state — เมื่อยังไม่มีข้อมูล (cache ว่าง + fetch ยังไม่เสร็จ) หรือ search ไม่เจอ
+ *
+ * M4: ถ้ามี search query → แสดง "ไม่พบร้านที่ค้นหา" + ปุ่มล้างคำค้น
+ *     ถ้าไม่มี → แสดง "ยังไม่มีข้อมูล" + ปุ่มรีเฟรช (เดิม)
  */
 @Composable
 private fun EmptyState(
     refreshing: Boolean,
+    hasSearchQuery: Boolean,
     onRefresh: () -> Unit,
+    onClearSearch: () -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -307,6 +316,34 @@ private fun EmptyState(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            } else if (hasSearchQuery) {
+                Text(
+                    text = "🔍",
+                    style = MaterialTheme.typography.displayLarge,
+                )
+                Text(
+                    text = "ไม่พบร้านที่ค้นหา",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Text(
+                    text = "ลองเปลี่ยนคำค้นหรือเลือกจังหวัดอื่น",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(MaterialTheme.colorScheme.primary)
+                        .clickable { onClearSearch() }
+                        .padding(horizontal = S4, vertical = S2),
+                ) {
+                    Text(
+                        text = "ล้างคำค้น",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
             } else {
                 Text(
                     text = "🍜",

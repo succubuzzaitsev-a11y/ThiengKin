@@ -33,13 +33,12 @@ import com.thiengkin.ui.components.RestaurantCard
 import com.thiengkin.ui.theme.S2
 import com.thiengkin.ui.theme.S3
 import com.thiengkin.ui.theme.S4
+import com.thiengkin.ui.theme.S7
 
 /**
  * Screen 07 — Favorites (Light)
  *
- * ร้านที่บันทึกไว้ · 3 sort tabs (ล่าสุด / ตามจังหวัด / ตาม rating)
- *
- * v0.2: Sort tabs ทำงานจริง · subtitle เปลี่ยนตาม mode · ใช้ district แทน favoritedDaysAgo (null)
+ * v0.4: refactored เป็น LazyColumn เป็น root เพื่อให้ทั้งหน้า scroll พร้อมกัน
  */
 @Composable
 fun FavoritesScreen(
@@ -49,97 +48,101 @@ fun FavoritesScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = S4),
+            .background(MaterialTheme.colorScheme.background),
+        contentPadding = PaddingValues(horizontal = S4, vertical = S3),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = S3, bottom = S2),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Pill(text = "รายการโปรด", variant = PillVariant.Yellow)
-            Box(
-                modifier = Modifier.size(34.dp).clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurfaceVariant),
-                contentAlignment = Alignment.Center,
+        // === item: TopBar ===
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(bottom = S2),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("ส", style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.background)
+                Pill(text = "รายการโปรด", variant = PillVariant.Yellow)
+                Box(
+                    modifier = Modifier.size(34.dp).clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.onSurfaceVariant),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("ส", style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.background)
+                }
             }
         }
 
-        Text(
-            "ร้านที่บันทึกไว้",
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            maxLines = 1,
-        )
-
-        // Subtitle — dynamic ตาม sortMode
-        Text(
-            text = favoritesSubtitle(state.sortMode, state.restaurants.size),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-            modifier = Modifier.padding(top = 2.dp),
-        )
-
-        // Sort tabs — wire ใช้งานจริง
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(0.dp),
-            contentPadding = PaddingValues(vertical = S3),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            items(FavoritesSort.values()) { mode ->
-                SortTab(
-                    label = mode.label,
-                    count = if (mode == state.sortMode) state.restaurants.size else 0,
-                    active = mode == state.sortMode,
-                    onClick = { viewModel.setSortMode(mode) },
-                )
-            }
+        // === item: Title ===
+        item {
+            Text(
+                "ร้านที่บันทึกไว้",
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+            )
         }
 
-        // List หรือ empty state
-        if (state.restaurants.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
+        // === item: Subtitle ===
+        item {
+            Text(
+                text = favoritesSubtitle(state.sortMode, state.restaurants.size),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                modifier = Modifier.padding(top = 2.dp, bottom = S3),
+            )
+        }
+
+        // === item: Sort tabs ===
+        item {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(0.dp),
+                contentPadding = PaddingValues(bottom = S3),
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = state.emptyMessage,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = S4),
-                )
-            }
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(S2)) {
-                items(state.restaurants, key = { it.id }) { r ->
-                    RestaurantCard(
-                        restaurant = r,
-                        etaText = districtLabel(r.district),
-                        distText = r.category ?: "—",
-                        onNavigate = { onNavigate(r.lat, r.lng, r.name) },
-                        onFavoriteToggle = { viewModel.toggleFavorite(r.id) },
-                        onClick = { onRestaurantClick(r.id) },
+                items(FavoritesSort.values()) { mode ->
+                    SortTab(
+                        label = mode.label,
+                        count = if (mode == state.sortMode) state.restaurants.size else 0,
+                        active = mode == state.sortMode,
+                        onClick = { viewModel.setSortMode(mode) },
                     )
                 }
-                item { Spacer(Modifier.height(S4)) }
             }
+        }
+
+        // === items: List OR empty state ===
+        if (state.restaurants.isEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = S7),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = state.emptyMessage,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = S4),
+                    )
+                }
+            }
+        } else {
+            items(state.restaurants, key = { it.id }) { r ->
+                RestaurantCard(
+                    restaurant = r,
+                    etaText = districtLabel(r.district),
+                    distText = r.category ?: "—",
+                    onNavigate = { onNavigate(r.lat, r.lng, r.name) },
+                    onFavoriteToggle = { viewModel.toggleFavorite(r.id) },
+                    onClick = { onRestaurantClick(r.id) },
+                )
+            }
+            item { Spacer(Modifier.height(S4)) }
         }
     }
 }
 
-/**
- * Subtitle — เปลี่ยนตาม sort mode
- * - ล่าสุด: "N ร้าน · เรียงตามชื่อ"
- * - ตามจังหวัด: "N ร้าน · เรียงตามอำเภอ"
- * - ตาม rating: "N ร้าน · เรียงตาม rating"
- */
 private fun favoritesSubtitle(mode: FavoritesSort, count: Int): String {
     val sortDesc = when (mode) {
         FavoritesSort.Latest -> "เรียงตามชื่อ"
@@ -149,7 +152,6 @@ private fun favoritesSubtitle(mode: FavoritesSort, count: Int): String {
     return "$count ร้าน · $sortDesc"
 }
 
-/** แปลง district enum เป็น label สั้นๆ */
 private fun districtLabel(district: String?): String =
     when {
         district == null -> "—"

@@ -39,16 +39,16 @@ import com.thiengkin.ui.components.Pill
 import com.thiengkin.ui.components.PillVariant
 import com.thiengkin.ui.components.RestaurantCard
 import com.thiengkin.ui.components.SearchInput
+import com.thiengkin.ui.theme.S1
 import com.thiengkin.ui.theme.S2
 import com.thiengkin.ui.theme.S3
 import com.thiengkin.ui.theme.S4
+import com.thiengkin.ui.theme.S7
 
 /**
  * Screen 04 — Near-me (Light)
  *
- * โหมดจอดรถ · filter เต็ม · เรียงตามระยะ
- *
- * v0.2: ใช้ GPS จริง + radius chips + category filter
+ * v0.4: refactored เป็น LazyColumn เป็น root เพื่อให้ทั้งหน้า scroll พร้อมกัน
  */
 @Composable
 fun NearMeScreen(
@@ -62,128 +62,155 @@ fun NearMeScreen(
 
     // Auto-request location เหมือน Travel Home
     LaunchedEffect(Unit) {
-        onRequestLocationPermission()
+        try {
+            onRequestLocationPermission()
+        } catch (_: Throwable) {
+            // Ignore: บาง context ไม่พร้อมรับ permission request
+        }
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = S4),
+            .background(MaterialTheme.colorScheme.background),
+        contentPadding = PaddingValues(horizontal = S4, vertical = S3),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = S3, bottom = S2),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Pill(text = "ใกล้คุณ", variant = PillVariant.Red)
-            Box(
-                modifier = Modifier.size(34.dp).clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurfaceVariant),
-                contentAlignment = Alignment.Center,
+        // === item: TopBar ===
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(bottom = S2),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Pill(text = "ใกล้คุณ", variant = PillVariant.Red)
+                Box(
+                    modifier = Modifier
+                        .size(34.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.onSurfaceVariant),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        "ส",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.background,
+                    )
+                }
+            }
+        }
+
+        // === item: Title ===
+        item {
+            Text(
+                text = "ร้านแถวนี้",
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+            )
+        }
+
+        // === item: Sub-text ===
+        item {
+            LocationSubtext(
+                location = state.location,
+                radiusKm = state.radiusKm,
+                count = state.restaurants.size,
+                onRequestPermission = {
+                    val granted = ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                    ) == PackageManager.PERMISSION_GRANTED
+                    if (granted) viewModel.requestLocation() else onRequestLocationPermission()
+                },
+                modifier = Modifier.padding(top = 2.dp, bottom = S2),
+            )
+        }
+
+        // === item: Search input ===
+        item {
+            SearchInput(
+                leadingIcon = Icons.Filled.Search,
+                placeholder = "ค้นหาร้าน...",
+                showArrow = false,
+                modifier = Modifier.padding(bottom = S2),
+            )
+        }
+
+        // === item: Radius chips ===
+        item {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(S2),
+                contentPadding = PaddingValues(bottom = S2),
+            ) {
+                items(RADIUS_OPTIONS) { km ->
+                    FilterChip(
+                        text = if (km >= 1.0) "${km.toInt()} กม." else "${(km * 1000).toInt()} ม.",
+                        active = state.radiusKm == km,
+                        onClick = { viewModel.setRadius(km) },
+                    )
+                }
+            }
+        }
+
+        // === item: Category chips ===
+        item {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(S2),
+                contentPadding = PaddingValues(bottom = S2),
+            ) {
+                items(CATEGORY_OPTIONS) { cat ->
+                    FilterChip(
+                        text = cat,
+                        active = state.activeCategory == cat,
+                        onClick = { viewModel.setCategory(cat) },
+                    )
+                }
+            }
+        }
+
+        // === item: Result count row ===
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = S2),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    "ส",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.background,
+                    text = "${state.restaurants.size} ร้าน · เรียงตามระยะ",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
-            }
-        }
-
-        Text(
-            text = "ร้านแถวนี้",
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            maxLines = 1,
-        )
-
-        // Location sub-text (dynamic)
-        LocationSubtext(
-            location = state.location,
-            radiusKm = state.radiusKm,
-            count = state.restaurants.size,
-            onRequestPermission = {
-                val granted = ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                ) == PackageManager.PERMISSION_GRANTED
-                if (granted) viewModel.requestLocation() else onRequestLocationPermission()
-            },
-        )
-
-        SearchInput(
-            leadingIcon = Icons.Filled.Search,
-            placeholder = "ค้นหาร้าน...",
-            showArrow = false,
-            modifier = Modifier.padding(vertical = S2),
-        )
-
-        // Radius chips: 1 / 3 / 5 / 10 กม.
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(S2),
-            contentPadding = PaddingValues(bottom = S2),
-        ) {
-            items(RADIUS_OPTIONS) { km ->
-                FilterChip(
-                    text = if (km >= 1.0) "${km.toInt()} กม." else "${(km * 1000).toInt()} ม.",
-                    active = state.radiusKm == km,
-                    onClick = { viewModel.setRadius(km) },
-                )
-            }
-        }
-
-        // Category chips
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(S2),
-            contentPadding = PaddingValues(bottom = S2),
-        ) {
-            items(CATEGORY_OPTIONS) { cat ->
-                FilterChip(
-                    text = cat,
-                    active = state.activeCategory == cat,
-                    onClick = { viewModel.setCategory(cat) },
-                )
-            }
-        }
-
-        // Result count
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = S2),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = "${state.restaurants.size} ร้าน · เรียงตามระยะ",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-            Text(
-                text = "กรอง ▾",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-
-        // Restaurant list
-        if (state.restaurants.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
-                    text = "ไม่มีร้านในรัศมี ${radiusLabel(state.radiusKm)}จากตำแหน่งนี้",
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = "กรอง ▾",
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(S2)) {
-                items(state.restaurants, key = { it.id }) { r ->
-                    RestaurantCard(
-                        restaurant = r,
-                        etaText = etaTextFor(r.distanceMeters),
-                        distText = distTextFor(r.distanceMeters),
-                        onNavigate = { onNavigate(r.lat, r.lng, r.name) },
-                        onFavoriteToggle = { viewModel.toggleFavorite(r.id) },
-                        onClick = { onRestaurantClick(r.id) },
+        }
+
+        // === items: Restaurant list OR empty state ===
+        if (state.restaurants.isEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = S7),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "ไม่มีร้านในรัศมี ${radiusLabel(state.radiusKm)}จากตำแหน่งนี้",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
+            }
+        } else {
+            items(state.restaurants, key = { it.id }) { r ->
+                RestaurantCard(
+                    restaurant = r,
+                    etaText = etaTextFor(r.distanceMeters),
+                    distText = distTextFor(r.distanceMeters),
+                    onNavigate = { onNavigate(r.lat, r.lng, r.name) },
+                    onFavoriteToggle = { viewModel.toggleFavorite(r.id) },
+                    onClick = { onRestaurantClick(r.id) },
+                )
             }
         }
     }
@@ -191,10 +218,6 @@ fun NearMeScreen(
 
 /**
  * Sub-text ใต้หัวเรื่อง — แสดงตำแหน่งปัจจุบัน + รัศมี
- * - Granted (real): "📍 {address} · ในรัศมี 3 กม."
- * - Granted (fallback): "{fallbackReason} · ในรัศมี 3 กม." + แตะเพื่อขอ permission
- * - Loading: "กำลังระบุตำแหน่ง..."
- * - Idle: "แตะเพื่อระบุตำแหน่ง"
  */
 @Composable
 private fun LocationSubtext(
@@ -202,6 +225,7 @@ private fun LocationSubtext(
     radiusKm: Double,
     count: Int,
     onRequestPermission: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val (mainText, subText, showRetryHint) = when (location) {
         is LocationState.Idle -> Triple("แตะเพื่อระบุตำแหน่ง", null, true)
@@ -220,9 +244,8 @@ private fun LocationSubtext(
         }
     }
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(top = 2.dp)
             .clickable(enabled = showRetryHint) { onRequestPermission() },
     ) {
         Text(
@@ -262,7 +285,6 @@ private fun distTextFor(meters: Int?): String =
 
 private fun etaTextFor(meters: Int?): String {
     if (meters == null) return "—"
-    // ~60 km/h driving → minutes
     val minutes = (meters / 1000.0 / 60.0 * 60).toInt().coerceAtLeast(1)
     return "ขับ $minutes นาที"
 }

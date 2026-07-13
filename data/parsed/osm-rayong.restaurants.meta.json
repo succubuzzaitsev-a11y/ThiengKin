@@ -1,0 +1,30 @@
+{
+  "source": "rayong",
+  "provinceId": "rayong",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.114Z",
+  "elapsedSeconds": 0.01,
+  "total": 1406,
+  "parsed": 1169,
+  "skipped": {
+    "unnamed": 237,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 287,
+    "cafe": 915,
+    "fast_food": 31,
+    "food_court": 1,
+    "(none)": 172
+  },
+  "withName": 1139,
+  "withNameTh": 119,
+  "withCuisine": 164,
+  "withAddress": 105,
+  "withPhone": 63,
+  "withWebsite": 23,
+  "withHours": 64,
+  "withPhoto": 2
+}

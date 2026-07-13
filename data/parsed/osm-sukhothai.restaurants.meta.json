@@ -1,0 +1,30 @@
+{
+  "source": "sukhothai",
+  "provinceId": "sukhothai",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.336Z",
+  "elapsedSeconds": 0.01,
+  "total": 665,
+  "parsed": 302,
+  "skipped": {
+    "unnamed": 363,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 263,
+    "cafe": 111,
+    "fast_food": 22,
+    "food_court": 5,
+    "(none)": 264
+  },
+  "withName": 261,
+  "withNameTh": 36,
+  "withCuisine": 180,
+  "withAddress": 34,
+  "withPhone": 38,
+  "withWebsite": 10,
+  "withHours": 51,
+  "withPhoto": 1
+}

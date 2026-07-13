@@ -1,0 +1,20 @@
+{
+  "label": "Yala",
+  "bbox": {
+    "s": 5.612871,
+    "w": 100.834806,
+    "n": 6.683807,
+    "e": 101.608761
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](5.612871,100.834806,6.683807,101.608761);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](5.612871,100.834806,6.683807,101.608761);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:50:00.847Z",
+  "elapsedSeconds": 1.4,
+  "counts": {
+    "total": 106,
+    "nodes": 102,
+    "ways": 4,
+    "withName": 74
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

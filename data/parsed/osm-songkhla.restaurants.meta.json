@@ -1,0 +1,31 @@
+{
+  "source": "songkhla",
+  "provinceId": "songkhla",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.322Z",
+  "elapsedSeconds": 0.01,
+  "total": 1463,
+  "parsed": 559,
+  "skipped": {
+    "unnamed": 904,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 173,
+    "restaurant": 381,
+    "food_court": 16,
+    "fast_food": 113,
+    "internet_cafe": 2,
+    "(none)": 778
+  },
+  "withName": 485,
+  "withNameTh": 79,
+  "withCuisine": 241,
+  "withAddress": 70,
+  "withPhone": 71,
+  "withWebsite": 23,
+  "withHours": 95,
+  "withPhoto": 1
+}

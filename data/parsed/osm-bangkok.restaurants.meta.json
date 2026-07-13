@@ -1,0 +1,35 @@
+{
+  "source": "bangkok",
+  "provinceId": "bangkok",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.431Z",
+  "elapsedSeconds": 0.2,
+  "total": 16731,
+  "parsed": 7721,
+  "skipped": {
+    "unnamed": 9010,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 5238,
+    "cafe": 2440,
+    "fast_food": 764,
+    "food_court": 157,
+    "parking_space;fast_food": 1,
+    "internet_cafe": 13,
+    "cafe;bicycle_rental": 1,
+    "concept_cafe": 2,
+    "cafe;restaurant": 1,
+    "(none)": 8114
+  },
+  "withName": 6600,
+  "withNameTh": 1604,
+  "withCuisine": 3820,
+  "withAddress": 1714,
+  "withPhone": 1067,
+  "withWebsite": 885,
+  "withHours": 1564,
+  "withPhoto": 83
+}

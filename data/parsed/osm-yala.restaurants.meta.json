@@ -1,0 +1,30 @@
+{
+  "source": "yala",
+  "provinceId": "yala",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.632Z",
+  "elapsedSeconds": 0.01,
+  "total": 106,
+  "parsed": 77,
+  "skipped": {
+    "unnamed": 29,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 46,
+    "cafe": 27,
+    "fast_food": 8,
+    "food_court": 4,
+    "(none)": 21
+  },
+  "withName": 74,
+  "withNameTh": 13,
+  "withCuisine": 40,
+  "withAddress": 20,
+  "withPhone": 32,
+  "withWebsite": 2,
+  "withHours": 42,
+  "withPhoto": 0
+}

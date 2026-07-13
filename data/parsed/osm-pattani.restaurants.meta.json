@@ -1,0 +1,29 @@
+{
+  "source": "pattani",
+  "provinceId": "pattani",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.725Z",
+  "elapsedSeconds": 0,
+  "total": 56,
+  "parsed": 34,
+  "skipped": {
+    "unnamed": 22,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 20,
+    "cafe": 15,
+    "food_court": 1,
+    "(none)": 20
+  },
+  "withName": 30,
+  "withNameTh": 8,
+  "withCuisine": 21,
+  "withAddress": 12,
+  "withPhone": 17,
+  "withWebsite": 1,
+  "withHours": 25,
+  "withPhoto": 0
+}

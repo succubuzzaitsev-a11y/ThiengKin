@@ -1,0 +1,30 @@
+{
+  "source": "phra-nakhon-si-ayutthaya",
+  "provinceId": "phra_nakhon_si_ayutthaya",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.924Z",
+  "elapsedSeconds": 0.01,
+  "total": 834,
+  "parsed": 329,
+  "skipped": {
+    "unnamed": 505,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "food_court": 6,
+    "fast_food": 33,
+    "restaurant": 306,
+    "cafe": 130,
+    "(none)": 359
+  },
+  "withName": 279,
+  "withNameTh": 57,
+  "withCuisine": 167,
+  "withAddress": 41,
+  "withPhone": 42,
+  "withWebsite": 17,
+  "withHours": 70,
+  "withPhoto": 0
+}

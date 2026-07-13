@@ -1,0 +1,30 @@
+{
+  "source": "prachin-buri",
+  "provinceId": "prachin_buri",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.026Z",
+  "elapsedSeconds": 0,
+  "total": 269,
+  "parsed": 113,
+  "skipped": {
+    "unnamed": 156,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 75,
+    "cafe": 57,
+    "fast_food": 6,
+    "food_court": 5,
+    "(none)": 126
+  },
+  "withName": 101,
+  "withNameTh": 27,
+  "withCuisine": 49,
+  "withAddress": 11,
+  "withPhone": 12,
+  "withWebsite": 5,
+  "withHours": 13,
+  "withPhoto": 0
+}

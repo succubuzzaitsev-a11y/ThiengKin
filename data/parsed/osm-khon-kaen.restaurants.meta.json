@@ -1,0 +1,31 @@
+{
+  "source": "khon-kaen",
+  "provinceId": "khon_kaen",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.997Z",
+  "elapsedSeconds": 0.02,
+  "total": 991,
+  "parsed": 622,
+  "skipped": {
+    "unnamed": 369,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 431,
+    "food_court": 22,
+    "cafe": 229,
+    "fast_food": 46,
+    "internet_cafe": 3,
+    "(none)": 260
+  },
+  "withName": 590,
+  "withNameTh": 327,
+  "withCuisine": 383,
+  "withAddress": 143,
+  "withPhone": 147,
+  "withWebsite": 45,
+  "withHours": 173,
+  "withPhoto": 0
+}

@@ -1,0 +1,30 @@
+{
+  "source": "kamphaeng-phet",
+  "provinceId": "kamphaeng_phet",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.948Z",
+  "elapsedSeconds": 0.01,
+  "total": 569,
+  "parsed": 195,
+  "skipped": {
+    "unnamed": 374,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 132,
+    "cafe": 86,
+    "fast_food": 21,
+    "food_court": 1,
+    "(none)": 329
+  },
+  "withName": 159,
+  "withNameTh": 27,
+  "withCuisine": 155,
+  "withAddress": 49,
+  "withPhone": 52,
+  "withWebsite": 18,
+  "withHours": 69,
+  "withPhoto": 1
+}

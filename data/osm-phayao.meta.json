@@ -1,0 +1,20 @@
+{
+  "label": "Phayao",
+  "bbox": {
+    "s": 18.805425,
+    "w": 99.68289,
+    "n": 19.736007,
+    "e": 100.62906
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](18.805425,99.68289,19.736007,100.62906);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](18.805425,99.68289,19.736007,100.62906);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:24:19.158Z",
+  "elapsedSeconds": 5.4,
+  "counts": {
+    "total": 439,
+    "nodes": 397,
+    "ways": 42,
+    "withName": 119
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

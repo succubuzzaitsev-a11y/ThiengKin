@@ -1,0 +1,30 @@
+{
+  "source": "kalasin",
+  "provinceId": "kalasin",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.935Z",
+  "elapsedSeconds": 0,
+  "total": 144,
+  "parsed": 115,
+  "skipped": {
+    "unnamed": 29,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 69,
+    "cafe": 47,
+    "fast_food": 18,
+    "food_court": 2,
+    "(none)": 8
+  },
+  "withName": 103,
+  "withNameTh": 19,
+  "withCuisine": 58,
+  "withAddress": 21,
+  "withPhone": 27,
+  "withWebsite": 5,
+  "withHours": 31,
+  "withPhoto": 0
+}

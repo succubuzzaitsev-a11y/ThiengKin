@@ -1,0 +1,20 @@
+{
+  "label": "Sakon Nakhon",
+  "bbox": {
+    "s": 16.772798,
+    "w": 103.252665,
+    "n": 18.088343,
+    "e": 104.435245
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.772798,103.252665,18.088343,104.435245);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.772798,103.252665,18.088343,104.435245);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:36:32.501Z",
+  "elapsedSeconds": 10.6,
+  "counts": {
+    "total": 212,
+    "nodes": 196,
+    "ways": 16,
+    "withName": 94
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

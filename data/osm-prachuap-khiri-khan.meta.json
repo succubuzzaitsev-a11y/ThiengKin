@@ -1,0 +1,20 @@
+{
+  "label": "Prachuap Khiri Khan",
+  "bbox": {
+    "s": 10.955626,
+    "w": 99.148856,
+    "n": 12.645237,
+    "e": 100.019746
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](10.955626,99.148856,12.645237,100.019746);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](10.955626,99.148856,12.645237,100.019746);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:31:18.381Z",
+  "elapsedSeconds": 96.6,
+  "counts": {
+    "total": 986,
+    "nodes": 926,
+    "ways": 60,
+    "withName": 545
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

@@ -1,0 +1,31 @@
+{
+  "source": "udon-thani",
+  "provinceId": "udon_thani",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.594Z",
+  "elapsedSeconds": 0.04,
+  "total": 2372,
+  "parsed": 1473,
+  "skipped": {
+    "unnamed": 899,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 1039,
+    "cafe": 526,
+    "fast_food": 113,
+    "internet_cafe": 12,
+    "food_court": 5,
+    "(none)": 677
+  },
+  "withName": 1208,
+  "withNameTh": 165,
+  "withCuisine": 784,
+  "withAddress": 181,
+  "withPhone": 299,
+  "withWebsite": 84,
+  "withHours": 328,
+  "withPhoto": 0
+}

@@ -1,0 +1,20 @@
+{
+  "label": "Nan",
+  "bbox": {
+    "s": 18.013367,
+    "w": 100.337502,
+    "n": 19.634157,
+    "e": 101.357029
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](18.013367,100.337502,19.634157,101.357029);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](18.013367,100.337502,19.634157,101.357029);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:18:38.056Z",
+  "elapsedSeconds": 89.3,
+  "counts": {
+    "total": 387,
+    "nodes": 366,
+    "ways": 21,
+    "withName": 195
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

@@ -1,0 +1,30 @@
+{
+  "source": "chachoengsao",
+  "provinceId": "chachoengsao",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.468Z",
+  "elapsedSeconds": 0.01,
+  "total": 885,
+  "parsed": 390,
+  "skipped": {
+    "unnamed": 495,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 212,
+    "cafe": 207,
+    "fast_food": 53,
+    "food_court": 7,
+    "(none)": 406
+  },
+  "withName": 356,
+  "withNameTh": 67,
+  "withCuisine": 199,
+  "withAddress": 54,
+  "withPhone": 64,
+  "withWebsite": 41,
+  "withHours": 77,
+  "withPhoto": 1
+}

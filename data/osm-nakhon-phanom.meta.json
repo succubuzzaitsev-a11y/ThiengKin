@@ -1,0 +1,20 @@
+{
+  "label": "Nakhon Phanom",
+  "bbox": {
+    "s": 16.787039,
+    "w": 103.981734,
+    "n": 18.023985,
+    "e": 104.805865
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.787039,103.981734,18.023985,104.805865);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.787039,103.981734,18.023985,104.805865);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:14:44.429Z",
+  "elapsedSeconds": 7.3,
+  "counts": {
+    "total": 207,
+    "nodes": 202,
+    "ways": 5,
+    "withName": 110
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

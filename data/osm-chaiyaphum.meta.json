@@ -1,0 +1,20 @@
+{
+  "label": "Chaiyaphum",
+  "bbox": {
+    "s": 15.331877,
+    "w": 101.317174,
+    "n": 16.730666,
+    "e": 102.459437
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.331877,101.317174,16.730666,102.459437);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.331877,101.317174,16.730666,102.459437);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T09:59:17.990Z",
+  "elapsedSeconds": 10.9,
+  "counts": {
+    "total": 112,
+    "nodes": 105,
+    "ways": 7,
+    "withName": 69
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

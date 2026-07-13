@@ -1,0 +1,20 @@
+{
+  "label": "Lopburi",
+  "bbox": {
+    "s": 14.646299,
+    "w": 100.420664,
+    "n": 15.750392,
+    "e": 101.40587
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.646299,100.420664,15.750392,101.40587);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.646299,100.420664,15.750392,101.40587);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:09:29.963Z",
+  "elapsedSeconds": 7.8,
+  "counts": {
+    "total": 216,
+    "nodes": 209,
+    "ways": 7,
+    "withName": 126
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

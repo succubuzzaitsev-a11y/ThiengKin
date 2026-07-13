@@ -1,0 +1,20 @@
+{
+  "label": "Kamphaeng Phet",
+  "bbox": {
+    "s": 15.858233,
+    "w": 99.016106,
+    "n": 16.913503,
+    "e": 100.046092
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.858233,99.016106,16.913503,100.046092);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.858233,99.016106,16.913503,100.046092);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:04:29.212Z",
+  "elapsedSeconds": 11.4,
+  "counts": {
+    "total": 569,
+    "nodes": 488,
+    "ways": 81,
+    "withName": 159
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

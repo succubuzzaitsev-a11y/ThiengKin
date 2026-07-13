@@ -1,0 +1,20 @@
+{
+  "label": "Phuket",
+  "bbox": {
+    "s": 7.478502,
+    "w": 98.258155,
+    "n": 8.200128,
+    "e": 98.471646
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](7.478502,98.258155,8.200128,98.471646);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](7.478502,98.258155,8.200128,98.471646);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-12T17:47:03.420Z",
+  "elapsedSeconds": 2,
+  "counts": {
+    "total": 4196,
+    "nodes": 3937,
+    "ways": 259,
+    "withName": 1681
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

@@ -1,0 +1,20 @@
+{
+  "label": "Trat",
+  "bbox": {
+    "s": 11.56168,
+    "w": 102.244535,
+    "n": 12.756798,
+    "e": 102.912402
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](11.56168,102.244535,12.756798,102.912402);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](11.56168,102.244535,12.756798,102.912402);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:46:15.970Z",
+  "elapsedSeconds": 1.3,
+  "counts": {
+    "total": 934,
+    "nodes": 863,
+    "ways": 71,
+    "withName": 397
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

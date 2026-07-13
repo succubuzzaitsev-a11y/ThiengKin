@@ -1,0 +1,20 @@
+{
+  "label": "Nakhon Si Thammarat",
+  "bbox": {
+    "s": 7.837021,
+    "w": 99.234188,
+    "n": 9.326426,
+    "e": 100.336909
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](7.837021,99.234188,9.326426,100.336909);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](7.837021,99.234188,9.326426,100.336909);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:17:05.869Z",
+  "elapsedSeconds": 16.5,
+  "counts": {
+    "total": 597,
+    "nodes": 554,
+    "ways": 43,
+    "withName": 206
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

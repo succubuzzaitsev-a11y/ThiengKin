@@ -1,0 +1,30 @@
+{
+  "source": "phetchabun",
+  "provinceId": "phetchabun",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.840Z",
+  "elapsedSeconds": 0,
+  "total": 342,
+  "parsed": 143,
+  "skipped": {
+    "unnamed": 199,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 96,
+    "cafe": 87,
+    "fast_food": 15,
+    "food_court": 2,
+    "(none)": 142
+  },
+  "withName": 106,
+  "withNameTh": 22,
+  "withCuisine": 85,
+  "withAddress": 21,
+  "withPhone": 30,
+  "withWebsite": 13,
+  "withHours": 30,
+  "withPhoto": 0
+}

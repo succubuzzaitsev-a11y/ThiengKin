@@ -1,0 +1,31 @@
+{
+  "startedAt": "2026-07-13T11:05:26.973Z",
+  "options": {
+    "forceFetch": false,
+    "skipFetch": false,
+    "skipPush": false,
+    "dryRun": false,
+    "only": "parse",
+    "startFrom": null,
+    "help": false
+  },
+  "phases": {
+    "fetch": {
+      "phase": "fetch",
+      "skipped": true
+    },
+    "parse": {
+      "phase": "parse",
+      "totalParsed": 52165,
+      "totalElements": 99191,
+      "totalFiles": 79,
+      "elapsedSeconds": 2.7
+    },
+    "push": {
+      "phase": "push",
+      "skipped": true
+    }
+  },
+  "finishedAt": "2026-07-13T11:05:29.806Z",
+  "elapsedSeconds": 2.833
+}

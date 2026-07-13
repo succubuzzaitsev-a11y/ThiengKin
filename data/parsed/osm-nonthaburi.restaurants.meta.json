@@ -1,0 +1,30 @@
+{
+  "source": "nonthaburi",
+  "provinceId": "nonthaburi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.694Z",
+  "elapsedSeconds": 0.03,
+  "total": 1693,
+  "parsed": 758,
+  "skipped": {
+    "unnamed": 935,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 527,
+    "cafe": 248,
+    "food_court": 29,
+    "fast_food": 105,
+    "(none)": 784
+  },
+  "withName": 633,
+  "withNameTh": 150,
+  "withCuisine": 329,
+  "withAddress": 146,
+  "withPhone": 98,
+  "withWebsite": 79,
+  "withHours": 130,
+  "withPhoto": 7
+}

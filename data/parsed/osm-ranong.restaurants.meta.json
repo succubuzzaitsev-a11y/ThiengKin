@@ -1,0 +1,30 @@
+{
+  "source": "ranong",
+  "provinceId": "ranong",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.066Z",
+  "elapsedSeconds": 0.01,
+  "total": 243,
+  "parsed": 190,
+  "skipped": {
+    "unnamed": 53,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 141,
+    "cafe": 63,
+    "fast_food": 18,
+    "food_court": 1,
+    "(none)": 20
+  },
+  "withName": 144,
+  "withNameTh": 7,
+  "withCuisine": 74,
+  "withAddress": 17,
+  "withPhone": 15,
+  "withWebsite": 6,
+  "withHours": 28,
+  "withPhoto": 0
+}

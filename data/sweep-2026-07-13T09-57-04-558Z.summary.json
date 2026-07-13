@@ -1,0 +1,413 @@
+{
+  "startedAt": "2026-07-13T09:57:04.707Z",
+  "options": {
+    "forceFetch": false,
+    "skipFetch": false,
+    "skipPush": false,
+    "dryRun": false,
+    "only": "fetch",
+    "startFrom": null,
+    "help": false
+  },
+  "phases": {
+    "fetch": {
+      "phase": "fetch",
+      "fetched": 71,
+      "skipped": 6,
+      "failed": 0,
+      "errors": [],
+      "perProvince": [
+        {
+          "id": "amnat_charoen",
+          "status": "fetched",
+          "elapsedSeconds": 5.4
+        },
+        {
+          "id": "ang_thong",
+          "status": "fetched",
+          "elapsedSeconds": 1.2
+        },
+        {
+          "id": "bangkok",
+          "status": "skipped"
+        },
+        {
+          "id": "bueng_kan",
+          "status": "fetched",
+          "elapsedSeconds": 84.6
+        },
+        {
+          "id": "buriram",
+          "status": "skipped"
+        },
+        {
+          "id": "chachoengsao",
+          "status": "fetched",
+          "elapsedSeconds": 2.3
+        },
+        {
+          "id": "chainat",
+          "status": "fetched",
+          "elapsedSeconds": 1.2
+        },
+        {
+          "id": "chaiyaphum",
+          "status": "fetched",
+          "elapsedSeconds": 11
+        },
+        {
+          "id": "chanthaburi",
+          "status": "fetched",
+          "elapsedSeconds": 87.7
+        },
+        {
+          "id": "chiang_mai",
+          "status": "skipped"
+        },
+        {
+          "id": "chiang_rai",
+          "status": "skipped"
+        },
+        {
+          "id": "chonburi",
+          "status": "fetched",
+          "elapsedSeconds": 89.7
+        },
+        {
+          "id": "chumphon",
+          "status": "fetched",
+          "elapsedSeconds": 87
+        },
+        {
+          "id": "kalasin",
+          "status": "fetched",
+          "elapsedSeconds": 7.7
+        },
+        {
+          "id": "kamphaeng_phet",
+          "status": "fetched",
+          "elapsedSeconds": 11.5
+        },
+        {
+          "id": "kanchanaburi",
+          "status": "fetched",
+          "elapsedSeconds": 82.5
+        },
+        {
+          "id": "khon_kaen",
+          "status": "fetched",
+          "elapsedSeconds": 89.3
+        },
+        {
+          "id": "krabi",
+          "status": "fetched",
+          "elapsedSeconds": 12.5
+        },
+        {
+          "id": "lampang",
+          "status": "fetched",
+          "elapsedSeconds": 9.1
+        },
+        {
+          "id": "lamphun",
+          "status": "fetched",
+          "elapsedSeconds": 53.1
+        },
+        {
+          "id": "loei",
+          "status": "fetched",
+          "elapsedSeconds": 13.7
+        },
+        {
+          "id": "lopburi",
+          "status": "fetched",
+          "elapsedSeconds": 7.9
+        },
+        {
+          "id": "mae_hong_son",
+          "status": "fetched",
+          "elapsedSeconds": 97.5
+        },
+        {
+          "id": "maha_sarakham",
+          "status": "fetched",
+          "elapsedSeconds": 3.4
+        },
+        {
+          "id": "mukdahan",
+          "status": "fetched",
+          "elapsedSeconds": 2.7
+        },
+        {
+          "id": "nakhon_nayok",
+          "status": "fetched",
+          "elapsedSeconds": 87.6
+        },
+        {
+          "id": "nakhon_pathom",
+          "status": "fetched",
+          "elapsedSeconds": 84.9
+        },
+        {
+          "id": "nakhon_phanom",
+          "status": "fetched",
+          "elapsedSeconds": 7.4
+        },
+        {
+          "id": "nakhon_ratchasima",
+          "status": "fetched",
+          "elapsedSeconds": 94.6
+        },
+        {
+          "id": "nakhon_sawan",
+          "status": "fetched",
+          "elapsedSeconds": 7.7
+        },
+        {
+          "id": "nakhon_si_thammarat",
+          "status": "fetched",
+          "elapsedSeconds": 16.6
+        },
+        {
+          "id": "nan",
+          "status": "fetched",
+          "elapsedSeconds": 89.4
+        },
+        {
+          "id": "narathiwat",
+          "status": "fetched",
+          "elapsedSeconds": 89.1
+        },
+        {
+          "id": "nong_bua_lamphu",
+          "status": "fetched",
+          "elapsedSeconds": 3.4
+        },
+        {
+          "id": "nong_khai",
+          "status": "fetched",
+          "elapsedSeconds": 9.1
+        },
+        {
+          "id": "nonthaburi",
+          "status": "fetched",
+          "elapsedSeconds": 85.1
+        },
+        {
+          "id": "pathum_thani",
+          "status": "skipped"
+        },
+        {
+          "id": "pattani",
+          "status": "fetched",
+          "elapsedSeconds": 1.2
+        },
+        {
+          "id": "phang_nga",
+          "status": "fetched",
+          "elapsedSeconds": 89.5
+        },
+        {
+          "id": "phatthalung",
+          "status": "fetched",
+          "elapsedSeconds": 8
+        },
+        {
+          "id": "phayao",
+          "status": "fetched",
+          "elapsedSeconds": 5.6
+        },
+        {
+          "id": "phetchabun",
+          "status": "fetched",
+          "elapsedSeconds": 90.5
+        },
+        {
+          "id": "phetchaburi",
+          "status": "fetched",
+          "elapsedSeconds": 89.3
+        },
+        {
+          "id": "phichit",
+          "status": "fetched",
+          "elapsedSeconds": 1.3
+        },
+        {
+          "id": "phitsanulok",
+          "status": "fetched",
+          "elapsedSeconds": 8.8
+        },
+        {
+          "id": "phra_nakhon_si_ayutthaya",
+          "status": "fetched",
+          "elapsedSeconds": 85.9
+        },
+        {
+          "id": "phrae",
+          "status": "fetched",
+          "elapsedSeconds": 8.5
+        },
+        {
+          "id": "phuket",
+          "status": "skipped"
+        },
+        {
+          "id": "prachin_buri",
+          "status": "fetched",
+          "elapsedSeconds": 3
+        },
+        {
+          "id": "prachuap_khiri_khan",
+          "status": "fetched",
+          "elapsedSeconds": 96.7
+        },
+        {
+          "id": "ranong",
+          "status": "fetched",
+          "elapsedSeconds": 86.7
+        },
+        {
+          "id": "ratchaburi",
+          "status": "fetched",
+          "elapsedSeconds": 2.1
+        },
+        {
+          "id": "rayong",
+          "status": "fetched",
+          "elapsedSeconds": 5.2
+        },
+        {
+          "id": "roi_et",
+          "status": "fetched",
+          "elapsedSeconds": 89.6
+        },
+        {
+          "id": "sa_kaeo",
+          "status": "fetched",
+          "elapsedSeconds": 89.7
+        },
+        {
+          "id": "sakon_nakhon",
+          "status": "fetched",
+          "elapsedSeconds": 10.8
+        },
+        {
+          "id": "samut_prakan",
+          "status": "fetched",
+          "elapsedSeconds": 2.6
+        },
+        {
+          "id": "samut_sakhon",
+          "status": "fetched",
+          "elapsedSeconds": 85.8
+        },
+        {
+          "id": "samut_songkhram",
+          "status": "fetched",
+          "elapsedSeconds": 1.4
+        },
+        {
+          "id": "saraburi",
+          "status": "fetched",
+          "elapsedSeconds": 1.7
+        },
+        {
+          "id": "satun",
+          "status": "fetched",
+          "elapsedSeconds": 86.2
+        },
+        {
+          "id": "sing_buri",
+          "status": "fetched",
+          "elapsedSeconds": 9.4
+        },
+        {
+          "id": "sisaket",
+          "status": "fetched",
+          "elapsedSeconds": 7.5
+        },
+        {
+          "id": "songkhla",
+          "status": "fetched",
+          "elapsedSeconds": 91.3
+        },
+        {
+          "id": "sukhothai",
+          "status": "fetched",
+          "elapsedSeconds": 2.2
+        },
+        {
+          "id": "suphan_buri",
+          "status": "fetched",
+          "elapsedSeconds": 14.9
+        },
+        {
+          "id": "surat_thani",
+          "status": "fetched",
+          "elapsedSeconds": 92.2
+        },
+        {
+          "id": "surin",
+          "status": "fetched",
+          "elapsedSeconds": 10.8
+        },
+        {
+          "id": "tak",
+          "status": "fetched",
+          "elapsedSeconds": 7.1
+        },
+        {
+          "id": "trang",
+          "status": "fetched",
+          "elapsedSeconds": 86.3
+        },
+        {
+          "id": "trat",
+          "status": "fetched",
+          "elapsedSeconds": 1.5
+        },
+        {
+          "id": "ubon_ratchathani",
+          "status": "fetched",
+          "elapsedSeconds": 13.1
+        },
+        {
+          "id": "udon_thani",
+          "status": "fetched",
+          "elapsedSeconds": 8.1
+        },
+        {
+          "id": "uthai_thani",
+          "status": "fetched",
+          "elapsedSeconds": 85.2
+        },
+        {
+          "id": "uttaradit",
+          "status": "fetched",
+          "elapsedSeconds": 89.4
+        },
+        {
+          "id": "yala",
+          "status": "fetched",
+          "elapsedSeconds": 1.5
+        },
+        {
+          "id": "yasothon",
+          "status": "fetched",
+          "elapsedSeconds": 4.2
+        }
+      ],
+      "elapsedSeconds": 3197.8
+    },
+    "parse": {
+      "phase": "parse",
+      "skipped": true
+    },
+    "push": {
+      "phase": "push",
+      "skipped": true
+    }
+  },
+  "finishedAt": "2026-07-13T10:50:22.584Z",
+  "elapsedSeconds": 3197.877
+}

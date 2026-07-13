@@ -1,0 +1,20 @@
+{
+  "label": "Yasothon",
+  "bbox": {
+    "s": 15.288986,
+    "w": 103.997227,
+    "n": 16.347249,
+    "e": 104.823574
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.288986,103.997227,16.347249,104.823574);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.288986,103.997227,16.347249,104.823574);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:50:22.564Z",
+  "elapsedSeconds": 4.1,
+  "counts": {
+    "total": 110,
+    "nodes": 101,
+    "ways": 9,
+    "withName": 58
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

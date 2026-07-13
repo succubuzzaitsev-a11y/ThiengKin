@@ -1,0 +1,31 @@
+{
+  "source": "krabi",
+  "provinceId": "krabi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.033Z",
+  "elapsedSeconds": 0.02,
+  "total": 1755,
+  "parsed": 1166,
+  "skipped": {
+    "unnamed": 589,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 239,
+    "restaurant": 1002,
+    "fast_food": 75,
+    "food_court": 11,
+    "internet_cafe": 1,
+    "(none)": 427
+  },
+  "withName": 889,
+  "withNameTh": 71,
+  "withCuisine": 556,
+  "withAddress": 102,
+  "withPhone": 140,
+  "withWebsite": 65,
+  "withHours": 265,
+  "withPhoto": 0
+}

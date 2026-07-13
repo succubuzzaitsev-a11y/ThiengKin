@@ -1,0 +1,20 @@
+{
+  "label": "Kalasin",
+  "bbox": {
+    "s": 16.182473,
+    "w": 103.098387,
+    "n": 17.102008,
+    "e": 104.238909
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.182473,103.098387,17.102008,104.238909);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.182473,103.098387,17.102008,104.238909);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:04:00.151Z",
+  "elapsedSeconds": 7.6,
+  "counts": {
+    "total": 144,
+    "nodes": 142,
+    "ways": 2,
+    "withName": 103
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

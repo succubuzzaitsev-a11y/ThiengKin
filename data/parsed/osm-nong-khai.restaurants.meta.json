@@ -1,0 +1,31 @@
+{
+  "source": "nong-khai",
+  "provinceId": "nong_khai",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.651Z",
+  "elapsedSeconds": 0.05,
+  "total": 1913,
+  "parsed": 1226,
+  "skipped": {
+    "unnamed": 687,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 913,
+    "cafe": 369,
+    "fast_food": 105,
+    "internet_cafe": 12,
+    "food_court": 4,
+    "(none)": 510
+  },
+  "withName": 1004,
+  "withNameTh": 80,
+  "withCuisine": 640,
+  "withAddress": 148,
+  "withPhone": 266,
+  "withWebsite": 63,
+  "withHours": 281,
+  "withPhoto": 0
+}

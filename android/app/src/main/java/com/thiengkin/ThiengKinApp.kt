@@ -10,6 +10,7 @@ import com.thiengkin.data.RestaurantDao
 import com.thiengkin.data.RestaurantRepository
 import com.thiengkin.data.ThiengKinDatabase
 import com.thiengkin.data.remote.FoursquareClient
+import com.thiengkin.data.remote.SupabaseClient
 import com.thiengkin.ui.screens.travel.TravelHomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,11 @@ import kotlinx.coroutines.launch
  *  - Drop JsonImporter (no bundled seed — OSM on-demand only)
  *  - Wire ProvinceDao + DistrictDao into ViewModel
  *  - Set default province = Bangkok (load from DB after seed)
+ *
+ * M3.d:
+ *  - Add SupabaseClient (anon/Publishable key, PostgREST)
+ *  - Repository reads OSM data from Supabase mirror (M3.c push) — primary path
+ *  - Overpass direct = fallback if Supabase empty/fails
  *
  * Phase 1.5 (planned): replace singletons with Hilt @Inject
  */
@@ -76,8 +82,22 @@ class ThiengKinApp : Application() {
             null
         }
 
+        // Supabase client (M3.d) — primary data source for OSM (mirror of M3.c push)
+        //   - null ถ้า URL/anon key ว่าง → Repository fallback ไป Overpass direct
+        //   - ใช้ anon/Publishable key เท่านั้น (RLS-enforced, safe to embed)
+        val supabaseUrl = BuildConfig.SUPABASE_URL
+        val supabaseAnonKey = BuildConfig.SUPABASE_ANON_KEY
+        val supabaseClient = if (supabaseUrl.isNotBlank() && supabaseAnonKey.isNotBlank()) {
+            Log.i(TAG, "Supabase client ENABLED ($supabaseUrl)")
+            SupabaseClient(baseUrl = supabaseUrl, anonKey = supabaseAnonKey)
+        } else {
+            Log.w(TAG, "Supabase client DISABLED (URL or anon key missing in BuildConfig — will fallback to Overpass)")
+            null
+        }
+
         repository = RestaurantRepository(
             dao = dao,
+            supabaseClient = supabaseClient,
             fsqClient = fsqClient,
         )
         geographyRepository = GeographyRepository(this, provinceDao, districtDao)

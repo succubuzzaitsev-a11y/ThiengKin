@@ -1,0 +1,30 @@
+{
+  "source": "chainat",
+  "provinceId": "chainat",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.473Z",
+  "elapsedSeconds": 0,
+  "total": 189,
+  "parsed": 70,
+  "skipped": {
+    "unnamed": 119,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 52,
+    "fast_food": 4,
+    "cafe": 29,
+    "food_court": 2,
+    "(none)": 102
+  },
+  "withName": 63,
+  "withNameTh": 15,
+  "withCuisine": 33,
+  "withAddress": 6,
+  "withPhone": 3,
+  "withWebsite": 1,
+  "withHours": 7,
+  "withPhoto": 0
+}

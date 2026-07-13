@@ -1,0 +1,29 @@
+{
+  "source": "trang",
+  "provinceId": "trang",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.481Z",
+  "elapsedSeconds": 0.01,
+  "total": 321,
+  "parsed": 155,
+  "skipped": {
+    "unnamed": 166,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 130,
+    "cafe": 52,
+    "fast_food": 17,
+    "(none)": 122
+  },
+  "withName": 120,
+  "withNameTh": 18,
+  "withCuisine": 66,
+  "withAddress": 21,
+  "withPhone": 18,
+  "withWebsite": 16,
+  "withHours": 26,
+  "withPhoto": 1
+}

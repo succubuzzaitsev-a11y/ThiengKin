@@ -1,0 +1,20 @@
+{
+  "label": "Udon Thani",
+  "bbox": {
+    "s": 16.801578,
+    "w": 102.017115,
+    "n": 18.086109,
+    "e": 103.667052
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.801578,102.017115,18.086109,103.667052);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.801578,102.017115,18.086109,103.667052);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:46:57.225Z",
+  "elapsedSeconds": 8,
+  "counts": {
+    "total": 2372,
+    "nodes": 2252,
+    "ways": 120,
+    "withName": 1208
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

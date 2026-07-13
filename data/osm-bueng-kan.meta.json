@@ -1,0 +1,20 @@
+{
+  "label": "Bueng Kan",
+  "bbox": {
+    "s": 17.770996,
+    "w": 103.243947,
+    "n": 18.448843,
+    "e": 104.190332
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.770996,103.243947,18.448843,104.190332);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.770996,103.243947,18.448843,104.190332);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T09:58:40.865Z",
+  "elapsedSeconds": 84.2,
+  "counts": {
+    "total": 115,
+    "nodes": 107,
+    "ways": 8,
+    "withName": 38
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

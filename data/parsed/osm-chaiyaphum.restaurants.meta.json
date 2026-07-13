@@ -1,0 +1,30 @@
+{
+  "source": "chaiyaphum",
+  "provinceId": "chaiyaphum",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.479Z",
+  "elapsedSeconds": 0,
+  "total": 112,
+  "parsed": 74,
+  "skipped": {
+    "unnamed": 38,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 19,
+    "cafe": 57,
+    "fast_food": 5,
+    "food_court": 3,
+    "(none)": 28
+  },
+  "withName": 69,
+  "withNameTh": 19,
+  "withCuisine": 40,
+  "withAddress": 7,
+  "withPhone": 7,
+  "withWebsite": 2,
+  "withHours": 11,
+  "withPhoto": 0
+}

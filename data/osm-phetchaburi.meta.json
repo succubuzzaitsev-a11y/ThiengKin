@@ -1,0 +1,20 @@
+{
+  "label": "Phetchaburi",
+  "bbox": {
+    "s": 12.561478,
+    "w": 99.099401,
+    "n": 13.342913,
+    "e": 100.102298
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](12.561478,99.099401,13.342913,100.102298);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](12.561478,99.099401,13.342913,100.102298);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:27:24.010Z",
+  "elapsedSeconds": 89.2,
+  "counts": {
+    "total": 541,
+    "nodes": 517,
+    "ways": 24,
+    "withName": 316
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

@@ -1,0 +1,30 @@
+{
+  "source": "phatthalung",
+  "provinceId": "phatthalung",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.817Z",
+  "elapsedSeconds": 0,
+  "total": 175,
+  "parsed": 78,
+  "skipped": {
+    "unnamed": 97,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 49,
+    "fast_food": 12,
+    "food_court": 1,
+    "cafe": 39,
+    "(none)": 74
+  },
+  "withName": 68,
+  "withNameTh": 9,
+  "withCuisine": 33,
+  "withAddress": 13,
+  "withPhone": 28,
+  "withWebsite": 12,
+  "withHours": 14,
+  "withPhoto": 0
+}

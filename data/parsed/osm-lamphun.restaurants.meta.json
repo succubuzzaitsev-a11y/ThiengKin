@@ -1,0 +1,30 @@
+{
+  "source": "lamphun",
+  "provinceId": "lamphun",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.263Z",
+  "elapsedSeconds": 0.02,
+  "total": 682,
+  "parsed": 305,
+  "skipped": {
+    "unnamed": 377,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 192,
+    "cafe": 175,
+    "fast_food": 20,
+    "food_court": 1,
+    "(none)": 294
+  },
+  "withName": 219,
+  "withNameTh": 51,
+  "withCuisine": 188,
+  "withAddress": 37,
+  "withPhone": 46,
+  "withWebsite": 16,
+  "withHours": 75,
+  "withPhoto": 3
+}

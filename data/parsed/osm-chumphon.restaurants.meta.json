@@ -1,0 +1,30 @@
+{
+  "source": "chumphon",
+  "provinceId": "chumphon",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.928Z",
+  "elapsedSeconds": 0.01,
+  "total": 405,
+  "parsed": 222,
+  "skipped": {
+    "unnamed": 183,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 177,
+    "fast_food": 24,
+    "cafe": 85,
+    "food_court": 1,
+    "(none)": 118
+  },
+  "withName": 163,
+  "withNameTh": 21,
+  "withCuisine": 99,
+  "withAddress": 14,
+  "withPhone": 25,
+  "withWebsite": 6,
+  "withHours": 49,
+  "withPhoto": 0
+}

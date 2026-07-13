@@ -1,0 +1,30 @@
+{
+  "source": "nakhon-nayok",
+  "provinceId": "nakhon_nayok",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.386Z",
+  "elapsedSeconds": 0,
+  "total": 173,
+  "parsed": 64,
+  "skipped": {
+    "unnamed": 109,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 49,
+    "cafe": 34,
+    "fast_food": 7,
+    "food_court": 2,
+    "(none)": 81
+  },
+  "withName": 59,
+  "withNameTh": 21,
+  "withCuisine": 39,
+  "withAddress": 10,
+  "withPhone": 6,
+  "withWebsite": 4,
+  "withHours": 9,
+  "withPhoto": 0
+}

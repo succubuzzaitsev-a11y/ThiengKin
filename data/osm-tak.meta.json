@@ -1,0 +1,20 @@
+{
+  "label": "Tak",
+  "bbox": {
+    "s": 15.180293,
+    "w": 97.742589,
+    "n": 17.868244,
+    "e": 99.468686
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.180293,97.742589,17.868244,99.468686);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.180293,97.742589,17.868244,99.468686);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:44:43.214Z",
+  "elapsedSeconds": 7,
+  "counts": {
+    "total": 745,
+    "nodes": 683,
+    "ways": 62,
+    "withName": 304
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

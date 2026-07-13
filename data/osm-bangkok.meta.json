@@ -1,0 +1,20 @@
+{
+  "label": "Bangkok",
+  "bbox": {
+    "s": 13.486989,
+    "w": 100.327889,
+    "n": 13.954553,
+    "e": 100.937958
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.486989,100.327889,13.954553,100.937958);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.486989,100.327889,13.954553,100.937958);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-12T16:50:09.334Z",
+  "elapsedSeconds": 5.8,
+  "counts": {
+    "total": 16731,
+    "nodes": 15072,
+    "ways": 1659,
+    "withName": 6600
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

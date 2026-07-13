@@ -1,0 +1,20 @@
+{
+  "label": "Mukdahan",
+  "bbox": {
+    "s": 16.186315,
+    "w": 104.070801,
+    "n": 16.89348,
+    "e": 104.979933
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.186315,104.070801,16.89348,104.979933);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.186315,104.070801,16.89348,104.979933);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:11:36.136Z",
+  "elapsedSeconds": 2.5,
+  "counts": {
+    "total": 377,
+    "nodes": 358,
+    "ways": 19,
+    "withName": 154
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

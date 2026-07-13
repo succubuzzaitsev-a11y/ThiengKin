@@ -7,6 +7,9 @@ import com.thiengkin.data.remote.FoursquareImporter
 import com.thiengkin.data.remote.OsmClient
 import com.thiengkin.data.remote.OsmException
 import com.thiengkin.data.remote.OsmImporter
+import com.thiengkin.data.remote.SupabaseClient
+import com.thiengkin.data.remote.SupabaseException
+import com.thiengkin.data.remote.SupabaseImporter
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,12 +18,18 @@ import kotlinx.coroutines.flow.Flow
  * Phase 1: local-only (assets → Room)
  * Phase 2: เพิ่ม remote (OSM Overpass + Foursquare Free) — fetch per area, cache in Room
  * Phase 3 (M1): nationwide — refresh by province (or province + district)
+ * Phase 3 (M3.d): OSM data มาจาก Supabase mirror (M3.c push) แทน Overpass direct
+ *                 - Supabase = primary path (anon key, RLS-enforced)
+ *                 - OSM direct = fallback เฉพาะกรณี Supabase ไม่มี data หรือ fail
+ *                 - ทั้งคู่เขียน Room ด้วย source="osm" → cache key เดิมใช้ได้
  */
 class RestaurantRepository(
     private val dao: RestaurantDao,
-    private val osmClient: OsmClient = OsmClient(),
-    private val osmImporter: OsmImporter = OsmImporter(),
-    private val fsqClient: FoursquareClient? = null,  // null = skip FSQ
+    private val supabaseClient: SupabaseClient? = null,        // null = disabled (no anon key)
+    private val supabaseImporter: SupabaseImporter = SupabaseImporter(),
+    private val osmClient: OsmClient = OsmClient(),           // fallback only
+    private val osmImporter: OsmImporter = OsmImporter(),     // fallback only
+    private val fsqClient: FoursquareClient? = null,          // null = skip FSQ
     private val fsqImporter: FoursquareImporter = FoursquareImporter(),
 ) {
     fun observeTop(limit: Int = 10): Flow<List<Restaurant>> = dao.observeTop(limit)
@@ -56,18 +65,27 @@ class RestaurantRepository(
     // === Phase 3 (M1): Province-scoped refresh (nationwide) ===
 
     /**
-     * Generic refresh — ดึงข้อมูลร้านอาหารจาก OSM Overpass + Foursquare สำหรับ area ที่ระบุ
+     * Generic refresh — ดึงข้อมูลร้านอาหารจาก Supabase mirror (primary) + Foursquare (optional)
+     *
+     * M3.d pipeline (post-Supabase mirror):
+     *   1. **Supabase** (PostgREST) → primary OSM source
+     *      - อ่าน `restaurants` table filtered by (province_id, source='osm')
+     *      - ใช้ anon/Publishable key (RLS-enforced, safe to ship in client)
+     *      - Cache: 7 วัน (same TTL as before)
+     *   2. **OSM Overpass** (direct) → fallback ถ้า Supabase ไม่มี data หรือ fail
+     *      - ใช้เฉพาะกรณี Supabase empty/error → กัน user ติดค้างถ้า Supabase outage
+     *   3. **Foursquare** (optional) → enrichment, ไม่กระทบถ้าไม่มี key
      *
      * Cache strategy:
-     * - ถ้า OSM cache อายุ < [cacheTtlMs] → skip
-     * - ถ้าเก่ากว่า → ลบ cache เก่า + fetch ใหม่
+     *   - Cache key = (province_id, source='osm') — เหมือนเดิม, Room schema ไม่เปลี่ยน
+     *   - ถ้า cache age < [cacheTtlMs] → skip fetch (ทั้ง Supabase และ Overpass)
+     *   - ถ้าเก่ากว่า/force → ลบ cache เก่า + fetch ใหม่
      *
      * @param provinceId Province.id (เช่น "bangkok", "chiang_mai") — ใช้ filter + cache invalidation
-     * @param districtId District.id (เช่น "phra_nakhon") — optional, ใช้ tag บน Restaurant เท่านั้น
-     *                   (bbox ของจังหวัดยังใช้สำหรับ query — drill-down UI จะ filter ในภายหลัง)
-     * @param bbox Overpass query bbox (ปกติคือ province.bbox, หรือ sub-bbox สำหรับ drill-down)
+     * @param districtId District.id (เช่น "phra_nakhon") — optional, drill-down filter
+     * @param bbox Overpass query bbox — ใช้กรณี fallback ไป Overpass (Supabase ไม่ใช้ bbox)
      *
-     * M1.b: เมธอดหลักของ nationwide scope — ใช้กับทั้ง province level และ drill-down district level
+     * M3.d: เปลี่ยน primary path จาก Overpass → Supabase. Behavior เดิม + resilience ขึ้น.
      */
     suspend fun refreshArea(
         provinceId: String,
@@ -78,26 +96,51 @@ class RestaurantRepository(
     ): RefreshResult {
         val nowMs = System.currentTimeMillis()
 
-        // === 1. OSM ===
+        // === 1. OSM (Supabase primary, Overpass fallback) ===
         val osmLatest = dao.latestUpdateByProvinceAndSource(provinceId, "osm")
         val osmCacheExpired = osmLatest == null || (nowMs - osmLatest) > cacheTtlMs
 
         if (force || osmCacheExpired) {
-            try {
-                Log.i(
-                    TAG,
-                    "OSM refresh: province=$provinceId district=$districtId force=$force expired=$osmCacheExpired",
-                )
-                val rawJson = osmClient.fetchRestaurants(bbox)
-                val parsed = osmImporter.parse(rawJson, provinceId, districtId, nowMs)
-                if (parsed.isNotEmpty()) {
-                    dao.deleteByProvinceAndSource(provinceId, "osm")
-                    dao.insertAll(parsed)
-                    Log.i(TAG, "OSM saved: ${parsed.size} records for $provinceId")
+            Log.i(
+                TAG,
+                "OSM refresh: province=$provinceId district=$districtId force=$force expired=$osmCacheExpired source=supabase-or-overpass",
+            )
+
+            // 1a. Try Supabase first
+            var supabaseOk = false
+            if (supabaseClient != null) {
+                try {
+                    val rawJson = supabaseClient.fetchRestaurantsByProvince(provinceId, districtId)
+                    val parsed = supabaseImporter.parse(rawJson, provinceId, districtId, nowMs)
+                    if (parsed.isNotEmpty()) {
+                        dao.deleteByProvinceAndSource(provinceId, "osm")
+                        dao.insertAll(parsed)
+                        Log.i(TAG, "Supabase saved: ${parsed.size} records for $provinceId (district=$districtId)")
+                        supabaseOk = true
+                    } else {
+                        Log.w(TAG, "Supabase returned 0 rows for $provinceId/$districtId — falling back to Overpass")
+                    }
+                } catch (e: SupabaseException) {
+                    Log.w(TAG, "Supabase fetch failed for $provinceId/${districtId ?: "(province)"}: ${e.message}")
                 }
-            } catch (e: OsmException) {
-                Log.w(TAG, "OSM fetch failed for $provinceId: ${e.message}")
-                return RefreshResult(skipped = true, reason = "OSM: ${e.message}")
+            } else {
+                Log.d(TAG, "Supabase client disabled (no anon key) — going straight to Overpass")
+            }
+
+            // 1b. Overpass fallback (only if Supabase returned nothing or is disabled)
+            if (!supabaseOk) {
+                try {
+                    val rawJson = osmClient.fetchRestaurants(bbox)
+                    val parsed = osmImporter.parse(rawJson, provinceId, districtId, nowMs)
+                    if (parsed.isNotEmpty()) {
+                        dao.deleteByProvinceAndSource(provinceId, "osm")
+                        dao.insertAll(parsed)
+                        Log.i(TAG, "Overpass fallback saved: ${parsed.size} records for $provinceId")
+                    }
+                } catch (e: OsmException) {
+                    Log.w(TAG, "Overpass fallback failed for $provinceId: ${e.message}")
+                    return RefreshResult(skipped = true, reason = "OSM: ${e.message}")
+                }
             }
         } else {
             Log.d(TAG, "OSM cache hit: province=$provinceId age=${nowMs - osmLatest}ms")

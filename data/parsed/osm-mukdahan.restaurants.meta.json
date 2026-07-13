@@ -1,0 +1,29 @@
+{
+  "source": "mukdahan",
+  "provinceId": "mukdahan",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.381Z",
+  "elapsedSeconds": 0.02,
+  "total": 377,
+  "parsed": 205,
+  "skipped": {
+    "unnamed": 172,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 177,
+    "cafe": 62,
+    "fast_food": 10,
+    "(none)": 128
+  },
+  "withName": 154,
+  "withNameTh": 28,
+  "withCuisine": 74,
+  "withAddress": 45,
+  "withPhone": 25,
+  "withWebsite": 7,
+  "withHours": 36,
+  "withPhoto": 0
+}

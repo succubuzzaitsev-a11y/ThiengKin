@@ -1,0 +1,30 @@
+{
+  "source": "phetchaburi",
+  "provinceId": "phetchaburi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.869Z",
+  "elapsedSeconds": 0.02,
+  "total": 541,
+  "parsed": 339,
+  "skipped": {
+    "unnamed": 202,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 275,
+    "cafe": 114,
+    "food_court": 11,
+    "fast_food": 16,
+    "(none)": 125
+  },
+  "withName": 316,
+  "withNameTh": 96,
+  "withCuisine": 143,
+  "withAddress": 39,
+  "withPhone": 42,
+  "withWebsite": 20,
+  "withHours": 80,
+  "withPhoto": 0
+}

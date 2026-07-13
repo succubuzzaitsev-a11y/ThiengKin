@@ -1,0 +1,32 @@
+{
+  "source": "mae-hong-son",
+  "provinceId": "mae_hong_son",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.323Z",
+  "elapsedSeconds": 0.02,
+  "total": 980,
+  "parsed": 563,
+  "skipped": {
+    "unnamed": 417,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 382,
+    "cafe": 290,
+    "fast_food": 40,
+    "food_court": 1,
+    "restaurant;cafe": 1,
+    "internet_cafe": 1,
+    "(none)": 265
+  },
+  "withName": 332,
+  "withNameTh": 29,
+  "withCuisine": 255,
+  "withAddress": 47,
+  "withPhone": 60,
+  "withWebsite": 17,
+  "withHours": 97,
+  "withPhoto": 0
+}

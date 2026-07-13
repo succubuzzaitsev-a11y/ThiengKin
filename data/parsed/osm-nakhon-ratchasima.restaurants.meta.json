@@ -1,0 +1,30 @@
+{
+  "source": "nakhon-ratchasima",
+  "provinceId": "nakhon_ratchasima",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.513Z",
+  "elapsedSeconds": 0.05,
+  "total": 1224,
+  "parsed": 672,
+  "skipped": {
+    "unnamed": 552,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 393,
+    "cafe": 395,
+    "fast_food": 52,
+    "food_court": 15,
+    "(none)": 369
+  },
+  "withName": 589,
+  "withNameTh": 142,
+  "withCuisine": 343,
+  "withAddress": 86,
+  "withPhone": 87,
+  "withWebsite": 37,
+  "withHours": 131,
+  "withPhoto": 0
+}

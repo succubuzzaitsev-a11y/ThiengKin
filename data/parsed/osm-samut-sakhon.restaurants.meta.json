@@ -1,0 +1,30 @@
+{
+  "source": "samut-sakhon",
+  "provinceId": "samut_sakhon",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.220Z",
+  "elapsedSeconds": 0.01,
+  "total": 527,
+  "parsed": 192,
+  "skipped": {
+    "unnamed": 335,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 151,
+    "fast_food": 13,
+    "cafe": 54,
+    "food_court": 3,
+    "(none)": 306
+  },
+  "withName": 184,
+  "withNameTh": 47,
+  "withCuisine": 78,
+  "withAddress": 32,
+  "withPhone": 32,
+  "withWebsite": 19,
+  "withHours": 29,
+  "withPhoto": 1
+}

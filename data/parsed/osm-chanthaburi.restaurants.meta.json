@@ -1,0 +1,31 @@
+{
+  "source": "chanthaburi",
+  "provinceId": "chanthaburi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.495Z",
+  "elapsedSeconds": 0.01,
+  "total": 670,
+  "parsed": 284,
+  "skipped": {
+    "unnamed": 386,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 196,
+    "cafe": 116,
+    "fast_food": 13,
+    "food_court": 11,
+    "internet_cafe": 1,
+    "(none)": 333
+  },
+  "withName": 265,
+  "withNameTh": 64,
+  "withCuisine": 183,
+  "withAddress": 32,
+  "withPhone": 79,
+  "withWebsite": 9,
+  "withHours": 124,
+  "withPhoto": 1
+}

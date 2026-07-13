@@ -1,0 +1,29 @@
+{
+  "source": "nong-bua-lamphu",
+  "provinceId": "nong_bua_lamphu",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.586Z",
+  "elapsedSeconds": 0,
+  "total": 107,
+  "parsed": 53,
+  "skipped": {
+    "unnamed": 54,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 23,
+    "cafe": 40,
+    "fast_food": 1,
+    "(none)": 43
+  },
+  "withName": 47,
+  "withNameTh": 16,
+  "withCuisine": 35,
+  "withAddress": 11,
+  "withPhone": 9,
+  "withWebsite": 3,
+  "withHours": 9,
+  "withPhoto": 0
+}

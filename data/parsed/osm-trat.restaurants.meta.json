@@ -1,0 +1,30 @@
+{
+  "source": "trat",
+  "provinceId": "trat",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.516Z",
+  "elapsedSeconds": 0.02,
+  "total": 934,
+  "parsed": 476,
+  "skipped": {
+    "unnamed": 458,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 471,
+    "cafe": 111,
+    "fast_food": 29,
+    "food_court": 1,
+    "(none)": 322
+  },
+  "withName": 397,
+  "withNameTh": 30,
+  "withCuisine": 272,
+  "withAddress": 43,
+  "withPhone": 49,
+  "withWebsite": 12,
+  "withHours": 98,
+  "withPhoto": 0
+}

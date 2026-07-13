@@ -1,0 +1,20 @@
+{
+  "label": "Mae Hong Son",
+  "bbox": {
+    "s": 17.636625,
+    "w": 97.343789,
+    "n": 19.815178,
+    "e": 98.651693
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.636625,97.343789,19.815178,98.651693);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.636625,97.343789,19.815178,98.651693);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:11:10.020Z",
+  "elapsedSeconds": 97.4,
+  "counts": {
+    "total": 980,
+    "nodes": 919,
+    "ways": 61,
+    "withName": 332
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

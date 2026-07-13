@@ -1,0 +1,20 @@
+{
+  "label": "Saraburi",
+  "bbox": {
+    "s": 14.243702,
+    "w": 100.575285,
+    "n": 15.072451,
+    "e": 101.454378
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.243702,100.575285,15.072451,101.454378);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.243702,100.575285,15.072451,101.454378);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:38:28.986Z",
+  "elapsedSeconds": 1.5,
+  "counts": {
+    "total": 728,
+    "nodes": 678,
+    "ways": 50,
+    "withName": 274
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

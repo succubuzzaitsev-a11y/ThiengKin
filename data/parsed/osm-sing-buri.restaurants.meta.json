@@ -1,0 +1,30 @@
+{
+  "source": "sing-buri",
+  "provinceId": "sing_buri",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.278Z",
+  "elapsedSeconds": 0,
+  "total": 130,
+  "parsed": 34,
+  "skipped": {
+    "unnamed": 96,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 28,
+    "cafe": 14,
+    "fast_food": 3,
+    "food_court": 1,
+    "(none)": 84
+  },
+  "withName": 31,
+  "withNameTh": 5,
+  "withCuisine": 20,
+  "withAddress": 2,
+  "withPhone": 4,
+  "withWebsite": 0,
+  "withHours": 4,
+  "withPhoto": 0
+}

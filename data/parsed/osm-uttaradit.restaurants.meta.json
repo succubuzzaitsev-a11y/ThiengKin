@@ -1,0 +1,30 @@
+{
+  "source": "uttaradit",
+  "provinceId": "uttaradit",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.615Z",
+  "elapsedSeconds": 0.01,
+  "total": 629,
+  "parsed": 236,
+  "skipped": {
+    "unnamed": 393,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 163,
+    "cafe": 118,
+    "food_court": 6,
+    "fast_food": 12,
+    "(none)": 330
+  },
+  "withName": 189,
+  "withNameTh": 35,
+  "withCuisine": 101,
+  "withAddress": 23,
+  "withPhone": 24,
+  "withWebsite": 11,
+  "withHours": 29,
+  "withPhoto": 0
+}

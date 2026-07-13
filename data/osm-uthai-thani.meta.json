@@ -1,0 +1,20 @@
+{
+  "label": "Uthai Thani",
+  "bbox": {
+    "s": 14.937751,
+    "w": 98.984358,
+    "n": 15.798214,
+    "e": 100.106713
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.937751,98.984358,15.798214,100.106713);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.937751,98.984358,15.798214,100.106713);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:48:24.732Z",
+  "elapsedSeconds": 84.9,
+  "counts": {
+    "total": 128,
+    "nodes": 114,
+    "ways": 14,
+    "withName": 48
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

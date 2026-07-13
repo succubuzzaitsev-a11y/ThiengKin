@@ -1,0 +1,20 @@
+{
+  "label": "Nong Khai",
+  "bbox": {
+    "s": 17.592736,
+    "w": 102.055223,
+    "n": 18.304086,
+    "e": 103.413489
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.592736,102.055223,18.304086,103.413489);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.592736,102.055223,18.304086,103.413489);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:20:42.239Z",
+  "elapsedSeconds": 8.9,
+  "counts": {
+    "total": 1913,
+    "nodes": 1823,
+    "ways": 90,
+    "withName": 1004
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

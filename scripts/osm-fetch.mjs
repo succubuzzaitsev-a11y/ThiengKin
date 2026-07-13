@@ -19,8 +19,9 @@
 //   );
 //   out body; >; out skel qt;
 //
-// Rate limit (Overpass wiki 2026): 10,000 req/day, 1 GB download
-//   เราใช้ 1 call/จังหวัด/refresh → 77 calls = 1 cycle ใช้ได้สบายๆ
+// Rate limit (Overpass wiki 2026): 10,000 req/day per endpoint, 1 GB download
+//   เราใช้ 1 call/จังหวัด/refresh → 77 calls = 1 cycle ต่อ endpoint
+//   Fallback chain: 3 endpoints กระจายโหลด (rate limit เป็นต่อ instance)
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -30,7 +31,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
 
-const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
+/** Overpass endpoint chain — try in order, fall back on 429/504/timeout */
+const OVERPASS_ENDPOINTS = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://overpass.openstreetmap.fr/api/interpreter',
+];
 const USER_AGENT = 'ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)';
 const GEOGRAPHY_FILE = path.join(ROOT, 'data', 'thailand-geography.json');
 
@@ -56,20 +62,44 @@ out skel qt;
 `;
 }
 
-async function fetchOverpass(query) {
+async function fetchOverpass(query, { endpointIdx = 0, triedEndpoints = [] } = {}) {
+  if (endpointIdx >= OVERPASS_ENDPOINTS.length) {
+    throw new Error(`All ${OVERPASS_ENDPOINTS.length} Overpass endpoints failed. Tried: ${triedEndpoints.join(', ')}`);
+  }
+  const url = OVERPASS_ENDPOINTS[endpointIdx];
   const body = new URLSearchParams({ data: query }).toString();
-  const res = await fetch(OVERPASS_URL, {
-    method: 'POST',
-    headers: {
-      'User-Agent': USER_AGENT,
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json',
-    },
-    body,
-  });
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'User-Agent': USER_AGENT,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      },
+      body,
+      signal: AbortSignal.timeout(75000),  // 75s
+    });
+  } catch (e) {
+    const next = endpointIdx + 1;
+    console.warn(`   ⚠️  ${url} — ${e.message}; trying next endpoint`);
+    return fetchOverpass(query, { endpointIdx: next, triedEndpoints: [...triedEndpoints, url] });
+  }
+  if (res.status === 429 || res.status === 504 || res.status === 502 || res.status === 503) {
+    const next = endpointIdx + 1;
+    if (next < OVERPASS_ENDPOINTS.length) {
+      console.warn(`   ⚠️  ${url} → HTTP ${res.status}; trying next endpoint`);
+      return fetchOverpass(query, { endpointIdx: next, triedEndpoints: [...triedEndpoints, url] });
+    }
+    const text = await res.text();
+    throw new Error(`All endpoints failed. Last: ${url} HTTP ${res.status}: ${text.substring(0, 200)}`);
+  }
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Overpass HTTP ${res.status}: ${text.substring(0, 200)}`);
+    throw new Error(`Overpass HTTP ${res.status} (${url}): ${text.substring(0, 200)}`);
+  }
+  if (endpointIdx > 0) {
+    console.log(`   ✓ Recovered via ${url} (endpoint #${endpointIdx + 1})`);
   }
   return res.json();
 }
@@ -100,7 +130,7 @@ function resolveBbox({ provinceId, useCity }) {
   if (provinceId && useCity && CITY_BBOX[provinceId]) {
     return { bbox: CITY_BBOX[provinceId], name: `${provinceId.replace(/_/g, '-')}-city`, label: CITY_BBOX[provinceId].label };
   }
-  if (provinceId && CITY_BBOX[provinceId] && !useCity) {
+  if (provinceId && !useCity) {
     // try geography file for full province bbox
     if (fs.existsSync(GEOGRAPHY_FILE)) {
       const geo = JSON.parse(fs.readFileSync(GEOGRAPHY_FILE, 'utf8'));
@@ -109,8 +139,12 @@ function resolveBbox({ provinceId, useCity }) {
         return { bbox: p.bbox, name: provinceId.replace(/_/g, '-'), label: p.nameEn || p.id };
       }
     }
-    console.warn(`⚠️  Province '${provinceId}' not found in ${GEOGRAPHY_FILE} — falling back to city preset`);
-    return { bbox: CITY_BBOX[provinceId], name: `${provinceId.replace(/_/g, '-')}-city`, label: CITY_BBOX[provinceId].label };
+    // province not in geography file → fall back to city preset if available
+    if (CITY_BBOX[provinceId]) {
+      console.warn(`⚠️  Province '${provinceId}' not found in ${GEOGRAPHY_FILE} — falling back to city preset`);
+      return { bbox: CITY_BBOX[provinceId], name: `${provinceId.replace(/_/g, '-')}-city`, label: CITY_BBOX[provinceId].label };
+    }
+    throw new Error(`Province '${provinceId}' not found in ${GEOGRAPHY_FILE} and no CITY_BBOX preset available`);
   }
   // default = chiang_mai city
   return { bbox: CITY_BBOX.chiang_mai, name: 'chiangmai-city', label: CITY_BBOX.chiang_mai.label };
@@ -189,14 +223,14 @@ async function main() {
   console.log(query.split('\n').map(l => '   ' + l).join('\n'));
   console.log();
 
-  console.log(`⏳ POST ${OVERPASS_URL} ...`);
+  console.log(`⏳ POST ${OVERPASS_ENDPOINTS[0]} (with ${OVERPASS_ENDPOINTS.length} endpoint fallbacks) ...`);
   const t0 = Date.now();
   let json;
   try {
     json = await fetchOverpass(query);
   } catch (e) {
     console.error(`\n💥 Fetch failed: ${e.message}`);
-    console.error(`   Tip: Overpass rate limit = 10,000 req/day. ลองเปลี่ยน URL หรือรอสักครู่`);
+    console.error(`   Tip: Overpass rate limit = 10,000 req/day per endpoint. ลองรอสักครู่หรือเปลี่ยน endpoint`);
     process.exit(1);
   }
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);

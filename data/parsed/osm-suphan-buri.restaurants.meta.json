@@ -1,0 +1,29 @@
+{
+  "source": "suphan-buri",
+  "provinceId": "suphan_buri",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.343Z",
+  "elapsedSeconds": 0,
+  "total": 289,
+  "parsed": 109,
+  "skipped": {
+    "unnamed": 180,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 51,
+    "restaurant": 77,
+    "fast_food": 6,
+    "(none)": 155
+  },
+  "withName": 95,
+  "withNameTh": 25,
+  "withCuisine": 63,
+  "withAddress": 17,
+  "withPhone": 16,
+  "withWebsite": 8,
+  "withHours": 21,
+  "withPhoto": 0
+}

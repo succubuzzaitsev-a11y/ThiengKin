@@ -1,0 +1,31 @@
+{
+  "source": "samut-prakan",
+  "provinceId": "samut_prakan",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.205Z",
+  "elapsedSeconds": 0.06,
+  "total": 2604,
+  "parsed": 1131,
+  "skipped": {
+    "unnamed": 1473,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 745,
+    "cafe": 353,
+    "fast_food": 143,
+    "food_court": 23,
+    "internet_cafe": 2,
+    "(none)": 1338
+  },
+  "withName": 1027,
+  "withNameTh": 199,
+  "withCuisine": 641,
+  "withAddress": 227,
+  "withPhone": 178,
+  "withWebsite": 129,
+  "withHours": 273,
+  "withPhoto": 24
+}

@@ -1,0 +1,31 @@
+{
+  "source": "sisaket",
+  "provinceId": "sisaket",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.301Z",
+  "elapsedSeconds": 0.01,
+  "total": 880,
+  "parsed": 330,
+  "skipped": {
+    "unnamed": 550,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 326,
+    "cafe": 164,
+    "food_court": 6,
+    "fast_food": 23,
+    "internet_cafe": 1,
+    "(none)": 360
+  },
+  "withName": 309,
+  "withNameTh": 63,
+  "withCuisine": 266,
+  "withAddress": 33,
+  "withPhone": 23,
+  "withWebsite": 14,
+  "withHours": 68,
+  "withPhoto": 0
+}

@@ -1,0 +1,20 @@
+{
+  "label": "Ubon Ratchathani",
+  "bbox": {
+    "s": 14.209024,
+    "w": 104.372184,
+    "n": 16.098047,
+    "e": 105.637025
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.209024,104.372184,16.098047,105.637025);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.209024,104.372184,16.098047,105.637025);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:46:46.622Z",
+  "elapsedSeconds": 13,
+  "counts": {
+    "total": 606,
+    "nodes": 578,
+    "ways": 28,
+    "withName": 280
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

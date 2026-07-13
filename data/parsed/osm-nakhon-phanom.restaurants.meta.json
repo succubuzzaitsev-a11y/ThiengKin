@@ -1,0 +1,30 @@
+{
+  "source": "nakhon-phanom",
+  "provinceId": "nakhon_phanom",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.450Z",
+  "elapsedSeconds": 0.02,
+  "total": 207,
+  "parsed": 146,
+  "skipped": {
+    "unnamed": 61,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "fast_food": 10,
+    "cafe": 72,
+    "restaurant": 92,
+    "internet_cafe": 2,
+    "(none)": 31
+  },
+  "withName": 110,
+  "withNameTh": 23,
+  "withCuisine": 74,
+  "withAddress": 21,
+  "withPhone": 11,
+  "withWebsite": 1,
+  "withHours": 40,
+  "withPhoto": 0
+}

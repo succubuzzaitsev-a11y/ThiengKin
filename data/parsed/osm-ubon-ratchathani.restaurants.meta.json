@@ -1,0 +1,31 @@
+{
+  "source": "ubon-ratchathani",
+  "provinceId": "ubon_ratchathani",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.535Z",
+  "elapsedSeconds": 0.01,
+  "total": 606,
+  "parsed": 314,
+  "skipped": {
+    "unnamed": 292,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 152,
+    "restaurant": 270,
+    "food_court": 6,
+    "fast_food": 34,
+    "internet_cafe": 1,
+    "(none)": 143
+  },
+  "withName": 280,
+  "withNameTh": 87,
+  "withCuisine": 241,
+  "withAddress": 35,
+  "withPhone": 36,
+  "withWebsite": 16,
+  "withHours": 74,
+  "withPhoto": 0
+}

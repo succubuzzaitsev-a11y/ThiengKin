@@ -1,0 +1,20 @@
+{
+  "label": "Suphan Buri",
+  "bbox": {
+    "s": 14.060965,
+    "w": 99.281169,
+    "n": 15.081525,
+    "e": 100.281121
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.060965,99.281169,15.081525,100.281121);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.060965,99.281169,15.081525,100.281121);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:42:30.654Z",
+  "elapsedSeconds": 14.8,
+  "counts": {
+    "total": 289,
+    "nodes": 258,
+    "ways": 31,
+    "withName": 95
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

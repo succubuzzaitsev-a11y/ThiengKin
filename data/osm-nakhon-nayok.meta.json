@@ -1,0 +1,20 @@
+{
+  "label": "Nakhon Nayok",
+  "bbox": {
+    "s": 13.961012,
+    "w": 100.913464,
+    "n": 14.512485,
+    "e": 101.505432
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.961012,100.913464,14.512485,101.505432);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.961012,100.913464,14.512485,101.505432);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:13:06.152Z",
+  "elapsedSeconds": 87.4,
+  "counts": {
+    "total": 173,
+    "nodes": 158,
+    "ways": 15,
+    "withName": 59
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

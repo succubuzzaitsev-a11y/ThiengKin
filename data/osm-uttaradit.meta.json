@@ -1,0 +1,20 @@
+{
+  "label": "Uttaradit",
+  "bbox": {
+    "s": 17.137547,
+    "w": 99.894679,
+    "n": 18.381406,
+    "e": 101.192571
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.137547,99.894679,18.381406,101.192571);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.137547,99.894679,18.381406,101.192571);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:49:56.806Z",
+  "elapsedSeconds": 89.3,
+  "counts": {
+    "total": 629,
+    "nodes": 556,
+    "ways": 73,
+    "withName": 189
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

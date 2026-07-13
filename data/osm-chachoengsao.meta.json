@@ -1,0 +1,20 @@
+{
+  "label": "Chachoengsao",
+  "bbox": {
+    "s": 13.178512,
+    "w": 100.847888,
+    "n": 13.976444,
+    "e": 101.990125
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.178512,100.847888,13.976444,101.990125);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.178512,100.847888,13.976444,101.990125);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T09:58:45.779Z",
+  "elapsedSeconds": 2.1,
+  "counts": {
+    "total": 885,
+    "nodes": 814,
+    "ways": 71,
+    "withName": 356
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

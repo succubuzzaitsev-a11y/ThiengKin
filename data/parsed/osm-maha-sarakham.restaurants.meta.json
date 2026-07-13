@@ -1,0 +1,31 @@
+{
+  "source": "maha-sarakham",
+  "provinceId": "maha_sarakham",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.332Z",
+  "elapsedSeconds": 0.01,
+  "total": 154,
+  "parsed": 91,
+  "skipped": {
+    "unnamed": 63,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 53,
+    "cafe": 41,
+    "fast_food": 7,
+    "internet_cafe": 2,
+    "food_court": 2,
+    "(none)": 49
+  },
+  "withName": 88,
+  "withNameTh": 42,
+  "withCuisine": 58,
+  "withAddress": 23,
+  "withPhone": 21,
+  "withWebsite": 9,
+  "withHours": 21,
+  "withPhoto": 0
+}

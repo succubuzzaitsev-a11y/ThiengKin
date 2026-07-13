@@ -1,0 +1,31 @@
+{
+  "source": "nakhon-sawan",
+  "provinceId": "nakhon_sawan",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.530Z",
+  "elapsedSeconds": 0.01,
+  "total": 687,
+  "parsed": 361,
+  "skipped": {
+    "unnamed": 326,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 256,
+    "cafe": 119,
+    "fast_food": 20,
+    "internet_cafe": 3,
+    "food_court": 3,
+    "(none)": 286
+  },
+  "withName": 337,
+  "withNameTh": 46,
+  "withCuisine": 151,
+  "withAddress": 48,
+  "withPhone": 40,
+  "withWebsite": 19,
+  "withHours": 62,
+  "withPhoto": 0
+}

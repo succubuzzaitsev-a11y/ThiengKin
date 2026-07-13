@@ -1,0 +1,20 @@
+{
+  "label": "Lamphun",
+  "bbox": {
+    "s": 17.424064,
+    "w": 98.67177,
+    "n": 18.709999,
+    "e": 99.320288
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.424064,98.67177,18.709999,99.320288);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.424064,98.67177,18.709999,99.320288);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:09:03.327Z",
+  "elapsedSeconds": 52.1,
+  "counts": {
+    "total": 682,
+    "nodes": 623,
+    "ways": 59,
+    "withName": 219
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

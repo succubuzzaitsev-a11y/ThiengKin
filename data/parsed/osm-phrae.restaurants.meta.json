@@ -1,0 +1,30 @@
+{
+  "source": "phrae",
+  "provinceId": "phrae",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.939Z",
+  "elapsedSeconds": 0.01,
+  "total": 657,
+  "parsed": 328,
+  "skipped": {
+    "unnamed": 329,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "fast_food": 14,
+    "restaurant": 194,
+    "cafe": 155,
+    "food_court": 7,
+    "(none)": 287
+  },
+  "withName": 245,
+  "withNameTh": 40,
+  "withCuisine": 157,
+  "withAddress": 36,
+  "withPhone": 49,
+  "withWebsite": 21,
+  "withHours": 61,
+  "withPhoto": 0
+}

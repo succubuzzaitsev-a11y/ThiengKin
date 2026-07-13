@@ -1,0 +1,33 @@
+{
+  "source": "chonburi",
+  "provinceId": "chonburi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.912Z",
+  "elapsedSeconds": 0.05,
+  "total": 5285,
+  "parsed": 3200,
+  "skipped": {
+    "unnamed": 2085,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 1731,
+    "fast_food": 240,
+    "food_court": 37,
+    "cafe": 1547,
+    "internet_cafe": 5,
+    "restaurant;parking": 1,
+    "cafe;bar": 1,
+    "(none)": 1723
+  },
+  "withName": 3035,
+  "withNameTh": 315,
+  "withCuisine": 1342,
+  "withAddress": 358,
+  "withPhone": 413,
+  "withWebsite": 290,
+  "withHours": 438,
+  "withPhoto": 3
+}

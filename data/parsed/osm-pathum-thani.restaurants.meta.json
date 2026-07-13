@@ -1,0 +1,31 @@
+{
+  "source": "pathum-thani",
+  "provinceId": "pathum_thani",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.721Z",
+  "elapsedSeconds": 0.02,
+  "total": 1219,
+  "parsed": 491,
+  "skipped": {
+    "unnamed": 728,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 329,
+    "cafe": 215,
+    "fast_food": 71,
+    "food_court": 27,
+    "internet_cafe": 2,
+    "(none)": 575
+  },
+  "withName": 447,
+  "withNameTh": 86,
+  "withCuisine": 252,
+  "withAddress": 66,
+  "withPhone": 73,
+  "withWebsite": 34,
+  "withHours": 97,
+  "withPhoto": 8
+}

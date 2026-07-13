@@ -1,0 +1,20 @@
+{
+  "label": "Krabi",
+  "bbox": {
+    "s": 7.196757,
+    "w": 98.603593,
+    "n": 8.672964,
+    "e": 99.415302
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](7.196757,98.603593,8.672964,99.415302);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](7.196757,98.603593,8.672964,99.415302);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:07:41.085Z",
+  "elapsedSeconds": 12.4,
+  "counts": {
+    "total": 1755,
+    "nodes": 1675,
+    "ways": 80,
+    "withName": 889
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

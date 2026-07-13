@@ -1,0 +1,20 @@
+{
+  "label": "Khon Kaen",
+  "bbox": {
+    "s": 15.632008,
+    "w": 101.750752,
+    "n": 17.087013,
+    "e": 103.184245
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.632008,101.750752,17.087013,103.184245);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.632008,101.750752,17.087013,103.184245);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:07:26.103Z",
+  "elapsedSeconds": 89.2,
+  "counts": {
+    "total": 991,
+    "nodes": 936,
+    "ways": 55,
+    "withName": 590
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

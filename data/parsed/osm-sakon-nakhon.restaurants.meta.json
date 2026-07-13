@@ -1,0 +1,30 @@
+{
+  "source": "sakon-nakhon",
+  "provinceId": "sakon_nakhon",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.131Z",
+  "elapsedSeconds": 0,
+  "total": 212,
+  "parsed": 100,
+  "skipped": {
+    "unnamed": 112,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "fast_food": 10,
+    "cafe": 62,
+    "restaurant": 40,
+    "food_court": 5,
+    "(none)": 95
+  },
+  "withName": 94,
+  "withNameTh": 41,
+  "withCuisine": 65,
+  "withAddress": 12,
+  "withPhone": 11,
+  "withWebsite": 5,
+  "withHours": 15,
+  "withPhoto": 0
+}

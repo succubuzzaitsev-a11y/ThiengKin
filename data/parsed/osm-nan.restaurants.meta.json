@@ -1,0 +1,31 @@
+{
+  "source": "nan",
+  "provinceId": "nan",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.573Z",
+  "elapsedSeconds": 0.02,
+  "total": 387,
+  "parsed": 236,
+  "skipped": {
+    "unnamed": 151,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 163,
+    "cafe": 116,
+    "internet_cafe": 4,
+    "fast_food": 12,
+    "food_court": 2,
+    "(none)": 90
+  },
+  "withName": 195,
+  "withNameTh": 21,
+  "withCuisine": 109,
+  "withAddress": 22,
+  "withPhone": 33,
+  "withWebsite": 18,
+  "withHours": 53,
+  "withPhoto": 0
+}

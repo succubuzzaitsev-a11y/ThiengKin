@@ -1,0 +1,31 @@
+{
+  "source": "surin",
+  "provinceId": "surin",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.445Z",
+  "elapsedSeconds": 0.01,
+  "total": 316,
+  "parsed": 126,
+  "skipped": {
+    "unnamed": 190,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 69,
+    "restaurant": 106,
+    "fast_food": 7,
+    "internet_cafe": 1,
+    "food_court": 2,
+    "(none)": 131
+  },
+  "withName": 106,
+  "withNameTh": 32,
+  "withCuisine": 83,
+  "withAddress": 19,
+  "withPhone": 11,
+  "withWebsite": 3,
+  "withHours": 25,
+  "withPhoto": 1
+}

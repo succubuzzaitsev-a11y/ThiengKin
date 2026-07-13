@@ -1,0 +1,31 @@
+{
+  "source": "buriram",
+  "provinceId": "buriram",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.448Z",
+  "elapsedSeconds": 0.01,
+  "total": 301,
+  "parsed": 191,
+  "skipped": {
+    "unnamed": 110,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 113,
+    "cafe": 102,
+    "fast_food": 12,
+    "internet_cafe": 1,
+    "food_court": 1,
+    "(none)": 72
+  },
+  "withName": 160,
+  "withNameTh": 43,
+  "withCuisine": 115,
+  "withAddress": 27,
+  "withPhone": 23,
+  "withWebsite": 4,
+  "withHours": 45,
+  "withPhoto": 0
+}

@@ -1,0 +1,20 @@
+{
+  "label": "Pathum Thani",
+  "bbox": {
+    "s": 13.917325,
+    "w": 100.331902,
+    "n": 14.27547,
+    "e": 100.951718
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.917325,100.331902,14.27547,100.951718);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.917325,100.331902,14.27547,100.951718);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T09:55:40.206Z",
+  "elapsedSeconds": 88.3,
+  "counts": {
+    "total": 1219,
+    "nodes": 1115,
+    "ways": 104,
+    "withName": 447
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

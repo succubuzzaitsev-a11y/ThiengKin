@@ -1,0 +1,24 @@
+{
+  "startedAt": "2026-07-13T11:06:57.280Z",
+  "options": {
+    "forceFetch": false,
+    "skipFetch": false,
+    "skipPush": false,
+    "dryRun": false,
+    "only": "push",
+    "startFrom": null,
+    "help": false
+  },
+  "phases": {
+    "fetch": {
+      "phase": "fetch",
+      "skipped": true
+    },
+    "parse": {
+      "phase": "parse",
+      "skipped": true
+    }
+  },
+  "error": "Push phase failed",
+  "finishedAt": "2026-07-13T11:06:58.781Z"
+}

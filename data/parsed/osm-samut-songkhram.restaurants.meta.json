@@ -1,0 +1,30 @@
+{
+  "source": "samut-songkhram",
+  "provinceId": "samut_songkhram",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.231Z",
+  "elapsedSeconds": 0.01,
+  "total": 98,
+  "parsed": 68,
+  "skipped": {
+    "unnamed": 30,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 47,
+    "cafe": 29,
+    "fast_food": 3,
+    "food_court": 1,
+    "(none)": 18
+  },
+  "withName": 60,
+  "withNameTh": 19,
+  "withCuisine": 45,
+  "withAddress": 5,
+  "withPhone": 15,
+  "withWebsite": 5,
+  "withHours": 20,
+  "withPhoto": 0
+}

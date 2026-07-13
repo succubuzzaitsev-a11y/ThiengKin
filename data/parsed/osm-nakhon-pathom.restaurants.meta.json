@@ -1,0 +1,31 @@
+{
+  "source": "nakhon-pathom",
+  "provinceId": "nakhon_pathom",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.425Z",
+  "elapsedSeconds": 0.02,
+  "total": 629,
+  "parsed": 219,
+  "skipped": {
+    "unnamed": 410,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 97,
+    "restaurant": 152,
+    "fast_food": 14,
+    "food_court": 7,
+    "internet_cafe": 1,
+    "(none)": 358
+  },
+  "withName": 201,
+  "withNameTh": 40,
+  "withCuisine": 109,
+  "withAddress": 50,
+  "withPhone": 41,
+  "withWebsite": 26,
+  "withHours": 38,
+  "withPhoto": 0
+}

@@ -1,0 +1,31 @@
+{
+  "source": "surat-thani",
+  "provinceId": "surat_thani",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.432Z",
+  "elapsedSeconds": 0.06,
+  "total": 2651,
+  "parsed": 1726,
+  "skipped": {
+    "unnamed": 925,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 1406,
+    "cafe": 512,
+    "fast_food": 119,
+    "food_court": 13,
+    "internet_cafe": 2,
+    "(none)": 599
+  },
+  "withName": 1231,
+  "withNameTh": 95,
+  "withCuisine": 791,
+  "withAddress": 224,
+  "withPhone": 246,
+  "withWebsite": 143,
+  "withHours": 433,
+  "withPhoto": 1
+}

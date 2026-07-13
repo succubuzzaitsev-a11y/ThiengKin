@@ -1,0 +1,31 @@
+{
+  "source": "chiang-rai",
+  "provinceId": "chiang_rai",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.820Z",
+  "elapsedSeconds": 0.04,
+  "total": 2951,
+  "parsed": 1282,
+  "skipped": {
+    "unnamed": 1669,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 898,
+    "cafe": 608,
+    "food_court": 16,
+    "fast_food": 77,
+    "internet_cafe": 3,
+    "(none)": 1349
+  },
+  "withName": 958,
+  "withNameTh": 229,
+  "withCuisine": 615,
+  "withAddress": 146,
+  "withPhone": 216,
+  "withWebsite": 64,
+  "withHours": 249,
+  "withPhoto": 1
+}

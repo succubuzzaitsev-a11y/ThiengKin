@@ -1,0 +1,30 @@
+{
+  "source": "uthai-thani",
+  "provinceId": "uthai_thani",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.599Z",
+  "elapsedSeconds": 0,
+  "total": 128,
+  "parsed": 58,
+  "skipped": {
+    "unnamed": 70,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 30,
+    "restaurant": 35,
+    "fast_food": 4,
+    "food_court": 1,
+    "(none)": 58
+  },
+  "withName": 48,
+  "withNameTh": 11,
+  "withCuisine": 29,
+  "withAddress": 10,
+  "withPhone": 5,
+  "withWebsite": 1,
+  "withHours": 13,
+  "withPhoto": 0
+}

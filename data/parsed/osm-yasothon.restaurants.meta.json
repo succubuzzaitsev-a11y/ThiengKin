@@ -1,0 +1,30 @@
+{
+  "source": "yasothon",
+  "provinceId": "yasothon",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.647Z",
+  "elapsedSeconds": 0,
+  "total": 110,
+  "parsed": 60,
+  "skipped": {
+    "unnamed": 50,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 33,
+    "restaurant": 30,
+    "fast_food": 4,
+    "food_court": 1,
+    "(none)": 42
+  },
+  "withName": 58,
+  "withNameTh": 34,
+  "withCuisine": 33,
+  "withAddress": 6,
+  "withPhone": 6,
+  "withWebsite": 1,
+  "withHours": 10,
+  "withPhoto": 0
+}

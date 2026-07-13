@@ -2,10 +2,11 @@
 
 > Action items + session handoff — ลบ/complete เมื่อทำเสร็จ
 
-**Last updated:** 2026-07-12 23:35 (Asia/Bangkok)
+**Last updated:** 2026-07-13 01:05 (Asia/Bangkok)
 **Project root:** `D:\thiengKin`
 **Git branch:** `main`
 **Latest commit:** `4f0d124` (M1.b: UI migration — drop City, wire ProvincePicker)
+**Working tree:** M3.d code uncommitted (7 files, +158/-46) — see "🛑 M3.d blocker" below
 
 ---
 
@@ -83,8 +84,36 @@
 - [x] **M3.a** — `OsmClient.queryBbox(s, w, n, e)` generic bbox query (Node mirror in `scripts/osm-fetch.mjs`)
 - [x] **M3.b** — `scripts/osm-parse.mjs` — Overpass JSON → Restaurant[] parser (mirror of `OsmImporter.kt`)
 - [x] **M3.c** — `scripts/push-osm.mjs` — push parsed → Supabase `restaurants` table (mirror of `refreshArea()`)
-- [ ] Wire M3.c into Android client (read from Supabase `restaurants` instead of bundled JSON)
+- [x] **M3.d** — Android client reads from Supabase (code written, **build unverified**, **sweep bug found**)
 - [ ] TTL 7 days (cache check in script), refresh button in Android UI
+
+#### 🛑 M3.d blocker (2026-07-13 01:05) — DO NOT MERGE UNTIL FIXED
+**Bug:** `scripts/osm-fetch.mjs:133` — `if (provinceId && CITY_BBOX[provinceId] && !useCity)` 
+requires province to be in CITY_BBOX (only 5 entries: chiang_mai, bangkok, phuket, chiang_rai, pai) before
+trying `GEOGRAPHY_FILE`. For the other 72 provinces, condition is false → falls through to line 146 default 
+= chiang_mai city preset.
+
+**Verified:** 3 non-CITY_BBOX provinces (buriram, pathum_thani, songkhla) all returned chiang_mai city bbox
+(18.70/98.85/18.90/99.10). bangkok (in CITY_BBOX) returned correct bbox.
+
+**Fix proposal (1 line):** change line 133 from 
+`if (provinceId && CITY_BBOX[provinceId] && !useCity)` → `if (provinceId && !useCity)`
+
+**Sweep status (00:18 → 00:55, 37 min wasted):**
+- 58 "✅ done" + 3 "⏭️" in log
+- Bug output: `osm-chiangmai-city.json` (5,573 el, chiang_mai city preset bbox) — overwritten many times
+- Pre-sweep files: bangkok (16,731), chiang-mai (9,003), chiang-rai (2,951), mueang-nonthaburi (277), 
+  chiang-mai-city (5,573) — all bbox verified correct
+- Sweep killed (PID 25380), `--only fetch` so Phase 3 not run → Supabase state unchanged
+- `data/_archived-osm-chiangmai-city.json` — earlier sweep run from 00:13 also hit bug
+
+**Next session — must do before any commit:**
+1. Fix `osm-fetch.mjs:133` (1-line change, no network needed)
+2. Re-run sweep: `node scripts/sweep-osm.mjs --only fetch` (~15-20 min)
+3. Verify bbox of new `data/osm-*.json` files match expected (sample 5 provinces)
+4. Run Phase 2+3: `node scripts/sweep-osm.mjs --skip-fetch` (~10 min)
+5. Build verify M3.d: `gradle :app:compileDebugKotlin --rerun-tasks` (JAVA_HOME set first)
+6. Commit: M3.d + sweep results as 1 commit (or 2 if M3.d wants separate checkpoint)
 
 ### M4 · Province picker UI (3-4 ชม.)
 - [ ] Searchable province select (ค้นหา Thai/English)
@@ -106,7 +135,7 @@
 
 ---
 
-## 📋 Session handoff (2026-07-12 — M1.b + M2 done, M3 ready to start)
+## 📋 Session handoff (2026-07-13 01:05 — M3.d code done, sweep bug found)
 
 ### Where we are
 - **M0 done:** `data/thailand-geography.json` (77 provinces + 928 districts + 7 regions) — bundled ใน assets/
@@ -117,10 +146,20 @@
   - Data: 7+77+928 rows pushed
   - District IDs: `{provinceId}_{districtSlug}` (unique across provinces)
   - Scripts: `scripts/apply-migrations.mjs` (DDL) + `scripts/push-geography.mjs` (data)
-- **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — แต่ใน design ใหม่ OSM เป็นหลัก FSQ เป็น optional enhancement
-- **Build:** `gradle :app:compileDebugKotlin --rerun-tasks` → BUILD SUCCESSFUL in 14s (M1.b verified)
-- **APK smoke test:** pending (ต้อง install + run on emulator — user ทำ)
-- **Next:** M3 — OSM nationwide pipeline (6-8 ชม.)
+- **M3.a/b/c done (committed):** OSM fetch/parse/push pipeline
+- **M3.d code done (uncommitted, build unverified):** Android client reads from Supabase
+  - Files: `SupabaseClient.kt`, `SupabaseImporter.kt` (new), `ThiengKinApp.kt`, `RestaurantRepository.kt`, `build.gradle.kts` (modified)
+  - Pattern: Supabase primary, Overpass fallback (anon-key gated)
+- **M3.d sweep bug found (2026-07-13 00:55):** `osm-fetch.mjs:133` เงื่อนไข `CITY_BBOX[provinceId]` ทำให้ 72/77 จังหวัด fall through ไป chiang_mai city — see "🛑 M3.d blocker"
+- **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — optional enrichment, ไม่ใช่ primary
+- **Build last verified:** `gradle :app:compileDebugKotlin --rerun-tasks` → BUILD SUCCESSFUL in 14s (M1.b, **pre-M3.d**)
+- **APK smoke test:** pending (M3.d build not verified yet — fix bug + sweep first)
+- **Next:** fix bug → re-run sweep → verify build → commit M3.d
+
+### Supabase current state (verified 2026-07-13 01:00)
+- restaurants total: **13,888 rows** (all source=osm, all district_id IS NULL)
+- source=foursquare: 0 | source=manual: 0
+- (สูงกว่า 5,199 ที่จำได้ — มี pushes อื่นๆ ที่ไม่ได้บันทึกไว้ใน memory)
 
 ### Quick start tomorrow
 ```powershell
@@ -128,27 +167,46 @@
 $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
 $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 
-# 2. Verify build ยัง pass หลัง M1.b
-cd D:\thiengKin\android
-.\gradlew.bat assembleDebug
+# 2. Fix M3.d bug (1 line) — scripts/osm-fetch.mjs:133
+#    Old: if (provinceId && CITY_BBOX[provinceId] && !useCity) {
+#    New: if (provinceId && !useCity) {
+code D:\thiengKin\scripts\osm-fetch.mjs
 
-# 3. APK smoke test (ถ้ามี emulator/เครื่องจริง)
+# 3. Re-run sweep (Phase 1 only, resumable)
+cd D:\thiengKin
+node scripts/sweep-osm.mjs --only fetch
+# expected: ~15-20 min, should create 74+ osm-*.json files (5 pre-existing + 72 new)
+
+# 4. Verify bbox of 3 random new files (must NOT be 18.70/98.85/18.90/99.10)
+node -e "const fs=require('fs');for(const f of fs.readdirSync('data').filter(x=>x.match(/^osm-[a-z-]+\.json$/))){try{const d=JSON.parse(fs.readFileSync('data/'+f,'utf8'));const lats=d.elements.map(e=>e.lat).filter(x=>x!=null);const lngs=d.elements.map(e=>e.lon).filter(x=>x!=null);console.log(f,':',Math.min(...lats).toFixed(3),Math.min(...lngs).toFixed(3),Math.max(...lats).toFixed(3),Math.max(...lngs).toFixed(3));}catch(e){}}"
+
+# 5. Push to Supabase (Phase 2 + 3, use --force to refresh)
+node scripts/sweep-osm.mjs --skip-fetch
+
+# 6. Verify Android build (M3.d code uncommitted — must compile clean)
+cd D:\thiengKin\android
+.\gradlew.bat :app:compileDebugKotlin --rerun-tasks
+
+# 7. APK smoke test (ถ้ามี emulator)
 .\gradlew.bat :app:assembleDebug
-# install via adb
 adb install -r app\build\outputs\apk\debug\app-debug.apk
 
-# 4. ดู UI migration ใหม่
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\ui\components\ProvincePicker.kt
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\ui\screens\travel\TravelHomeViewModel.kt
-code D:\thiengKin\android\app\src\main\java\com\thiengkin\data\LocationRepository.kt
+# 8. Commit M3.d + sweep results (per RULES.md rule 6)
+cd D:\thiengKin
+git add -A
+git status   # review ก่อน commit
+git commit -m "feat(android+osm): M3.d Supabase wire-up + 77-province OSM data"
 ```
 
 ### Working dir context
 - **Git config:** `pornchaisic-cloud <succubuzzaitsev@gmail.com>` (ตรงกับ commit history)
 - **No git remote configured** (local-only repo) — push ไม่ได้จนกว่าจะ add remote
 - **JAVA_HOME** ไม่ได้ตั้งใน PowerShell session — ต้อง set เองทุกครั้ง (หรือใส่ใน `$PROFILE`)
-- **Working tree:** M1.b committed at `4f0d124` (16 files, +732 / -664)
+- **Working tree:** M1.b committed at `4f0d124` | M3.d uncommitted (7 files, +158/-46) + 2 new Kotlin files
 - **City.kt ถูกลบแล้ว** — Province.centroid ใช้แทน City.lat/lng ทั้งหมด
+- **anon key blocker:** `BuildConfig.SUPABASE_ANON_KEY` ว่าง (gradle.properties + env ไม่มี) — 
+  Android client จะ disable Supabase + fallback Overpass ตอน runtime ถ้าไม่ใส่
+  (M3.d code handle gracefully — แค่ไม่ได้ใช้ primary path)
 
 ---
 

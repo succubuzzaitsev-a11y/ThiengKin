@@ -1,0 +1,30 @@
+{
+  "source": "loei",
+  "provinceId": "loei",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.280Z",
+  "elapsedSeconds": 0.01,
+  "total": 476,
+  "parsed": 213,
+  "skipped": {
+    "unnamed": 263,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 164,
+    "cafe": 110,
+    "fast_food": 23,
+    "food_court": 1,
+    "(none)": 178
+  },
+  "withName": 153,
+  "withNameTh": 42,
+  "withCuisine": 119,
+  "withAddress": 18,
+  "withPhone": 45,
+  "withWebsite": 9,
+  "withHours": 45,
+  "withPhoto": 1
+}

@@ -1,0 +1,30 @@
+{
+  "source": "phichit",
+  "provinceId": "phichit",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.875Z",
+  "elapsedSeconds": 0,
+  "total": 43,
+  "parsed": 26,
+  "skipped": {
+    "unnamed": 17,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 8,
+    "cafe": 17,
+    "food_court": 2,
+    "fast_food": 3,
+    "(none)": 13
+  },
+  "withName": 20,
+  "withNameTh": 12,
+  "withCuisine": 14,
+  "withAddress": 6,
+  "withPhone": 6,
+  "withWebsite": 3,
+  "withHours": 11,
+  "withPhoto": 0
+}

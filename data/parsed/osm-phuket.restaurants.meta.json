@@ -1,0 +1,31 @@
+{
+  "source": "phuket",
+  "provinceId": "phuket",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.019Z",
+  "elapsedSeconds": 0.06,
+  "total": 4196,
+  "parsed": 2378,
+  "skipped": {
+    "unnamed": 1818,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 877,
+    "restaurant": 1762,
+    "fast_food": 218,
+    "food_court": 21,
+    "internet_cafe": 4,
+    "(none)": 1314
+  },
+  "withName": 1681,
+  "withNameTh": 102,
+  "withCuisine": 1358,
+  "withAddress": 421,
+  "withPhone": 546,
+  "withWebsite": 252,
+  "withHours": 830,
+  "withPhoto": 4
+}

@@ -1,0 +1,30 @@
+{
+  "source": "saraburi",
+  "provinceId": "saraburi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.259Z",
+  "elapsedSeconds": 0.02,
+  "total": 728,
+  "parsed": 332,
+  "skipped": {
+    "unnamed": 396,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "fast_food": 24,
+    "restaurant": 294,
+    "cafe": 159,
+    "food_court": 4,
+    "(none)": 247
+  },
+  "withName": 274,
+  "withNameTh": 58,
+  "withCuisine": 156,
+  "withAddress": 63,
+  "withPhone": 66,
+  "withWebsite": 39,
+  "withHours": 76,
+  "withPhoto": 0
+}

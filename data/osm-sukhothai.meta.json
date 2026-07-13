@@ -1,0 +1,20 @@
+{
+  "label": "Sukhothai",
+  "bbox": {
+    "s": 16.684162,
+    "w": 99.311948,
+    "n": 17.821578,
+    "e": 100.111487
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.684162,99.311948,17.821578,100.111487);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.684162,99.311948,17.821578,100.111487);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:42:13.211Z",
+  "elapsedSeconds": 2.1,
+  "counts": {
+    "total": 665,
+    "nodes": 603,
+    "ways": 62,
+    "withName": 261
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

@@ -1,0 +1,31 @@
+{
+  "source": "ratchaburi",
+  "provinceId": "ratchaburi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.087Z",
+  "elapsedSeconds": 0.02,
+  "total": 624,
+  "parsed": 290,
+  "skipped": {
+    "unnamed": 334,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 179,
+    "cafe": 112,
+    "fast_food": 23,
+    "food_court": 11,
+    "internet_cafe": 1,
+    "(none)": 298
+  },
+  "withName": 246,
+  "withNameTh": 53,
+  "withCuisine": 144,
+  "withAddress": 46,
+  "withPhone": 54,
+  "withWebsite": 22,
+  "withHours": 58,
+  "withPhoto": 0
+}

@@ -1,0 +1,20 @@
+{
+  "label": "Phra Nakhon Si Ayutthaya",
+  "bbox": {
+    "s": 14.110682,
+    "w": 100.225663,
+    "n": 14.673016,
+    "e": 100.823602
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.110682,100.225663,14.673016,100.823602);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.110682,100.225663,14.673016,100.823602);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:29:22.625Z",
+  "elapsedSeconds": 85.8,
+  "counts": {
+    "total": 834,
+    "nodes": 758,
+    "ways": 76,
+    "withName": 279
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

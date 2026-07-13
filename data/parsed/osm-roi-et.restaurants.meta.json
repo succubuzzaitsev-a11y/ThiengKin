@@ -1,0 +1,30 @@
+{
+  "source": "roi-et",
+  "provinceId": "roi_et",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.120Z",
+  "elapsedSeconds": 0,
+  "total": 232,
+  "parsed": 175,
+  "skipped": {
+    "unnamed": 57,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 97,
+    "restaurant": 89,
+    "fast_food": 12,
+    "food_court": 2,
+    "(none)": 32
+  },
+  "withName": 157,
+  "withNameTh": 48,
+  "withCuisine": 97,
+  "withAddress": 20,
+  "withPhone": 24,
+  "withWebsite": 11,
+  "withHours": 30,
+  "withPhoto": 0
+}

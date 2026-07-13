@@ -1,0 +1,20 @@
+{
+  "label": "Phitsanulok",
+  "bbox": {
+    "s": 16.321975,
+    "w": 99.853398,
+    "n": 17.743016,
+    "e": 101.109975
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.321975,99.853398,17.743016,101.109975);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](16.321975,99.853398,17.743016,101.109975);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:27:39.156Z",
+  "elapsedSeconds": 8.7,
+  "counts": {
+    "total": 1018,
+    "nodes": 921,
+    "ways": 97,
+    "withName": 364
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

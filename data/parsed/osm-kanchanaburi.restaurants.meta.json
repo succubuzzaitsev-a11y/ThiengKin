@@ -1,0 +1,30 @@
+{
+  "source": "kanchanaburi",
+  "provinceId": "kanchanaburi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.969Z",
+  "elapsedSeconds": 0.01,
+  "total": 699,
+  "parsed": 407,
+  "skipped": {
+    "unnamed": 292,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 308,
+    "cafe": 155,
+    "fast_food": 19,
+    "food_court": 3,
+    "(none)": 214
+  },
+  "withName": 267,
+  "withNameTh": 57,
+  "withCuisine": 155,
+  "withAddress": 43,
+  "withPhone": 38,
+  "withWebsite": 9,
+  "withHours": 60,
+  "withPhoto": 0
+}

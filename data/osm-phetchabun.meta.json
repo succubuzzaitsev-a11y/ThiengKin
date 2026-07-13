@@ -1,0 +1,20 @@
+{
+  "label": "Phetchabun",
+  "bbox": {
+    "s": 15.319836,
+    "w": 100.635327,
+    "n": 17.178028,
+    "e": 101.791621
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.319836,100.635327,17.178028,101.791621);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.319836,100.635327,17.178028,101.791621);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:25:52.170Z",
+  "elapsedSeconds": 90.3,
+  "counts": {
+    "total": 342,
+    "nodes": 309,
+    "ways": 33,
+    "withName": 106
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

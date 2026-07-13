@@ -1,0 +1,20 @@
+{
+  "label": "Maha Sarakham",
+  "bbox": {
+    "s": 15.405434,
+    "w": 102.844349,
+    "n": 16.643816,
+    "e": 103.494148
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.405434,102.844349,16.643816,103.494148);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](15.405434,102.844349,16.643816,103.494148);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:11:15.936Z",
+  "elapsedSeconds": 3.3,
+  "counts": {
+    "total": 154,
+    "nodes": 142,
+    "ways": 12,
+    "withName": 88
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

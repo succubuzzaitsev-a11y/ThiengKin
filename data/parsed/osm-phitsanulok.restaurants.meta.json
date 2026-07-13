@@ -1,0 +1,30 @@
+{
+  "source": "phitsanulok",
+  "provinceId": "phitsanulok",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.905Z",
+  "elapsedSeconds": 0.02,
+  "total": 1018,
+  "parsed": 471,
+  "skipped": {
+    "unnamed": 547,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 302,
+    "cafe": 206,
+    "fast_food": 55,
+    "food_court": 7,
+    "(none)": 448
+  },
+  "withName": 364,
+  "withNameTh": 88,
+  "withCuisine": 275,
+  "withAddress": 89,
+  "withPhone": 78,
+  "withWebsite": 21,
+  "withHours": 108,
+  "withPhoto": 0
+}

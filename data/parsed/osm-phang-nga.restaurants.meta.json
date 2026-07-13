@@ -1,0 +1,31 @@
+{
+  "source": "phang-nga",
+  "provinceId": "phang_nga",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.812Z",
+  "elapsedSeconds": 0.06,
+  "total": 2945,
+  "parsed": 1624,
+  "skipped": {
+    "unnamed": 1321,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 1332,
+    "cafe": 457,
+    "fast_food": 127,
+    "food_court": 13,
+    "internet_cafe": 1,
+    "(none)": 1015
+  },
+  "withName": 1215,
+  "withNameTh": 81,
+  "withCuisine": 877,
+  "withAddress": 235,
+  "withPhone": 307,
+  "withWebsite": 142,
+  "withHours": 439,
+  "withPhoto": 3
+}

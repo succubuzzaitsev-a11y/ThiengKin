@@ -1,0 +1,29 @@
+{
+  "source": "sa-kaeo",
+  "provinceId": "sa_kaeo",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.123Z",
+  "elapsedSeconds": 0,
+  "total": 88,
+  "parsed": 61,
+  "skipped": {
+    "unnamed": 27,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 31,
+    "restaurant": 40,
+    "fast_food": 5,
+    "(none)": 12
+  },
+  "withName": 46,
+  "withNameTh": 14,
+  "withCuisine": 25,
+  "withAddress": 6,
+  "withPhone": 10,
+  "withWebsite": 4,
+  "withHours": 11,
+  "withPhoto": 0
+}

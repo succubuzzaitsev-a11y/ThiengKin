@@ -1,0 +1,20 @@
+{
+  "label": "Phrae",
+  "bbox": {
+    "s": 17.685588,
+    "w": 99.367342,
+    "n": 18.83441,
+    "e": 100.550455
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.685588,99.367342,18.83441,100.550455);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](17.685588,99.367342,18.83441,100.550455);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:29:33.646Z",
+  "elapsedSeconds": 8.4,
+  "counts": {
+    "total": 657,
+    "nodes": 594,
+    "ways": 63,
+    "withName": 245
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

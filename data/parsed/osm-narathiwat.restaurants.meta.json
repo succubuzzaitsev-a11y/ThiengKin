@@ -1,0 +1,31 @@
+{
+  "source": "narathiwat",
+  "provinceId": "narathiwat",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.581Z",
+  "elapsedSeconds": 0,
+  "total": 146,
+  "parsed": 73,
+  "skipped": {
+    "unnamed": 73,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 48,
+    "cafe": 23,
+    "fast_food": 11,
+    "food_court": 4,
+    "internet_cafe": 3,
+    "(none)": 57
+  },
+  "withName": 70,
+  "withNameTh": 8,
+  "withCuisine": 32,
+  "withAddress": 14,
+  "withPhone": 19,
+  "withWebsite": 0,
+  "withHours": 26,
+  "withPhoto": 0
+}

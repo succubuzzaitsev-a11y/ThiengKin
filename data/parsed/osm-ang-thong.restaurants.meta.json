@@ -1,0 +1,30 @@
+{
+  "source": "ang-thong",
+  "provinceId": "ang_thong",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.139Z",
+  "elapsedSeconds": 0.01,
+  "total": 205,
+  "parsed": 78,
+  "skipped": {
+    "unnamed": 127,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 51,
+    "cafe": 20,
+    "fast_food": 6,
+    "food_court": 3,
+    "(none)": 125
+  },
+  "withName": 74,
+  "withNameTh": 13,
+  "withCuisine": 36,
+  "withAddress": 3,
+  "withPhone": 8,
+  "withWebsite": 2,
+  "withHours": 24,
+  "withPhoto": 0
+}

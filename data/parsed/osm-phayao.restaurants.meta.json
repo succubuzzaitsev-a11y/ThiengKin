@@ -1,0 +1,30 @@
+{
+  "source": "phayao",
+  "provinceId": "phayao",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.832Z",
+  "elapsedSeconds": 0.01,
+  "total": 439,
+  "parsed": 179,
+  "skipped": {
+    "unnamed": 260,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 124,
+    "cafe": 113,
+    "food_court": 2,
+    "fast_food": 19,
+    "(none)": 181
+  },
+  "withName": 119,
+  "withNameTh": 22,
+  "withCuisine": 99,
+  "withAddress": 20,
+  "withPhone": 20,
+  "withWebsite": 2,
+  "withHours": 32,
+  "withPhoto": 0
+}

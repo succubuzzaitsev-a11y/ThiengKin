@@ -29,6 +29,25 @@ android {
                 ?: System.getenv("FOURSQUARE_API_KEY")
                 ?: ""
         buildConfigField("String", "FOURSQUARE_API_KEY", "\"$foursquareKey\"")
+
+        // Supabase config (M3.d — read restaurants from PostgREST mirror)
+        // - URL: project ref → https://<ref>.supabase.co (already public, safe to embed)
+        // - ANON KEY = Publishable key (RLS-enforced, safe to ship in client)
+        //   * NEVER use the Secret/service_role key in client — bypasses RLS
+        //   * Get from: https://supabase.com/dashboard/project/zlntknagzrcoduzxngmx/settings/api
+        //     → "Publishable and secret API keys" section → Publishable key
+        // - ถ้า ANON_KEY ว่าง → Supabase client จะถูก disable ใน ThiengKinApp (เหมือน FSQ)
+        //   → Repository.refreshArea() จะ skip fetch → UI แสดง "ยังไม่มีข้อมูล"
+        val supabaseUrl: String =
+            (findProperty("SUPABASE_URL") as? String)
+                ?: System.getenv("SUPABASE_URL")
+                ?: ""
+        val supabaseAnonKey: String =
+            (findProperty("SUPABASE_ANON_KEY") as? String)
+                ?: System.getenv("SUPABASE_ANON_KEY")
+                ?: ""
+        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"$supabaseAnonKey\"")
     }
 
     buildTypes {

@@ -1,0 +1,30 @@
+{
+  "source": "prachuap-khiri-khan",
+  "provinceId": "prachuap_khiri_khan",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.055Z",
+  "elapsedSeconds": 0.02,
+  "total": 986,
+  "parsed": 583,
+  "skipped": {
+    "unnamed": 403,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "cafe": 171,
+    "restaurant": 475,
+    "fast_food": 32,
+    "food_court": 18,
+    "(none)": 290
+  },
+  "withName": 545,
+  "withNameTh": 146,
+  "withCuisine": 260,
+  "withAddress": 52,
+  "withPhone": 70,
+  "withWebsite": 25,
+  "withHours": 132,
+  "withPhoto": 0
+}

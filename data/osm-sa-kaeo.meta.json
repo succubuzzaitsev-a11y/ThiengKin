@@ -1,0 +1,20 @@
+{
+  "label": "Sa Kaeo",
+  "bbox": {
+    "s": 13.236566,
+    "w": 101.873751,
+    "n": 14.195012,
+    "e": 102.940372
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.236566,101.873751,14.195012,102.940372);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.236566,101.873751,14.195012,102.940372);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:36:19.127Z",
+  "elapsedSeconds": 89.5,
+  "counts": {
+    "total": 88,
+    "nodes": 85,
+    "ways": 3,
+    "withName": 46
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

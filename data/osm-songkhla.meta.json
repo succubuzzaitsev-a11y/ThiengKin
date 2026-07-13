@@ -1,0 +1,20 @@
+{
+  "label": "Songkhla",
+  "bbox": {
+    "s": 6.289281,
+    "w": 100.054689,
+    "n": 7.937927,
+    "e": 101.108065
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](6.289281,100.054689,7.937927,101.108065);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](6.289281,100.054689,7.937927,101.108065);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:42:08.466Z",
+  "elapsedSeconds": 91.2,
+  "counts": {
+    "total": 1463,
+    "nodes": 1346,
+    "ways": 117,
+    "withName": 485
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

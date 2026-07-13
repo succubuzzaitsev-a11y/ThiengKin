@@ -1,0 +1,30 @@
+{
+  "source": "lopburi",
+  "provinceId": "lopburi",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.294Z",
+  "elapsedSeconds": 0.01,
+  "total": 216,
+  "parsed": 140,
+  "skipped": {
+    "unnamed": 76,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 90,
+    "cafe": 77,
+    "fast_food": 10,
+    "food_court": 1,
+    "(none)": 38
+  },
+  "withName": 126,
+  "withNameTh": 24,
+  "withCuisine": 61,
+  "withAddress": 19,
+  "withPhone": 30,
+  "withWebsite": 17,
+  "withHours": 26,
+  "withPhoto": 0
+}

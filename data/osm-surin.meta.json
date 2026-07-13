@@ -1,0 +1,20 @@
+{
+  "label": "Surin",
+  "bbox": {
+    "s": 14.327045,
+    "w": 103.089282,
+    "n": 15.481639,
+    "e": 104.092183
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.327045,103.089282,15.481639,104.092183);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.327045,103.089282,15.481639,104.092183);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:44:33.633Z",
+  "elapsedSeconds": 10.6,
+  "counts": {
+    "total": 316,
+    "nodes": 287,
+    "ways": 29,
+    "withName": 106
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

@@ -1,0 +1,20 @@
+{
+  "label": "Kanchanaburi",
+  "bbox": {
+    "s": 13.725755,
+    "w": 98.182808,
+    "n": 15.660355,
+    "e": 99.879739
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.725755,98.182808,15.660355,99.879739);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](13.725755,98.182808,15.660355,99.879739);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:05:54.255Z",
+  "elapsedSeconds": 82.4,
+  "counts": {
+    "total": 699,
+    "nodes": 658,
+    "ways": 41,
+    "withName": 267
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

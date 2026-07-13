@@ -1,0 +1,20 @@
+{
+  "label": "Chainat",
+  "bbox": {
+    "s": 14.901762,
+    "w": 99.719592,
+    "n": 15.417474,
+    "e": 100.351644
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.901762,99.719592,15.417474,100.351644);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](14.901762,99.719592,15.417474,100.351644);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T09:58:49.458Z",
+  "elapsedSeconds": 1,
+  "counts": {
+    "total": 189,
+    "nodes": 166,
+    "ways": 23,
+    "withName": 63
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

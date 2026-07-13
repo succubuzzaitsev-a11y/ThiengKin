@@ -1,0 +1,30 @@
+{
+  "source": "satun",
+  "provinceId": "satun",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.274Z",
+  "elapsedSeconds": 0.01,
+  "total": 411,
+  "parsed": 203,
+  "skipped": {
+    "unnamed": 208,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 181,
+    "fast_food": 17,
+    "cafe": 40,
+    "food_court": 4,
+    "(none)": 169
+  },
+  "withName": 165,
+  "withNameTh": 6,
+  "withCuisine": 80,
+  "withAddress": 14,
+  "withPhone": 20,
+  "withWebsite": 14,
+  "withHours": 35,
+  "withPhoto": 1
+}

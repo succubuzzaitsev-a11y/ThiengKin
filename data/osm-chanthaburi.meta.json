@@ -1,0 +1,20 @@
+{
+  "label": "Chanthaburi",
+  "bbox": {
+    "s": 12.28596,
+    "w": 101.685733,
+    "n": 13.334377,
+    "e": 102.536145
+  },
+  "query": "[out:json][timeout:60];\n(\n  node[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](12.28596,101.685733,13.334377,102.536145);\n  way[\"amenity\"~\"restaurant|cafe|fast_food|food_court\"](12.28596,101.685733,13.334377,102.536145);\n);\nout body center;\n>;\nout skel qt;\n",
+  "fetchedAt": "2026-07-13T10:00:48.252Z",
+  "elapsedSeconds": 87.6,
+  "counts": {
+    "total": 670,
+    "nodes": 603,
+    "ways": 67,
+    "withName": 265
+  },
+  "source": "OpenStreetMap Overpass API (https://overpass-api.de)",
+  "userAgent": "ThiengKin/0.1.0 (osm-fetch; +https://thiengkin.app)"
+}

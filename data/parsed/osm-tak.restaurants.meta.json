@@ -1,0 +1,31 @@
+{
+  "source": "tak",
+  "provinceId": "tak",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:29.469Z",
+  "elapsedSeconds": 0.02,
+  "total": 745,
+  "parsed": 391,
+  "skipped": {
+    "unnamed": 354,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 301,
+    "fast_food": 35,
+    "cafe": 150,
+    "food_court": 4,
+    "bar;restaurant": 1,
+    "(none)": 254
+  },
+  "withName": 304,
+  "withNameTh": 53,
+  "withCuisine": 192,
+  "withAddress": 58,
+  "withPhone": 54,
+  "withWebsite": 16,
+  "withHours": 74,
+  "withPhoto": 1
+}

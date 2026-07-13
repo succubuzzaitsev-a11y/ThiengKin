@@ -1,0 +1,29 @@
+{
+  "source": "bueng-kan",
+  "provinceId": "bueng_kan",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:27.435Z",
+  "elapsedSeconds": 0,
+  "total": 115,
+  "parsed": 49,
+  "skipped": {
+    "unnamed": 66,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 47,
+    "cafe": 19,
+    "fast_food": 5,
+    "(none)": 44
+  },
+  "withName": 38,
+  "withNameTh": 9,
+  "withCuisine": 35,
+  "withAddress": 4,
+  "withPhone": 5,
+  "withWebsite": 1,
+  "withHours": 5,
+  "withPhoto": 0
+}

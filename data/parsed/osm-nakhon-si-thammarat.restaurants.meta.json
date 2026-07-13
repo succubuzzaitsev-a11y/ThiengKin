@@ -1,0 +1,31 @@
+{
+  "source": "nakhon-si-thammarat",
+  "provinceId": "nakhon_si_thammarat",
+  "districtId": null,
+  "parsedAt": "2026-07-13T11:05:28.550Z",
+  "elapsedSeconds": 0.01,
+  "total": 597,
+  "parsed": 292,
+  "skipped": {
+    "unnamed": 305,
+    "noCoords": 0,
+    "relation": 0,
+    "area": 0
+  },
+  "byAmenity": {
+    "restaurant": 225,
+    "fast_food": 55,
+    "cafe": 133,
+    "food_court": 2,
+    "internet_cafe": 1,
+    "(none)": 181
+  },
+  "withName": 206,
+  "withNameTh": 33,
+  "withCuisine": 133,
+  "withAddress": 26,
+  "withPhone": 48,
+  "withWebsite": 17,
+  "withHours": 76,
+  "withPhoto": 0
+}

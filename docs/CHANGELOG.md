@@ -156,23 +156,82 @@
 
 ---
 
-## 🔮 Upcoming
+## v4 (2026-07-12 → 2026-07-13) — Nationwide pivot + OSM primary
 
-### v3.4 (planned)
-- Android project skeleton (Gradle + Compose + Room)
-- filter-data.mjs (Foursquare Place Details)
-- Android Kotlin importer (JSON → Room DB)
-- Manual curation เริ่มต้น (ร้านดังเชียงใหม์ 30-50 ร้าน)
+**Theme:** จาก Chiang Mai pilot 1 จังหวัด → 77 จังหวัดทั่วประเทศ + เปลี่ยน data source เป็น OSM
 
-### v4 (planned)
-- Week 2-5: Android development
-- Travel Mode UI (dark, big buttons)
-- Near-me Mode UI (light, filter)
+### M0 — Province/district reference data (2026-07-12)
+- Scrape 77 provinces + 928 districts + 7 regions จาก `chingchai/OpenGISData-Thailand`
+- Parse → `data/thailand-geography.json` (311 KB, committed)
+- Commit: `3e9a131`
+
+### M1 — Android schema + UI migration (2026-07-12)
+- **M1.a** — Room entities: `Province` (77), `District` (928), `Restaurant.provinceId` + `districtId`
+  - `RestaurantRepository.refreshArea(provinceId, districtId?, bbox)` generic
+  - DB v3 → v4 (`fallbackToDestructiveMigration`)
+  - Commit: `14edf81`
+- **M1.b** — Drop `City.kt`/`CitySelector`/`JsonImporter`, wire `ProvincePicker` (searchable + district drill-down)
+  - Commit: `4f0d124`
+
+### M2 — Supabase setup (2026-07-12)
+- Project: `zlntknagzrcoduzxngmx` (account `succubuzzaitsev@gmail.com`)
+- Schema: `provinces` (77), `districts` (928), `restaurants`
+- Migrations: `001_initial_schema.sql` + `002_rls_policies.sql` (RLS public read)
+- Push 7r + 77p + 928d to Supabase
+- Commit: `be810bf`
+
+### P0 — FoursquareClient v3 wire format fix (2026-07-12)
+- Fixed base URL → `places-api.foursquare.com/places/search`
+- Fixed `Authorization: Bearer <key>` + `X-Places-Api-Version: 2025-06-17`
+- Fixed `query=<text>` + `sort=RELEVANCE` + `offset=<n>` (was returning 0 results)
+- Commit: `4837679`
+
+### M3 — OSM nationwide pipeline (2026-07-12 → 2026-07-13)
+- **M3.a** — `OsmClient.queryBbox(s, w, n, e)` + `scripts/osm-fetch.mjs` (Node mirror)
+  - Commit: `a1f79fd`
+- **M3.b** — `scripts/osm-parse.mjs` — Overpass JSON → Restaurant[] (mirror of `OsmImporter.kt`)
+  - Commit: `65280f9`
+- **M3.c** — `scripts/push-osm.mjs` — parsed → Supabase `restaurants` (mirror of `refreshArea()`)
+  - Upsert pattern: `on_conflict=id` + `Prefer: resolution=merge-duplicates,return=minimal`
+  - Synthetic districtId nullify trick (OSM `chiang_mai_city` label not real FK)
+  - Commit: `ac6300d`
+- **M3.d** — Android `SupabaseClient.kt` reads from Supabase primary + Overpass fallback
+  - Nationwide sweep: 33,442 unique OSM rows in DB (Bangkok 16,731 + 76 จังหวัด)
+  - Commit: `8421e94`
+
+### M4 — Province picker UI finalize (2026-07-13)
+- **GPS auto-detect** → nearest province by centroid (1× per session, ไม่ override manual changes)
+  - `TravelHomeViewModel.autoSelectProvinceFromGps()`
+- **Search restaurants by name** — substring match `name` + `nameTh` + `category`
+  - `SearchInput` refactor: static → static+editable modes with clear button
+  - Context-aware empty state: "ไม่พบร้านที่ค้นหา" + "ล้างคำค้น" button
+- **Filter chip remap → OSM-actual** (was broken: Thai custom tags = 0 matches)
+  - ริมทาง → fast_food + takeaway
+  - เปิดเช้า → openingHours != null
+  - คนท้องถิ่น → cuisine:thai + cuisine:regional + cuisine:noodle
+  - ของฝาก → cafe + coffee_shop + bubble_tea
+- Build verified: `compileDebugKotlin` 21s, `assembleDebug` 15s → APK 18 MB
+- Commit: `e73678a`
+
+### M5 — Ship MVP (in progress · 2026-07-13 → )
+- [ ] APK smoke test on real device (install + GPS + province picker + refresh)
+- [ ] Set `BuildConfig.SUPABASE_ANON_KEY` (currently empty → Overpass fallback)
+- [ ] TODO cleanup
+- [ ] GitHub push (currently local-only repo)
+
+---
+
+## 🔮 Upcoming (Phase B · after MVP ship)
+
+- **M6** — Auth (Supabase Auth, email + Google)
+- **M7** — Reviews + GPS check-in
+- **M8** — Points system + tier
+- **M9** — Anti-cheat (report, cool-down, probation)
+- **M10** — Leaderboard, badges (Explorer = visited 10 provinces)
+
+### Backlog
+- Travel Mode ETA / route preview (OSRM vs Google Directions)
 - AI ranking formula 40/30/15/10/5
 - Deep link Google Maps
-
-### v5 (planned)
-- Phase 2: Google Places via Supabase Edge Function
-- AI Review Summary (Gemini Flash)
-- Multi-province (เพิ่มจังหวัดที่ 2)
 - English toggle
+- Favorites sync (Supabase Realtime)

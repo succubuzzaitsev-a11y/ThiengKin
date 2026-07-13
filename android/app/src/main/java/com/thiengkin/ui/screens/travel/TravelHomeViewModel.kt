@@ -211,18 +211,24 @@ class TravelHomeViewModel(
     )
 
     init {
-        // M5 fix: รอ geography seed เสร็จก่อนโหลด provinces + initial selection
-        // (เดิม race condition — ThiengKinApp seed เป็น async, ViewModel อ่าน DB ตอนยังว่าง → picker เห็น list ว่าง)
+        // M5 fix v2: รอ geography seed เสร็จก่อนโหลด provinces + initial selection
+        // (เดิม v1 race condition — `isEmpty()` exit เมื่อ province แรก insert เสร็จ
+        //  → picker เห็น 1 จังหวัด จนกว่า ViewModel จะ reload)
+        // v2: poll จนกว่าจะได้ 77 provinces ครบ (max 10s)
         viewModelScope.launch {
-            var provinces = provinceDao.getAll()
+            var provinces = emptyList<Province>()
             var attempts = 0
-            while (provinces.isEmpty() && attempts < 100) {  // max 5s (50ms × 100)
-                kotlinx.coroutines.delay(50)
+            while (provinces.size < EXPECTED_PROVINCE_COUNT && attempts < 200) {  // max 10s (50ms × 200)
                 provinces = provinceDao.getAll()
+                if (provinces.size >= EXPECTED_PROVINCE_COUNT) break
+                kotlinx.coroutines.delay(50)
                 attempts++
             }
             _provinces.value = provinces
-            Log.i(TAG, "Loaded ${provinces.size} provinces (after $attempts polls)")
+            Log.i(
+                TAG,
+                "Loaded ${provinces.size}/$EXPECTED_PROVINCE_COUNT provinces (after $attempts polls)",
+            )
 
             // หลัง provinces พร้อม → re-read initial province (อาจเพิ่ง set โดย ThiengKinApp seed completion)
             if (_selectedProvinceId.value == null) {
@@ -400,6 +406,11 @@ class TravelHomeViewModel(
         lateinit var defaultProvinceDao: ProvinceDao
         lateinit var defaultDistrictDao: DistrictDao
 
+        // v0.3: จำนวนจังหวัดที่ bundle ใน assets/thailand-geography.json (77 provinces)
+        // ใช้เป็น target ในการ poll geography seed — เดิมใช้ isEmpty() เช็คแค่ "มีอย่างน้อย 1"
+        // ทำให้ picker เห็น 1 จังหวัด (นนทบุรี) ตอน seed ยังไม่เสร็จ
+        const val EXPECTED_PROVINCE_COUNT = 77
+
         /**
          * Filter chip → predicate (M4: predicate-based filter, ใช้ทั้ง tags + category + openingHours)
          *
@@ -408,11 +419,10 @@ class TravelHomeViewModel(
          * - `r.tags` (list) = OSM tags เช่น "cuisine:thai", "takeaway:yes", "outdoor_seating", etc.
          * - `r.openingHours` (string) = "Mo-Fr 07:00-22:00" (OSM standard format, 18% ของ places)
          *
-         * **M4 design notes:**
-         * - "เปิดเช้า" ใช้ openingHours != null เป็น proxy (curated/active places tend to set hours)
-         *   Phase 2: parse opening_hours string เพื่อ filter เฉพาะ early-morning (06:00-09:00)
-         * - "ของฝาก" map เป็น cafe + bubble tea (กินได้ + กาแฟเป็นของฝากคลาสสิก)
-         *   Phase 2: เพิ่ม dedicated souvenir type (ปัจจุบัน OSM ไม่มี taxonomy นี้)
+         * **v0.3 (post-M5) design notes:**
+         * - "เปิดเช้า" — parse opening_hours string เพื่อหา early-morning range (ก่อน 10:00)
+         *   ก่อนหน้านี้ filter แค่ `openingHours != null` (ร้านที่ระบุเวลาเฉยๆ ไม่ใช่ "เปิดเช้า" จริง)
+         * - "ร้านกาแฟ" — cafe + coffee_shop (เดิมชื่อ "ของฝาก" + รวม bubble_tea ที่ไม่ใช่กาแฟ)
          */
         val FILTERS: Map<String, (Restaurant) -> Boolean> = mapOf(
             "ทั้งหมด" to { true },
@@ -422,19 +432,28 @@ class TravelHomeViewModel(
                     r.tags.contains("takeaway:yes") ||
                     r.tags.contains("takeaway")
             },
-            // เปิดเช้า = มี opening_hours (proxy: curated places เท่านั้นที่บอกเวลา)
-            "เปิดเช้า" to { r -> r.openingHours != null },
+            // เปิดเช้า = parse openingHours หา early-morning range (ก่อน 10:00)
+            //   pattern: "Mo-Fr 07:00-22:00; Sa-Su 11:00-23:00" → split by ; ก่อน
+            "เปิดเช้า" to { r ->
+                val oh = r.openingHours ?: return@to false
+                val timePattern = Regex("""(\d{1,2}):(\d{2})\s*[-–]\s*(\d{1,2}):(\d{2})""")
+                oh.split(';').any { segment ->
+                    timePattern.find(segment)?.let { match ->
+                        val startHour = match.groupValues[1].toIntOrNull() ?: return@let false
+                        startHour < 10
+                    } ?: false
+                }
+            },
             // คนท้องถิ่น = Thai / regional / noodle (อาหารท้องถิ่น)
             "คนท้องถิ่น" to { r ->
                 r.tags.contains("cuisine:thai") ||
                     r.tags.contains("cuisine:regional") ||
                     r.tags.contains("cuisine:noodle")
             },
-            // ของฝาก = cafe + coffee_shop + bubble_tea (กินได้ + กาแฟเป็นของฝาก)
-            "ของฝาก" to { r ->
+            // ร้านกาแฟ = cafe + coffee_shop (ไม่รวม bubble_tea)
+            "ร้านกาแฟ" to { r ->
                 r.category == "คาเฟ่" ||
-                    r.tags.contains("cuisine:coffee_shop") ||
-                    r.tags.contains("cuisine:bubble_tea")
+                    r.tags.contains("cuisine:coffee_shop")
             },
         )
     }

@@ -206,7 +206,7 @@ fun TravelHomeScreen(
                 contentPadding = PaddingValues(bottom = S3),
             ) {
                 items(
-                    listOf("ทั้งหมด", "ริมทาง", "เปิดเช้า", "คนท้องถิ่น", "ของฝาก")
+                    listOf("ทั้งหมด", "ริมทาง", "เปิดเช้า", "คนท้องถิ่น", "ร้านกาแฟ")
                 ) { label ->
                     FilterChip(
                         text = label,

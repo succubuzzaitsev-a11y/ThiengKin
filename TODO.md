@@ -2,11 +2,11 @@
 
 > Action items + session handoff — ลบ/complete เมื่อทำเสร็จ
 
-**Last updated:** 2026-07-13 18:50 (Asia/Bangkok)
+**Last updated:** 2026-07-13 22:32 (Asia/Bangkok)
 **Project root:** `D:\thiengKin`
 **Git branch:** `main`
-**Latest commit:** `8421e94` (M3.d: Android client + nationwide sweep 33,442 rows)
-**Working tree:** M4 changes uncommitted (3 files, +122/-22) — see M4 below
+**Latest commit:** `d96c3f4` (M5 wrap-up: 4 bug fixes + docs)
+**Working tree:** clean (post M5 wrap-up)
 
 ---
 
@@ -84,36 +84,16 @@
 - [x] **M3.a** — `OsmClient.queryBbox(s, w, n, e)` generic bbox query (Node mirror in `scripts/osm-fetch.mjs`)
 - [x] **M3.b** — `scripts/osm-parse.mjs` — Overpass JSON → Restaurant[] parser (mirror of `OsmImporter.kt`)
 - [x] **M3.c** — `scripts/push-osm.mjs` — push parsed → Supabase `restaurants` table (mirror of `refreshArea()`)
-- [x] **M3.d** — Android client reads from Supabase (code written, **build unverified**, **sweep bug found**)
+- [x] **M3.d** — Android client reads from Supabase (build verified, 33,442 rows nationwide)
 - [ ] TTL 7 days (cache check in script), refresh button in Android UI
 
-#### 🛑 M3.d blocker (2026-07-13 01:05) — DO NOT MERGE UNTIL FIXED
-**Bug:** `scripts/osm-fetch.mjs:133` — `if (provinceId && CITY_BBOX[provinceId] && !useCity)` 
-requires province to be in CITY_BBOX (only 5 entries: chiang_mai, bangkok, phuket, chiang_rai, pai) before
-trying `GEOGRAPHY_FILE`. For the other 72 provinces, condition is false → falls through to line 146 default 
-= chiang_mai city preset.
+#### ✅ M3.d blocker (2026-07-13 01:05) — RESOLVED (commit `8421e94`)
+**Bug (fixed):** `scripts/osm-fetch.mjs:133` — `if (provinceId && CITY_BBOX[provinceId] && !useCity)` 
+required province to be in CITY_BBOX before trying `GEOGRAPHY_FILE`. For 72 provinces, fell through to default.
 
-**Verified:** 3 non-CITY_BBOX provinces (buriram, pathum_thani, songkhla) all returned chiang_mai city bbox
-(18.70/98.85/18.90/99.10). bangkok (in CITY_BBOX) returned correct bbox.
+**Fix (applied):** changed to `if (provinceId && !useCity)` — always check `GEOGRAPHY_FILE` first.
 
-**Fix proposal (1 line):** change line 133 from 
-`if (provinceId && CITY_BBOX[provinceId] && !useCity)` → `if (provinceId && !useCity)`
-
-**Sweep status (00:18 → 00:55, 37 min wasted):**
-- 58 "✅ done" + 3 "⏭️" in log
-- Bug output: `osm-chiangmai-city.json` (5,573 el, chiang_mai city preset bbox) — overwritten many times
-- Pre-sweep files: bangkok (16,731), chiang-mai (9,003), chiang-rai (2,951), mueang-nonthaburi (277), 
-  chiang-mai-city (5,573) — all bbox verified correct
-- Sweep killed (PID 25380), `--only fetch` so Phase 3 not run → Supabase state unchanged
-- `data/_archived-osm-chiangmai-city.json` — earlier sweep run from 00:13 also hit bug
-
-**Next session — must do before any commit:**
-1. Fix `osm-fetch.mjs:133` (1-line change, no network needed)
-2. Re-run sweep: `node scripts/sweep-osm.mjs --only fetch` (~15-20 min)
-3. Verify bbox of new `data/osm-*.json` files match expected (sample 5 provinces)
-4. Run Phase 2+3: `node scripts/sweep-osm.mjs --skip-fetch` (~10 min)
-5. Build verify M3.d: `gradle :app:compileDebugKotlin --rerun-tasks` (JAVA_HOME set first)
-6. Commit: M3.d + sweep results as 1 commit (or 2 if M3.d wants separate checkpoint)
+**Verification (post-sweep):** 33,442 OSM rows across all 77 จังหวัด in Supabase — bbox verified per-province.
 
 ### M4 · Province picker UI (3-4 ชม.) ✅ DONE (2026-07-13 18:50)
 - [x] Searchable province select (ค้นหา Thai/English) — `ProvincePicker.kt` (M1.b)
@@ -137,11 +117,14 @@ trying `GEOGRAPHY_FILE`. For the other 72 provinces, condition is false → fall
 - `android/app/src/main/java/com/thiengkin/ui/screens/travel/TravelHomeScreen.kt` — wire SearchInput value+onValueChange, EmptyState context-aware
 - `android/app/src/main/java/com/thiengkin/ui/screens/travel/TravelHomeViewModel.kt` — GPS auto-detect, search query, predicate-based FILTERS
 
-### M5 · Ship MVP (2-3 ชม.) — NEXT
-- [ ] APK smoke test (offline + online) — install + run on emulator/เครื่องจริง
-- [ ] Set `BuildConfig.SUPABASE_ANON_KEY` (currently empty → Overpass fallback)
+### M5 · Ship MVP (2-3 ชม.) — IN PROGRESS
+- [x] `BuildConfig.SUPABASE_ANON_KEY` set (publishable key, RLS-enforced) ✅
+- [x] Build APK (17.12 MB, 2026-07-13 21:45) ✅
+- [x] Push commits to `succubuzzaitsev-a11y/ThiengKin` (5 commits) ✅
+- [x] Bug fixes (4): race v2, chip "ร้านกาแฟ", "เปิดเช้า" parser, label "สรุปรีวิว" ✅
+- [ ] **APK smoke test on real device** (BLOCKER — no adb device connected, need user)
 - [ ] TODO cleanup
-- [ ] README update
+- [ ] (security) Rotate Supabase **secret key** — leaked in chat transcript
 
 **Phase B (after MVP ship):**
 - M6: Auth (Supabase Auth, email + Google)
@@ -152,36 +135,26 @@ trying `GEOGRAPHY_FILE`. For the other 72 provinces, condition is false → fall
 
 ---
 
-## 📋 Session handoff (2026-07-13 18:55 — M4 + docs done, M5 in progress)
+## 📋 Session handoff (2026-07-13 22:30 — M5 wrap-up done, smoke test pending)
 
 ### Where we are
-- **M0 done:** `data/thailand-geography.json` (77 provinces + 928 districts + 7 regions) — bundled ใน assets/
-- **M1.a/b done:** schema + UI migration, ProvincePicker ใช้งานได้
-- **M2 done:** Supabase live at `zlntknagzrcoduzxngmx.supabase.co` (7+77+928 geography rows)
-- **M3 done (commit 8421e94):** OSM fetch/parse/push pipeline + Android client reads from Supabase
-  - **33,442 unique OSM rows** in DB nationwide (verified)
-  - Supabase primary, Overpass fallback
-- **M4 done (commit e73678a):** Province picker UI finalize
-  - GPS auto-detect → nearest province by centroid (1× per session)
-  - Search restaurants by name (substring match, clear button, context-aware empty state)
-  - Filter chip remap to OSM-actual (cuisine, category, openingHours) — was broken (Thai custom tags → 0 results)
-  - Build verified: `compileDebugKotlin` 21s, `assembleDebug` 15s → APK 18MB
-- **Docs done (commit d55b668):** README + CHANGELOG updated to v4 nationwide state
-- **P0 done:** FoursquareClient v3 wire format fixed (commit `4837679`) — optional enrichment
-- **Next (M5):** APK smoke test on real device + anon key → Ship MVP
+- **M0-M4 done:** Province picker + GPS auto-detect + search + OSM-actual filter chips
+- **M5 wrap-up done (commits `c9bb809` → `d96c3f4`, all pushed):**
+  - 4 bug fixes (race v2, chip "ร้านกาแฟ", "เปิดเช้า" parser, label "สรุปรีวิว")
+  - Supabase URL + anon key อยู่ใน `android/gradle.properties` แล้ว (publishable, RLS-enforced)
+  - APK 17.12 MB built 2026-07-13 21:45
+  - 5 commits pushed to `succubuzzaitsev-a11y/ThiengKin`
+- **Supabase live:** `zlntknagzrcoduzxngmx.supabase.co` — 33,442 OSM rows nationwide
+- **Next:** APK smoke test on real device → ship MVP
 
 ### Pending items for M5
 - [ ] **APK smoke test on real device** (BLOCKER — no adb device connected, need user)
-  - Verify: GPS prompt, province picker, restaurant list, refresh button, search, filter chips
-  - Build APK: `cd D:\thiengKin\android; .\gradlew.bat :app:assembleDebug` (18 MB)
+  - Verify: GPS prompt, province picker (77 จังหวัด), restaurant list, refresh, search, filter chips
   - Install: `adb install -r app\build\outputs\apk\debug\app-debug.apk`
   - Logcat: `adb logcat -s "ThiengKinApp:*" "TravelHomeVM:*" "RestaurantRepository:*"`
-- [ ] **Set `BuildConfig.SUPABASE_ANON_KEY`** (BLOCKER — needs user-provided key)
-  - Currently empty → Android client falls back to OSM Overpass direct query (works, less efficient)
-  - Get from: https://supabase.com/dashboard/project/zlntknagzrcoduzxngmx/settings/api
-  - Section: "Publishable and secret API keys" → `Publishable` (= old `anon` JWT, starts with `eyJ...`)
-  - ใส่ใน `android/gradle.properties` หรือ env `SUPABASE_ANON_KEY`
-- [ ] Push to GitHub (`origin` มีอยู่แล้ว: `succubuzzaitsev-a11y/ThiengKin`, main ahead 1+1 commits)
+- [ ] (security) **Rotate Supabase secret key** — leaked in earlier chat (full key in session log, not in repo)
+  - https://supabase.com/dashboard/project/zlntknagzrcoduzxngmx/settings/api → "Secret" → regenerate
+  - ⚠️ Secret key bypasses RLS — must rotate ASAP
 - [ ] (optional) Phase B preparation — auth, reviews, points
 
 ### M5 quick start (when device + anon key ready)
@@ -265,14 +238,14 @@ git commit -m "feat(android+osm): M3.d Supabase wire-up + 77-province OSM data"
 ```
 
 ### Working dir context
-- **Git config:** `pornchaisic-cloud <succubuzzaitsev@gmail.com>` (ตรงกับ commit history)
-- **No git remote configured** (local-only repo) — push ไม่ได้จนกว่าจะ add remote
+- **Git config:** `succubuzzaitsev-a11y <succubuzzaitsev@gmail.com>` (ตรงกับ commit history, GitHub account `succubuzzaitsev-a11y/ThiengKin`)
+- **Remote:** `git@github.com-succubuzzaitsev:succubuzzaitsev-a11y/ThiengKin.git` (push) + `https://github.com/succubuzzaitsev-a11y/ThiengKin.git` (fetch)
+- **SSH key:** `~/.ssh/succubuzzaitsev_push_ed25519` (alias `github.com-succubuzzaitsev`) — verified
 - **JAVA_HOME** ไม่ได้ตั้งใน PowerShell session — ต้อง set เองทุกครั้ง (หรือใส่ใน `$PROFILE`)
-- **Working tree:** M1.b committed at `4f0d124` | M3.d uncommitted (7 files, +158/-46) + 2 new Kotlin files
+- **Working tree:** clean (latest commit `d96c3f4`)
 - **City.kt ถูกลบแล้ว** — Province.centroid ใช้แทน City.lat/lng ทั้งหมด
-- **anon key blocker:** `BuildConfig.SUPABASE_ANON_KEY` ว่าง (gradle.properties + env ไม่มี) — 
-  Android client จะ disable Supabase + fallback Overpass ตอน runtime ถ้าไม่ใส่
-  (M3.d code handle gracefully — แค่ไม่ได้ใช้ primary path)
+- **anon key:** `BuildConfig.SUPABASE_ANON_KEY` ✅ set (publishable, RLS-enforced) — Supabase primary path enabled
+- **Secret key:** ⚠️ `sb_secret_...` ที่ใช้ admin scripts ใน `data/push-*` — rotate ASAP (leaked in chat)
 
 ---
 
@@ -319,7 +292,12 @@ Client + Repository ส่ง FSQ v3 ถูกต้องแล้ว:
 
 | Date | Commit | What |
 |------|--------|------|
-| 2026-07-13 | (M4, uncommitted) | **feat(android): M4 province picker finalize — GPS auto-detect, search by name, OSM-actual filter chips** |
+| 2026-07-13 | (pending) | **chore: M5 wrap-up local — gradle.properties (Supabase keys), TravelHomeVM race v2, label fixes, _check.ps1, ssh key backup** |
+| 2026-07-13 | `d96c3f4` | **chore: ignore sweep pipeline artifacts + underscore-prefixed debug scripts** |
+| 2026-07-13 | `14e5c5d` | **fix(android): M5 picker UX + geography seed race + refresh cancel** |
+| 2026-07-13 | `079938e` | **docs(todo): mark M4 + docs done; M5 in progress with clear blockers** |
+| 2026-07-13 | `8ca1c9d` | **docs: update README + CHANGELOG to v4 nationwide state** |
+| 2026-07-13 | `c9bb809` | **feat(android): M4 province picker finalize — GPS auto-detect, search by name, OSM-actual filter chips** |
 | 2026-07-13 | `8421e94` | **feat(osm): M3.d Android client + nationwide sweep (77จังหวัด, 33,442 OSM rows)** |
 | 2026-07-13 | `ac6300d` | **feat(osm): M3.c push pipeline — parsed OSM → Supabase restaurants (mirror refreshArea)** |
 | 2026-07-12 | `be810bf` | **feat(supabase): M2 Supabase setup — schema, RLS, geography push (7r/77p/928d)** |

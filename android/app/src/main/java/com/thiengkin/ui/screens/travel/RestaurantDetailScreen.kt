@@ -45,7 +45,10 @@ import com.thiengkin.ui.theme.S4
 /**
  * Screen 03 — Restaurant Detail (Dark)
  *
- * Layout: hero img · name · meta · สรุปรีวิว (Ai) · เมนูเด่น · CTA นำทาง
+ * Layout: hero img · name · meta · สรุปรีวิว · เมนูเด่น · CTA นำทาง
+ *
+ * v0.3 (post-M5): label "สรุปรีวิว (Ai)" → "สรุปรีวิว" (ลบ "(Ai)" tag ตาม user feedback)
+ *                  content ยังเป็น placeholder "ยังไม่มีสรุปรีวิว" จนกว่าจะมี aiSummary data จริง
  *
  * v0.2: dynamic data (aiSummary / menuText) + proper back button + real price tier
  */
@@ -195,7 +198,8 @@ fun RestaurantDetailScreen(
                 )
             }
 
-            // AI Summary card — ใช้ r.aiSummary ถ้ามี, ไม่งั้นโชว์ placeholder
+            // สรุปรีวิว — ใช้ r.aiSummary ถ้ามี, ไม่งั้นโชว์ placeholder
+            // v0.3: label "สรุปรีวิว (Ai)" → "สรุปรีวิว" (ลบ "(Ai)" tag ตาม user feedback)
             SummaryCard(
                 aiSummary = r.aiSummary,
                 category = r.category,
@@ -257,7 +261,7 @@ private fun SummaryCard(aiSummary: String?, category: String?) {
             .padding(S3 + 2.dp),
     ) {
         Text(
-            "สรุปรีวิว (Ai)",
+            "สรุปรีวิว",  // v0.3: ลบ "(Ai)" tag
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.padding(bottom = S1 + 2.dp),

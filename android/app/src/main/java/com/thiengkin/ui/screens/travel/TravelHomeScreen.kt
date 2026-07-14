@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Refresh
@@ -44,13 +45,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.thiengkin.data.LocationState
 import com.thiengkin.data.distanceMeters
-import com.thiengkin.data.etaMinutes
+import com.thiengkin.ui.components.AdSlot
+import com.thiengkin.ui.components.CategoryGrid
+import com.thiengkin.ui.components.CompactRow
 import com.thiengkin.ui.components.FilterChip
 import com.thiengkin.ui.components.Pill
 import com.thiengkin.ui.components.PillVariant
 import com.thiengkin.ui.components.ProvincePicker
-import com.thiengkin.ui.components.RestaurantCard
 import com.thiengkin.ui.components.SearchInput
+import com.thiengkin.ui.components.TopBarAvatar
+import com.thiengkin.ui.components.TopBarAvatarVariant
 import com.thiengkin.ui.theme.S1
 import com.thiengkin.ui.theme.S2
 import com.thiengkin.ui.theme.S3
@@ -60,8 +64,15 @@ import com.thiengkin.ui.theme.S7
 /**
  * Screen 01 — Travel Home (Dark)
  *
- * v0.4: refactored เป็น LazyColumn เป็น root เพื่อให้ทั้งหน้า scroll พร้อมกัน
- *      (header + search + filter + list ทั้งหมดอยู่ใน LazyColumn เดียว)
+ * v0.5 (2026-07-14): M2 redesign — apply home-redesign.html spec
+ *  - Pill.Solid + Home icon
+ *  - TopBarAvatar.Solid (gradient red)
+ *  - SearchInput: pill 999dp + mic (showMic=true)
+ *  - AdSlot (140dp dashed)
+ *  - CategoryGrid (5×2 with real food photos from res/drawable/category_*)
+ *  - CompactRow (76×76 + ETA tag + นำทาง + ♡)
+ *
+ * KEEP current: Location card, Province picker, Filter chips (text), Section header "ใกล้คุณ"
  */
 @Composable
 fun TravelHomeScreen(
@@ -95,24 +106,23 @@ fun TravelHomeScreen(
                 .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(horizontal = S4, vertical = S3),
         ) {
-            // === item: TopBar (pill + avatar) ===
+            // === item: TopBar (M2 — Pill.Solid + Home icon + TopBarAvatar.Solid) ===
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(bottom = S2),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Pill(text = "อร่อยวันนี้", variant = PillVariant.Red)
-                    Box(
-                        modifier = Modifier
-                            .size(34.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.onSurfaceVariant),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text("ส", style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.background)
-                    }
+                    Pill(
+                        text = "อร่อยวันนี้",
+                        variant = PillVariant.Solid,
+                        showDot = false,
+                        leadingIcon = Icons.Filled.Home,
+                    )
+                    TopBarAvatar(
+                        initials = "ส",
+                        variant = TopBarAvatarVariant.Solid,
+                    )
                 }
             }
 
@@ -127,7 +137,7 @@ fun TravelHomeScreen(
                 )
             }
 
-            // === item: Location card ===
+            // === item: Location card (KEEP current) ===
             item {
                 CurrentLocationCard(
                     location = state.location,
@@ -147,7 +157,7 @@ fun TravelHomeScreen(
                 )
             }
 
-            // === item: Province picker + refresh ===
+            // === item: Province picker + refresh (KEEP current) ===
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(bottom = S2),
@@ -191,19 +201,49 @@ fun TravelHomeScreen(
                 }
             }
 
-            // === item: Search input ===
+            // === item: Search input (M2 — pill 999dp + mic) ===
             item {
                 SearchInput(
                     leadingIcon = Icons.Filled.Search,
-                    placeholder = "ค้นหาร้าน...",
+                    placeholder = "ค้นหาร้าน หรือ เมนู...",
                     value = state.searchQuery,
                     onValueChange = { viewModel.setSearchQuery(it) },
-                    showArrow = false,
+                    showMic = true,
+                    onMicClick = {
+                        // TODO M2.1: pipe เข้า SpeechRecognizer
+                    },
                     modifier = Modifier.padding(bottom = S2),
                 )
             }
 
-            // === item: Filter chips ===
+            // === CHANGE: AdSlot (140dp dashed) ===
+            item {
+                AdSlot(
+                    title = "พื้นที่โฆษณา",
+                    subtitle = "320 × 140 · สำหรับพันธมิตรธุรกิจ",
+                    modifier = Modifier.padding(bottom = S3),
+                )
+            }
+
+            // === CHANGE: CategoryGrid (5×2 รูปจริง) ===
+            item {
+                Column(modifier = Modifier.padding(bottom = S3)) {
+                    Text(
+                        text = "หมวดหมู่",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(bottom = S2),
+                    )
+                    CategoryGrid(
+                        selectedKey = null,  // M2.1: wire to filter
+                        onItemClick = { key ->
+                            // TODO M2.1: filter by category
+                        },
+                    )
+                }
+            }
+
+            // === item: Filter chips (KEEP current — text style) ===
             item {
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(S2),
@@ -221,7 +261,7 @@ fun TravelHomeScreen(
                 }
             }
 
-            // === item: Section header ===
+            // === item: Section header (KEEP current) ===
             item {
                 Row(
                     modifier = Modifier
@@ -248,7 +288,7 @@ fun TravelHomeScreen(
                 }
             }
 
-            // === items: Restaurant list OR empty state ===
+            // === items: Restaurant list (M2 — CompactRow 76×76 + ETA + นำทาง + ♡) ===
             when {
                 state.loading -> item {
                     Box(
@@ -267,10 +307,9 @@ fun TravelHomeScreen(
                     )
                 }
                 else -> items(state.restaurants, key = { it.id }) { restaurant ->
-                    RestaurantCard(
+                    CompactRow(
                         restaurant = restaurant,
-                        etaText = etaTextFor(restaurant.etaMinutes),
-                        distText = distTextFor(restaurant.distanceMeters),
+                        distanceMeters = restaurant.distanceMeters,
                         onNavigate = {
                             onNavigate(restaurant.lat, restaurant.lng, restaurant.name)
                         },
@@ -462,13 +501,3 @@ private fun CurrentLocationCard(
         }
     }
 }
-
-private fun etaTextFor(eta: Int?): String =
-    if (eta != null) "อีก $eta นาที" else "—"
-
-private fun distTextFor(meters: Int?): String =
-    if (meters != null) {
-        if (meters < 1000) "$meters ม." else "%.1f กม.".format(meters / 1000.0)
-    } else {
-        "—"
-    }

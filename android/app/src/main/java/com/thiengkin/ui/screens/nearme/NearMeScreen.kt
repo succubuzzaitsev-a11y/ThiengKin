@@ -34,10 +34,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.thiengkin.data.LocationState
 import com.thiengkin.data.distanceMeters
+import com.thiengkin.ui.components.AdSlot
+import com.thiengkin.ui.components.CompactRow
 import com.thiengkin.ui.components.FilterChip
 import com.thiengkin.ui.components.Pill
 import com.thiengkin.ui.components.PillVariant
-import com.thiengkin.ui.components.RestaurantCard
 import com.thiengkin.ui.components.SearchInput
 import com.thiengkin.ui.theme.S1
 import com.thiengkin.ui.theme.S2
@@ -48,7 +49,12 @@ import com.thiengkin.ui.theme.S7
 /**
  * Screen 04 — Near-me (Light)
  *
- * v0.4: refactored เป็น LazyColumn เป็น root เพื่อให้ทั้งหน้า scroll พร้อมกัน
+ * v0.5 (2026-07-14): integrate 3 visual upgrades — minimal viable
+ *  - SearchInput: showMic=true (functional)
+ *  - AdSlot: 140dp dashed
+ *  - CompactRow: 76×76 + ETA tag + นำทาง + ♡
+ *
+ * KEEP current: top bar (soft pill + plain avatar), title+sub, radius/category text chips, bottom nav (M3 default).
  */
 @Composable
 fun NearMeScreen(
@@ -75,7 +81,7 @@ fun NearMeScreen(
             .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(horizontal = S4, vertical = S3),
     ) {
-        // === item: TopBar ===
+        // === item: TopBar (KEEP current — soft pill + plain gray avatar) ===
         item {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(bottom = S2),
@@ -99,7 +105,7 @@ fun NearMeScreen(
             }
         }
 
-        // === item: Title ===
+        // === item: Title (KEEP current) ===
         item {
             Text(
                 text = "ร้านแถวนี้",
@@ -109,7 +115,7 @@ fun NearMeScreen(
             )
         }
 
-        // === item: Sub-text ===
+        // === item: LocationSubtext (KEEP current) ===
         item {
             LocationSubtext(
                 location = state.location,
@@ -126,17 +132,31 @@ fun NearMeScreen(
             )
         }
 
-        // === item: Search input ===
+        // === CHANGE 1: SearchInput — pill 999dp + mic (functional) ===
         item {
             SearchInput(
                 leadingIcon = Icons.Filled.Search,
-                placeholder = "ค้นหาร้าน...",
-                showArrow = false,
+                placeholder = "ค้นหาร้าน หรือ เมนู...",
+                value = "",  // TODO: wire search query to viewModel in next step
+                onValueChange = { /* TODO: viewModel.setSearchQuery(it) */ },
+                showMic = true,
+                onMicClick = {
+                    // TODO: pipe เข้า SpeechRecognizer
+                },
                 modifier = Modifier.padding(bottom = S2),
             )
         }
 
-        // === item: Radius chips ===
+        // === CHANGE 2: AdSlot (NEW · 140dp dashed) ===
+        item {
+            AdSlot(
+                title = "พื้นที่โฆษณา",
+                subtitle = "320 × 140 · สำหรับพันธมิตรธุรกิจ",
+                modifier = Modifier.padding(bottom = S3),
+            )
+        }
+
+        // === item: Radius chips (KEEP current) ===
         item {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(S2),
@@ -152,7 +172,7 @@ fun NearMeScreen(
             }
         }
 
-        // === item: Category chips ===
+        // === item: Category chips (KEEP current) ===
         item {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(S2),
@@ -168,7 +188,7 @@ fun NearMeScreen(
             }
         }
 
-        // === item: Result count row ===
+        // === item: Result count row (KEEP current) ===
         item {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(vertical = S2),
@@ -187,7 +207,7 @@ fun NearMeScreen(
             }
         }
 
-        // === items: Restaurant list OR empty state ===
+        // === items: Restaurant list — CompactRow (CHANGE 3) ===
         if (state.restaurants.isEmpty()) {
             item {
                 Box(
@@ -203,10 +223,9 @@ fun NearMeScreen(
             }
         } else {
             items(state.restaurants, key = { it.id }) { r ->
-                RestaurantCard(
+                CompactRow(
                     restaurant = r,
-                    etaText = etaTextFor(r.distanceMeters),
-                    distText = distTextFor(r.distanceMeters),
+                    distanceMeters = r.distanceMeters,
                     onNavigate = { onNavigate(r.lat, r.lng, r.name) },
                     onFavoriteToggle = { viewModel.toggleFavorite(r.id) },
                     onClick = { onRestaurantClick(r.id) },
@@ -275,19 +294,6 @@ private fun LocationSubtext(
 
 private fun radiusLabel(km: Double): String =
     if (km >= 1.0) "${km.toInt()} กม." else "${(km * 1000).toInt()} ม."
-
-private fun distTextFor(meters: Int?): String =
-    if (meters != null) {
-        if (meters < 1000) "$meters ม." else "%.1f กม.".format(meters / 1000.0)
-    } else {
-        "—"
-    }
-
-private fun etaTextFor(meters: Int?): String {
-    if (meters == null) return "—"
-    val minutes = (meters / 1000.0 / 60.0 * 60).toInt().coerceAtLeast(1)
-    return "ขับ $minutes นาที"
-}
 
 private val RADIUS_OPTIONS = listOf(1.0, 3.0, 5.0, 10.0)
 

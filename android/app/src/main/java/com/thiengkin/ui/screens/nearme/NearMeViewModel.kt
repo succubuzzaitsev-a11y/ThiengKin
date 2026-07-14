@@ -26,7 +26,7 @@ data class NearMeState(
  * NearMeViewModel — หน้า "ใกล้ฉัน"
  *
  * Pipeline:
- *  1. repository.observeAll() — ทุกร้านใน DB (292)
+ *  1. repository.observeAll() — ทุกร้านใน DB
  *  2. locationRepository.state — ตำแหน่งปัจจุบัน (real GPS / fallback)
  *  3. _radius (3 / 5 / 10 กม.)
  *  4. _category (filter chip ที่เลือก)

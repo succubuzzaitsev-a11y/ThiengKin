@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,17 +33,21 @@ import com.thiengkin.ui.theme.S3
 import com.thiengkin.ui.theme.S4
 
 /**
- * SearchInput — fixed input field with icon + optional arrow / clear button
+ * SearchInput — fixed input field with icon + optional arrow / clear button / mic
  *
  * ใช้ใน:
  * - Travel Home (editable — search restaurants by name)
- * - Near-me (editable — same)
+ * - Near-me (editable + showMic — speech recognition)
  * - Travel route destination (static clickable — เลือกปลายทาง)
  *
  * โหมด:
  * - **Static** (value=null): แสดง placeholder เป็น Text ใน Row + clickable เท่านั้น
  * - **Editable** (value=String): แสดง BasicTextField + cursor + clear button (×) เมื่อมี text
  *   + onValueChange callback + onSearch callback (เมื่อกด Enter/Done)
+ *
+ * M2 add-on:
+ * - **showMic** (default false): เมื่อ editable + value ว่าง → แสดง mic icon (red) แทน
+ *   onMicClick callback เรียกเมื่อกด → caller pipe เข้า SpeechRecognizer
  */
 @Composable
 fun SearchInput(
@@ -49,8 +55,10 @@ fun SearchInput(
     placeholder: String,
     value: String? = null,
     showArrow: Boolean = false,
+    showMic: Boolean = false,
     onValueChange: ((String) -> Unit)? = null,
     onSearch: (() -> Unit)? = null,
+    onMicClick: (() -> Unit)? = null,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
@@ -60,8 +68,11 @@ fun SearchInput(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .clip(RoundedCornerShape(999.dp))  // M2: pill shape
+            .background(
+                if (isEditable) MaterialTheme.colorScheme.surfaceVariant
+                else MaterialTheme.colorScheme.surface
+            )
             .let {
                 if (!isEditable) it.clickable(onClick = onClick) else it
             }
@@ -96,27 +107,48 @@ fun SearchInput(
                     modifier = Modifier.weight(1f),
                 )
             }
-            if (isEditable && value!!.isNotEmpty()) {
-                IconButton(
-                    onClick = { onValueChange?.invoke("") },
-                    modifier = Modifier
-                        .padding(start = S2)
-                        .clip(RoundedCornerShape(50))
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = "ล้างคำค้น",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(S2),
+            // Trailing icon priority: clear (×) > mic (🎤) > arrow (→)
+            when {
+                isEditable && value!!.isNotEmpty() -> {
+                    IconButton(
+                        onClick = { onValueChange?.invoke("") },
+                        modifier = Modifier
+                            .padding(start = S2)
+                            .clip(RoundedCornerShape(50))
+                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "ล้างคำค้น",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(S2),
+                        )
+                    }
+                }
+                isEditable && showMic -> {
+                    // M2: mic icon เมื่อ editable + showMic + value ว่าง
+                    IconButton(
+                        onClick = { onMicClick?.invoke() },
+                        modifier = Modifier
+                            .padding(start = S2)
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(50)),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Mic,
+                            contentDescription = "ค้นหาด้วยเสียง",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp),
+                        )
+                    }
+                }
+                showArrow -> {
+                    Text(
+                        text = "→",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
-            } else if (showArrow) {
-                Text(
-                    text = "→",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
             }
         }
     }

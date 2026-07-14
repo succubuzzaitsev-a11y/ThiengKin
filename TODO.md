@@ -126,6 +126,52 @@ required province to be in CITY_BBOX before trying `GEOGRAPHY_FILE`. For 72 prov
 - [ ] TODO cleanup
 - [ ] (security) Rotate Supabase **secret key** — leaked in chat transcript
 
+---
+
+## ✅ M2 · Visual redesign (2026-07-14) — DONE
+
+Scope: apply LINE MAN-style visual to Travel Home (full) + Near Me (minimal)
+
+**3 commits pushed (d3d0734, 176d41b, 1bdb42c):**
+
+### Bug fix
+- [x] `ProvincePicker` — remove stale closure `onDistrictSelected(null)` undo (d3d0734)
+  - Symptom: pill text didn't update after province change (snackbar showed but pill stayed OLD)
+  - Root cause: `onDistrictSelected` callback used `state.selectedProvince` (captured = OLD) → `setProvince(OLD, null)` undid the new selection
+  - Fix: remove redundant `onDistrictSelected(null)` — `setProvince(province, null)` already clears district
+
+### New components (all additive, backward-compat) — 176d41b
+- [x] `Pill.Solid` variant + `leadingIcon: ImageVector?` param
+- [x] `TopBarAvatar` — Solid (gradient red) + Plain (gray legacy)
+- [x] `CategoryGrid` — 5×2 LazyVerticalGrid, 52dp circles, real food photos
+- [x] `AdSlot` — 110dp dashed border, "โฆษณา" corner label
+- [x] `CompactRow` — 76×76 photo + ETA tag (green/red/gray) + นำทาง + ♡
+- [x] `SearchInput.showMic` + `onMicClick` — pill 999dp + 🎤 (red) (backward-compat default false)
+- [x] 10 category drawables in `res/drawable/category_*.{jpg,png}`
+  - Note: 4.jpg was HTML (corrupted) — replaced with 5.jpg (papaya) as placeholder
+
+### Apply to screens — 1bdb42c
+- [x] `TravelHomeScreen` — full M2 redesign (6 changes):
+  1. TopBar: Pill.Solid + Home icon + TopBarAvatar.Solid
+  2. SearchInput: pill 999dp + 🎤 mic
+  3. AdSlot: 110dp dashed
+  4. CategoryGrid: 5×2 รูปจริง
+  5. CompactRow 76×76 (replaces RestaurantCard 88×88)
+  6. KEEP: Location card, Province picker, Filter chips, Section header, Bottom nav (M3)
+- [x] `NearMeScreen` — minimal scope (3 changes per user spec "Near Me ใช้ Current เปลี่ยนแค่"):
+  1. SearchInput: pill 999dp + 🎤 mic
+  2. AdSlot: 110dp dashed (NEW)
+  3. CompactRow 76×76 (replaces RestaurantCard 88×88)
+  4. KEEP: Top bar (soft red + plain avatar), title+sub, radius/category text chips, result count, bottom nav
+- [x] Cleanup: removed diagnostic `Log.i` + `try-catch` from NearMeViewModel/Screen (added during earlier crash debug)
+
+### Build & verify
+- [x] `gradle assembleDebug` — BUILD SUCCESSFUL (~37s clean build)
+- [x] `adb install -r` — Success (HUAWEI Mate 20 X, Android 10, API 29)
+- [x] App launched — pid 18525, no FATAL EXCEPTION
+- [x] APK size: 17.97 MB (was 17.12 MB, +850KB for 10 category images)
+- [x] Manual smoke test: user tested on device, all 6 changes on Travel Home + 3 on Near Me visible
+
 **Phase B (after MVP ship):**
 - M6: Auth (Supabase Auth, email + Google)
 - M7: Reviews + GPS check-in

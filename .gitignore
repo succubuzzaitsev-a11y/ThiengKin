@@ -74,3 +74,28 @@ desktop.ini
 *.swp
 *.swo
 *~
+
+# === M2 visual redesign (2026-07-14) — local demo + debug files ===
+
+# Local visual demo HTMLs (used for review before code change)
+demo/*.html
+!demo/.gitkeep
+demo/assets/
+
+# Debug screenshots (capture from adb screencap, never for repo)
+app-*.png
+state*.png
+state-*.png
+current-state.png
+nearme-result.png
+nm*.png
+nm-*.png
+now.png
+
+# Source images (used to copy into res/drawable — keep source, drop drawable-copy if regen-able)
+# category_images/ contains the original files (regen from Unsplash)
+# Actually we commit them so .gitignore this — drawable is in res/drawable already
+category_images/
+
+# Reference images (visual references from design phase)
+reference_*.png

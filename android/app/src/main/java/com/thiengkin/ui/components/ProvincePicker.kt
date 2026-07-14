@@ -144,8 +144,11 @@ fun ProvincePicker(
                         // M5 fix: select + close immediately (ไม่ auto-advance ไป district)
                         // user เลือกจังหวัด → ปิด sheet → เห็นรายการร้านทันที
                         // ถ้าจะ drill-down อำเภอ → กดปุ่ม "เลือกอำเภอใน..." ที่ top ของ list
-                        onProvinceSelected(province)
-                        onDistrictSelected(null)  // reset district
+                        //
+                        // Bug fix (2026-07-14): ลบ onDistrictSelected(null) — เดิมเรียกซ้ำทำให้
+                        // callback ใน TravelHomeScreen ใช้ state.selectedProvince (captured = เก่า)
+                        // แล้ว setProvince(OLD, null) undo การเปลี่ยน — pill ไม่ update แต่ refresh ทำงาน
+                        onProvinceSelected(province)  // setProvince(newP, null) — เคลียร์ district ให้แล้ว
                         showSheet = false
                     },
                     onDrillIntoDistricts = selectedProvince?.let { p ->

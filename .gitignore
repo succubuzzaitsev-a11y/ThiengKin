@@ -99,3 +99,11 @@ category_images/
 
 # Reference images (visual references from design phase)
 reference_*.png
+
+# Category image source (regen from web search + image_synthesize)
+# - category_images/ = original sources (gitignored — only used to copy into res/drawable)
+# - category_downloads/ = downloaded/generated candidates (regen-able)
+# - category_backup/ = old wrong-format files (recoverable, can delete after stable)
+category_images/
+category_downloads/
+category_backup/

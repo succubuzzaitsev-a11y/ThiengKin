@@ -150,6 +150,38 @@ Scope: apply LINE MAN-style visual to Travel Home (full) + Near Me (minimal)
 - [x] 10 category drawables in `res/drawable/category_*.{jpg,png}`
   - Note: 4.jpg was HTML (corrupted) — replaced with 5.jpg (papaya) as placeholder
 
+### M2.1 · Image fix (2026-07-15) — DONE — commit `6fde582`
+
+**Bug**: All 10 CategoryGrid drawables were mapped to wrong images (mostly clocks,
+shaved ice, noodles, burger) because of mismatched naming between `category_images/`
+and the slot-to-category mapping. `bakery.jpg` was a placeholder (papaya, same hash
+as `papaya.jpg`). User provided `reference_thai_food_grid.png` and asked to make
+images match.
+
+**Fix**:
+| Slot | File | Source |
+|---|---|---|
+| noodle (ก๋วยเตี๋ยว) | `category_noodle.png` | `category_images/3.png` (Thai noodle soup) |
+| rice (ข้าวราดแกง) | `category_rice.jpg` | `image_synthesize` gen_rice (pad krapow) |
+| cafe (คาเฟ่) | `category_cafe.jpg` | `image_synthesize` gen_cafe (latte) |
+| fastfood (ฟาสต์ฟู้ด) | `category_fastfood.jpg` | `category_images/8.jpeg` (burger) |
+| bakery (เบเกอรี่) | `category_bakery.jpg` | `image_synthesize` gen_bakery (chocolate cake) |
+| papaya (ส้มตำ) | `category_papaya.jpg` | `image_synthesize` gen_papaya (som tam) |
+| salad (สลัด) | `category_salad.jpg` | `category_images/6.jpeg` (green salad) |
+| pub (ผับบาร์) | `category_pub.jpg` | `image_synthesize` gen_pub (2 beer glasses) |
+| dessert (ของหวาน) | `category_dessert.jpeg` | `category_images/2.jpeg` (shaved ice bowl) |
+| late (เปิดดึก) | `category_late.jpg` | `category_images/9.jpg` (clock, kept) |
+
+**Workflow**:
+- Downloaded candidate images had Vecteezy watermarks → not production-ready
+- Generated 5 missing (rice, cafe, bakery, papaya, pub) via `image_synthesize` → clean, no watermark
+- Renamed 2 files for content/extension match: `noodle.jpg`→`noodle.png`, `fastfood.png`→`fastfood.jpg`, `rice.png`→`rice.jpg`
+
+**Verify**:
+- All 10 magic bytes verified JPEG (`FF D8`) / PNG (`89 50`)
+- `gradle assembleDebug` → BUILD SUCCESSFUL in 1m 1s
+- APK: 23.1 MB (was 17.97 MB, +5MB from higher-res source images)
+
 ### Apply to screens — 1bdb42c
 - [x] `TravelHomeScreen` — full M2 redesign (6 changes):
   1. TopBar: Pill.Solid + Home icon + TopBarAvatar.Solid

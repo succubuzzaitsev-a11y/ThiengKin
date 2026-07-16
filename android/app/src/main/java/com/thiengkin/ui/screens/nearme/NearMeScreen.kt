@@ -320,10 +320,10 @@ private fun radiusLabel(km: Double): String =
 
 private val RADIUS_OPTIONS = listOf(1.0, 3.0, 5.0, 10.0)
 
-private val CATEGORY_OPTIONS = listOf(
-    "ทั้งหมด",
-    "ก๋วยเตี๋ยว",
-    "ข้าวราดแกง",
-    "กาแฟ",
-    "เปิดดึก",
-)
+/**
+ * Category chips — ใช้ same 10 หมวดเดียวกับ Travel Home (M7)
+ * Source of truth: [com.thiengkin.data.RestaurantCategories]
+ * Predicates: [com.thiengkin.data.RestaurantCategories.predicates] (match name + category + tag)
+ */
+private val CATEGORY_OPTIONS: List<String> = listOf("ทั้งหมด") +
+    com.thiengkin.data.RestaurantCategories.labels

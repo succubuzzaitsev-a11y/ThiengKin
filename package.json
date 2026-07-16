@@ -1,0 +1,23 @@
+{
+  "name": "thiengkin",
+  "version": "1.0.0",
+  "description": "> **\"เปิดแอปก็เจอร้าน\"** — เพื่อนร่วมทางสายกิน\r > แอป Android หาร้านอร่อยข้างทาง + near-me mode · ครอบคลุม **77 จังหวัดทั่วประเทศ**\r > ธีม: 🔴 แดง `#DC2626` + 🟡 เหลือง `#FACC15` (จากโลโก้ Thieng Tham Development)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/succubuzzaitsev-a11y/ThiengKin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/succubuzzaitsev-a11y/ThiengKin/issues"
+  },
+  "homepage": "https://github.com/succubuzzaitsev-a11y/ThiengKin#readme"
+}

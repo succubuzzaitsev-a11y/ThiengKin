@@ -275,11 +275,19 @@ fun TravelHomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = "ใกล้คุณ",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
+                    Column {
+                        Text(
+                            text = "ใกล้คุณ",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                        // M7: show "X เปิดอยู่ตอนนี้" subtext
+                        Text(
+                            text = "${state.openNowCount} เปิดอยู่ตอนนี้",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.tertiary,
+                        )
+                    }
                     Text(
                         text = "ดูจุดแวะ →",
                         style = MaterialTheme.typography.bodySmall,
@@ -289,6 +297,32 @@ fun TravelHomeScreen(
                             .background(MaterialTheme.colorScheme.surface)
                             .clickable { onRouteClick() }
                             .padding(horizontal = S2 + 2.dp, vertical = S1 + 2.dp),
+                    )
+                }
+            }
+
+            // === M7: hide-closed toggle (Travel Home ตัวอย่าง) ===
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = S1),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "ซ่อนร้านปิดแล้ว",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(end = 8.dp),
+                    )
+                    Switch(
+                        checked = state.hideClosed,
+                        onCheckedChange = { viewModel.setHideClosed(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                            checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        ),
                     )
                 }
             }

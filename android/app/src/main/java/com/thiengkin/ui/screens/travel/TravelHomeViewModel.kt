@@ -7,6 +7,7 @@ import com.thiengkin.data.District
 import com.thiengkin.data.DistrictDao
 import com.thiengkin.data.LocationRepository
 import com.thiengkin.data.LocationState
+import com.thiengkin.data.OpeningHoursParser
 import com.thiengkin.data.Province
 import com.thiengkin.data.ProvinceDao
 import com.thiengkin.data.Restaurant
@@ -46,6 +47,8 @@ data class TravelHomeState(
     val refreshMessage: String? = null,  // แสดง toast/ข้อความหลัง refresh เสร็จ
     val selectedCategoryKey: String? = null,  // M2.1: หมวดที่เลือกจาก CategoryGrid (null = ทั้งหมด)
     val autoDetectEnabled: Boolean = true,  // M6 Phase 1: toggle GPS auto-detect province
+    val hideClosed: Boolean = false,  // M7: toggle — ซ่อนร้านที่ปิดแล้ว
+    val openNowCount: Int = 0,        // M7: count of currently-open restaurants (after search + chip filter)
 )
 
 /**
@@ -81,6 +84,7 @@ class TravelHomeViewModel(
     private val _refreshMessage = MutableStateFlow<String?>(null)
     private val _selectedCategoryKey = MutableStateFlow<String?>(null)  // M2.1: CategoryGrid selection
     private val _autoDetectEnabled = MutableStateFlow(true)  // M6: default = true (เดิม)
+    private val _hideClosed = MutableStateFlow(false)  // M7: default OFF (show all, badge เปิด/ปิด)
 
     private var refreshJob: Job? = null
 
@@ -117,7 +121,7 @@ class TravelHomeViewModel(
             }
         }
 
-    /** Data + filter pipeline (7 flows — M2.1: +selectedCategoryKey) */
+    /** Data + filter pipeline (8 flows — M7: +hideClosed) */
     private val dataFlow = combine(
         restaurantsFlow,
         _filter,
@@ -126,6 +130,7 @@ class TravelHomeViewModel(
         _refreshing,
         _refreshMessage,
         _selectedCategoryKey,
+        _hideClosed,
     ) { values ->
         @Suppress("UNCHECKED_CAST")
         val all = values[0] as List<Restaurant>
@@ -136,6 +141,7 @@ class TravelHomeViewModel(
         val refreshing = values[4] as Boolean
         val refreshMsg = values[5] as String?
         val catKey = values[6] as String?
+        val hideClosed = values[7] as Boolean
 
         // 1) Search query (M4) — substring match name + nameTh + nameEn + category
         //    ทำก่อน chip filter เพราะ result set เล็กลง filter เร็วขึ้น
@@ -172,21 +178,29 @@ class TravelHomeViewModel(
             }
         }
 
+        // 2.6) M7: Filter out closed restaurants if hideClosed ON
+        val openFiltered = if (hideClosed) {
+            catFiltered.filter { OpeningHoursParser.isOpenNow(it.openingHours) }
+        } else {
+            catFiltered
+        }
+        val openCount = catFiltered.count { OpeningHoursParser.isOpenNow(it.openingHours) }
+
         // 3) Sort: real GPS → distance asc, fallback → rating desc
         val sorted: List<Restaurant> = when (location) {
             is LocationState.Granted ->
                 if (!location.isFallback) {
-                    catFiltered.sortedBy { r ->
+                    openFiltered.sortedBy { r ->
                         Haversine.distanceKm(location.lat, location.lng, r.lat, r.lng)
                     }
                 } else {
                     // Fallback (province centroid) — ใช้ rating + ระยะจาก province centroid
-                    catFiltered.sortedWith(
+                    openFiltered.sortedWith(
                         compareByDescending<Restaurant> { it.rating ?: 0.0 }
                             .thenBy { r -> Haversine.distanceKm(location.lat, location.lng, r.lat, r.lng) }
                     )
                 }
-            else -> catFiltered.sortedByDescending { it.rating ?: 0.0 }
+            else -> openFiltered.sortedByDescending { it.rating ?: 0.0 }
         }
 
         DataState(
@@ -197,6 +211,8 @@ class TravelHomeViewModel(
             refreshing = refreshing,
             refreshMsg = refreshMsg,
             catKey = catKey,
+            hideClosed = hideClosed,
+            openCount = openCount,
         )
     }
 
@@ -234,6 +250,8 @@ class TravelHomeViewModel(
             refreshMessage = data.refreshMsg,
             selectedCategoryKey = data.catKey,  // M2.1
             autoDetectEnabled = autoDetect,  // M6 Phase 1
+            hideClosed = data.hideClosed,  // M7
+            openNowCount = data.openCount,  // M7
         )
     }.stateIn(
         scope = viewModelScope,
@@ -388,6 +406,11 @@ class TravelHomeViewModel(
         }
     }
 
+    /** M7: toggle hide-closed (immediate effect, no persistence needed) */
+    fun setHideClosed(hide: Boolean) {
+        _hideClosed.value = hide
+    }
+
     /**
      * เปลี่ยนจังหวัด (+ optional อำเภอ) → trigger OSM/FSQ fetch
      */
@@ -458,6 +481,8 @@ class TravelHomeViewModel(
         val refreshing: Boolean,
         val refreshMsg: String?,
         val catKey: String?,  // M2.1
+        val hideClosed: Boolean = false,  // M7
+        val openCount: Int = 0,           // M7: count after category filter, before hideClosed
     )
 
     private data class LookupState(

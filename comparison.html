@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ThiengKin — App vs Demo Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --border: #e9e3d6;
+    --ink: #14171e;
+    --ink-2: #3a4256;
+    --muted: #7c7a72;
+    --line: #ddd5c5;
+    --line-soft: #ece6d6;
+    --primary: #dc2626;
+    --mustard: #facc15;
+    --green: #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 40px 24px 80px;
+    line-height: 1.55;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+
+  /* Header */
+  header { margin-bottom: 48px; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--primary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 44px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .subtitle { font-size: 17px; color: var(--ink-2); max-width: 720px; }
+
+  /* Section heads */
+  .section { margin-bottom: 64px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .section-tag {
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Side by side */
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 24px;
+  }
+  .pair-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .pair-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .pair-label {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .pair-title { font-size: 18px; font-weight: 600; color: var(--ink); }
+  .pair-subtitle { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+
+  /* Visual mocks */
+  .phone-mock {
+    background: #0f0f0f;
+    border-radius: 28px;
+    padding: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+  .phone-mock.light { background: #fff; border: 1px solid var(--line); }
+  .phone-screen {
+    border-radius: 22px;
+    overflow: hidden;
+    background: #0f0f0f;
+  }
+  .phone-mock.light .phone-screen { background: #fff; }
+  .phone-screen.light { background: #fff; }
+
+  /* Pill */
+  .pill-soft-red {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .pill-soft-red::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #dc2626;
+  }
+  .pill-solid-red {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #dc2626;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .pill-solid-red svg { width: 10px; height: 10px; fill: white; }
+
+  /* Avatar */
+  .avatar-plain {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: #9a9a9a;
+    color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .avatar-gradient {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #dc2626, #f87171);
+    color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* Search */
+  .search-old {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 8px;
+    color: #9a9a9a;
+    font-size: 13px;
+  }
+  .phone-mock.light .search-old { background: #f5f5f5; color: #9a9a9a; }
+  .search-old svg { width: 16px; height: 16px; }
+
+  .search-new {
+    background: #f2f2f2;
+    border-radius: 999px;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px;
+    color: #5a5a5a;
+    font-size: 13px;
+  }
+  .phone-mock.light .search-new { background: #f2f2f2; }
+  .search-new svg { width: 18px; height: 18px; }
+  .search-new .mic { color: #dc2626; margin-left: auto; }
+
+  /* Mock screen */
+  .mock-content { padding: 12px; }
+  .mock-content.light { color: #0f0f0f; }
+  .mock-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .mock-title {
+    font-size: 18px; font-weight: 800; line-height: 1.15;
+    color: white;
+  }
+  .mock-content.light .mock-title { color: #0f0f0f; }
+  .mock-subtitle {
+    font-size: 12px; color: #9a9a9a; margin-bottom: 12px;
+  }
+  .mock-content.light .mock-subtitle { color: #5a5a5a; }
+
+  /* Chips */
+  .chips-old {
+    display: flex; gap: 6px; margin: 8px 0; overflow-x: auto;
+  }
+  .chip-old {
+    background: #1a1a1a;
+    color: white;
+    font-size: 10px; font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .chip-old.active { background: #dc2626; color: white; }
+  .phone-mock.light .chip-old { background: #fff; color: #0f0f0f; border: 1px solid #ebebeb; }
+  .phone-mock.light .chip-old.active { background: #dc2626; color: white; border-color: #dc2626; }
+
+  /* Category grid (NEW) */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin: 10px 0;
+  }
+  .cat-item {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    text-align: center;
+  }
+  .cat-circle {
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    background: #fef2f2;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .cat-circle.alt { background: #fef3c7; }
+  .cat-circle.alt2 { background: #dcfce7; }
+  .cat-circle.alt3 { background: #dbeafe; }
+  .cat-circle.alt4 { background: #fce7f3; }
+  .cat-label {
+    font-size: 9px; font-weight: 600;
+    color: #0f0f0f;
+    line-height: 1.1;
+  }
+
+  /* Ad slot (NEW) */
+  .ad-slot {
+    height: 100px;
+    border-radius: 12px;
+    background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(0,0,0,0.02) 8px 9px), #f2f2f2;
+    border: 1.5px dashed #9a9a9a;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    margin: 10px 0;
+  }
+  .ad-corner {
+    position: absolute;
+    top: 6px; right: 6px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    font-size: 8px; font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .ad-content { text-align: center; color: #5a5a5a; }
+  .ad-content-icon { font-size: 24px; margin-bottom: 4px; opacity: 0.7; }
+  .ad-content-title { font-size: 12px; font-weight: 700; color: #0f0f0f; }
+  .ad-content-sub { font-size: 10px; color: #9a9a9a; margin-top: 2px; }
+
+  /* Card OLD */
+  .card-old {
+    display: flex; gap: 10px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 6px;
+  }
+  .phone-mock.light .card-old { background: #fff; border: 1px solid #ebebeb; }
+  .card-old-img {
+    width: 70px; height: 70px;
+    background: linear-gradient(135deg, #FFD89B 0%, #F97316 100%);
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .card-old-body { flex: 1; min-width: 0; }
+  .card-old-eta-row {
+    display: flex; justify-content: space-between; margin-bottom: 4px;
+    font-size: 10px;
+  }
+  .card-old-eta { color: #facc15; font-weight: 700; }
+  .card-old-dist { color: #9a9a9a; }
+  .card-old-name {
+    font-size: 13px; font-weight: 700; color: white;
+    margin: 4px 0;
+  }
+  .phone-mock.light .card-old-name { color: #0f0f0f; }
+  .card-old-actions { display: flex; gap: 6px; margin-top: 6px; }
+  .card-old-nav {
+    flex: 1; background: #dc2626; color: white;
+    font-size: 11px; font-weight: 700;
+    padding: 5px 0; border-radius: 6px;
+    text-align: center;
+  }
+  .card-old-fav {
+    width: 28px; height: 28px;
+    background: #242424; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fafafa; font-size: 12px;
+  }
+  .phone-mock.light .card-old-fav { background: #f2f2f2; color: #0f0f0f; }
+
+  /* Card NEW — CompactRow */
+  .row-new {
+    display: flex; gap: 10px; padding: 8px 0;
+    border-bottom: 1px solid #f2f2f2;
+  }
+  .row-new:last-child { border-bottom: none; }
+  .row-new-img {
+    width: 60px; height: 60px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #FFD89B 0%, #F97316 100%);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .row-new-img.r2 { background: linear-gradient(135deg, #FFB199 0%, #FF0844 100%); }
+  .row-new-img.r3 { background: linear-gradient(135deg, #A1FFCE 0%, #20E3B2 100%); }
+  .row-new-eta {
+    display: flex; gap: 4px; align-items: center; margin-bottom: 4px;
+    font-size: 9px; font-weight: 700;
+  }
+  .eta-tag {
+    background: #16a34a; color: white;
+    padding: 2px 5px; border-radius: 3px;
+  }
+  .eta-tag.gray { background: #5a5a5a; }
+  .eta-tag.red { background: #dc2626; }
+  .row-new-name {
+    font-size: 12px; font-weight: 700; color: #0f0f0f;
+  }
+  .row-new-meta {
+    display: flex; gap: 4px; align-items: center;
+    font-size: 9px; color: #5a5a5a; margin-top: 2px;
+  }
+  .row-new-meta .star { color: #facc15; font-weight: 700; }
+  .row-new-meta .open { color: #16a34a; font-weight: 600; }
+  .row-new-action {
+    display: flex; gap: 4px; align-items: center;
+    font-size: 10px; color: #dc2626; font-weight: 600;
+    margin-top: 4px;
+  }
+
+  /* Bottom nav OLD */
+  .bottom-old {
+    height: 56px;
+    background: #fff;
+    border-top: 1px solid #ebebeb;
+    display: flex; padding: 4px 0 6px;
+  }
+  .phone-mock:not(.light) .bottom-old { background: #1a1a1a; border-top-color: #2a2a2a; }
+  .nav-old-item {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+    color: #9a9a9a;
+    font-size: 9px; font-weight: 600;
+  }
+  .nav-old-item.active { color: #0f0f0f; }
+  .phone-mock:not(.light) .nav-old-item.active { color: white; }
+  .nav-old-item svg { width: 18px; height: 18px; }
+
+  /* Bottom nav NEW */
+  .bottom-new {
+    height: 60px;
+    background: #fff;
+    border-top: 1px solid #ebebeb;
+    display: flex; padding: 4px 0 6px;
+  }
+  .nav-new-item {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+    color: #9a9a9a;
+    font-size: 9px; font-weight: 600;
+    position: relative;
+  }
+  .nav-new-item.active { color: #dc2626; }
+  .nav-new-item.active svg { fill: #dc2626; stroke: #dc2626; }
+  .nav-new-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 22px; height: 3px;
+    background: #dc2626;
+    border-radius: 0 0 3px 3px;
+  }
+
+  /* Annotation */
+  .anno {
+    display: flex; align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(220, 38, 38, 0.05);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .anno-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--primary);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .anno-text { line-height: 1.5; }
+  .anno-text strong { color: var(--ink); font-weight: 600; }
+
+  /* Summary diff table */
+  .diff-table {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .diff-table th, .diff-table td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .diff-table th {
+    background: #faf6ec;
+    font-weight: 600;
+    color: var(--ink-2);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .diff-table tr:last-child td { border-bottom: none; }
+  .diff-table .arrow {
+    color: var(--primary);
+    font-weight: 600;
+    text-align: center;
+  }
+  .diff-table code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--line-soft);
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+  .tag-new {
+    display: inline-block;
+    background: #16a34a;
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tag-update {
+    display: inline-block;
+    background: #facc15;
+    color: #0f0f0f;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 900px) {
+    .pair { grid-template-columns: 1fr; }
+    h1 { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">ThiengKin · Visual Diff</div>
+  <h1>App vs Demo —<br>Visual gap analysis</h1>
+  <p class="subtitle">
+    Current state (checkpoint-1) เทียบกับ target LINE MAN style demo · 14 จุดต่าง แบ่งเป็น <strong>5 visual upgrade</strong> + <strong>2 component ใหม่</strong>
+  </p>
+</header>
+
+<!-- ====== SECTION 1: TOP BAR (Pill + Avatar) ====== -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Top Bar — Pill + Avatar</h2>
+    <span class="section-tag">Pill.Solid + TopBarAvatar</span>
+  </div>
+
+  <div class="pair">
+    <!-- CURRENT -->
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Current</div>
+          <div class="pair-title">Soft red pill + dot + plain gray avatar</div>
+        </div>
+        <span class="tag-update">UPDATE</span>
+      </div>
+      <div class="phone-mock">
+        <div class="phone-screen">
+          <div class="mock-content">
+            <div class="mock-row">
+              <span class="pill-soft-red">อร่อยวันนี้</span>
+              <span class="avatar-plain">ส</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="anno">
+        <span class="anno-label">i</span>
+        <div class="anno-text">
+          <strong>Pill:</strong> โทน <code>primaryContainer</code> (FEF2F2) + dot 6dp · <strong>Avatar:</strong> onSurfaceVariant (gray 9A9A9A)
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO -->
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Demo (target)</div>
+          <div class="pair-title">Solid red pill + icon + red gradient avatar</div>
+        </div>
+        <span class="tag-new">NEW VARIANT</span>
+      </div>
+      <div class="phone-mock">
+        <div class="phone-screen">
+          <div class="mock-content">
+            <div class="mock-row">
+              <span class="pill-solid-red">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/></svg>
+                ใกล้คุณ
+              </span>
+              <span class="avatar-gradient">ส</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="anno">
+        <span class="anno-label">i</span>
+        <div class="anno-text">
+          <strong>Pill.Solid:</strong> bg <code>primary</code> (DC2626) + leading icon · <strong>TopBarAvatar.Solid:</strong> gradient(135deg, DC2626→F87171)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SECTION 2: SEARCH ====== -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Search Input</h2>
+    <span class="section-tag">showMic param + 999dp pill</span>
+  </div>
+
+  <div class="pair">
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Current</div>
+          <div class="pair-title">Rounded 12dp, no mic</div>
+        </div>
+        <span class="tag-update">UPDATE</span>
+      </div>
+      <div class="phone-mock">
+        <div class="phone-screen">
+          <div class="mock-content">
+            <div class="search-old">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+              <span>ค้นหาร้าน...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Demo (target)</div>
+          <div class="pair-title">Pill 999dp + mic icon (red)</div>
+        </div>
+        <span class="tag-update">UPDATE</span>
+      </div>
+      <div class="phone-mock">
+        <div class="phone-screen">
+          <div class="mock-content">
+            <div class="search-new">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+              <span>ค้นหาร้าน หรือ เมนู...</span>
+              <svg class="mic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 003-3V5a3 3 0 10-6 0v6a3 3 0 003 3z"/><path d="M19 11a7 7 0 11-14 0M12 18v3" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SECTION 3: NEW — AD SLOT + CATEGORY GRID ====== -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2 class="section-title">AdSlot + CategoryGrid (NEW)</h2>
+    <span class="section-tag">2 components ใหม่ทั้งหมด</span>
+  </div>
+
+  <div class="pair">
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Current</div>
+          <div class="pair-title">ไม่มี — list เริ่มจาก chips ตรงๆ</div>
+        </div>
+        <span class="tag-update">NONE</span>
+      </div>
+      <div class="phone-mock light">
+        <div class="phone-screen light">
+          <div class="mock-content light">
+            <div class="mock-title" style="font-size:14px; color:#0f0f0f;">ร้านแถวนี้</div>
+            <div class="mock-subtitle" style="font-size:10px; margin-bottom:8px;">📍 เชียงใหม่</div>
+            <div class="search-old" style="background:#f5f5f5; color:#9a9a9a;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/></svg>
+              <span style="font-size:11px;">ค้นหาร้าน...</span>
+            </div>
+            <div class="chips-old" style="margin-top:6px;">
+              <span class="chip-old active" style="font-size:9px; padding:3px 8px;">1 กม.</span>
+              <span class="chip-old" style="font-size:9px; padding:3px 8px;">3 กม.</span>
+              <span class="chip-old" style="font-size:9px; padding:3px 8px;">5 กม.</span>
+              <span class="chip-old" style="font-size:9px; padding:3px 8px;">10 กม.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Demo (target)</div>
+          <div class="pair-title">+ AdSlot (140dp dashed) + CategoryGrid (5×2 emoji)</div>
+        </div>
+        <span class="tag-new">2 NEW</span>
+      </div>
+      <div class="phone-mock light">
+        <div class="phone-screen light">
+          <div class="mock-content light">
+            <div class="search-new" style="font-size:11px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/></svg>
+              <span>ค้นหาร้าน หรือ เมนู...</span>
+            </div>
+
+            <div class="ad-slot" style="height:80px; margin: 8px 0;">
+              <div class="ad-corner">โฆษณา</div>
+              <div class="ad-content">
+                <div class="ad-content-icon">📢</div>
+                <div class="ad-content-title" style="font-size:11px;">พื้นที่โฆษณา</div>
+                <div class="ad-content-sub" style="font-size:9px;">320 × 140</div>
+              </div>
+            </div>
+
+            <div class="cat-grid" style="margin: 4px 0;">
+              <div class="cat-item"><div class="cat-circle">🍜</div><div class="cat-label">ก๋วยเตี๋ยว</div></div>
+              <div class="cat-item"><div class="cat-circle alt">🍚</div><div class="cat-label">ข้าวราดแกง</div></div>
+              <div class="cat-item"><div class="cat-circle alt2">☕</div><div class="cat-label">คาเฟ่</div></div>
+              <div class="cat-item"><div class="cat-circle alt3">🍔</div><div class="cat-label">ฟาสต์ฟู้ด</div></div>
+              <div class="cat-item"><div class="cat-circle alt4">🍰</div><div class="cat-label">เบเกอรี่</div></div>
+              <div class="cat-item"><div class="cat-circle alt">🍢</div><div class="cat-label">ส้มตำ</div></div>
+              <div class="cat-item"><div class="cat-circle alt2">🥗</div><div class="cat-label">สลัด</div></div>
+              <div class="cat-item"><div class="cat-circle alt3">🍻</div><div class="cat-label">ผับบาร์</div></div>
+              <div class="cat-item"><div class="cat-circle alt4">🍡</div><div class="cat-label">ของหวาน</div></div>
+              <div class="cat-item"><div class="cat-circle">⏰</div><div class="cat-label">เปิดดึก</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="anno">
+        <span class="anno-label">i</span>
+        <div class="anno-text">
+          <strong>AdSlot:</strong> 140dp height, 1.5px dashed border, "โฆษณา" corner label · <strong>CategoryGrid:</strong> 5-col × 2 rows, 52dp circle icons
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SECTION 4: RESTAURANT CARD ====== -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Restaurant Card — RestaurantCard → CompactRow</h2>
+    <span class="section-tag">RestaurantCard → CompactRow</span>
+  </div>
+
+  <div class="pair">
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Current — RestaurantCard</div>
+          <div class="pair-title">88×88 photo + 2 ปุ่ม + meta block</div>
+        </div>
+        <span class="tag-update">CURRENT</span>
+      </div>
+      <div class="phone-mock light">
+        <div class="phone-screen light">
+          <div class="mock-content light">
+            <div class="card-old">
+              <div class="card-old-img">🍜</div>
+              <div class="card-old-body">
+                <div class="card-old-eta-row">
+                  <span class="card-old-eta">อีก 8 นาที</span>
+                  <span class="card-old-dist">800 ม.</span>
+                </div>
+                <div class="card-old-name">ก๋วยเตี๋ยวลูกชิ้นปลาเจ๊เล็ก</div>
+                <div class="card-old-eta-row" style="font-size:9px;">
+                  <span style="color:#facc15; font-weight:700;">★ 4.8</span>
+                  <span style="color:#5a5a5a;">320 รีวิว</span>
+                </div>
+                <div class="card-old-actions">
+                  <div class="card-old-nav">นำทาง</div>
+                  <div class="card-old-fav">♡</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-old">
+              <div class="card-old-img" style="background:linear-gradient(135deg, #FFB199 0%, #FF0844 100%);">🍢</div>
+              <div class="card-old-body">
+                <div class="card-old-eta-row">
+                  <span class="card-old-eta">อีก 12 นาที</span>
+                  <span class="card-old-dist">1.2 กม.</span>
+                </div>
+                <div class="card-old-name">ส้มตำไทยแซ่บ ๆ</div>
+                <div class="card-old-eta-row" style="font-size:9px;">
+                  <span style="color:#facc15; font-weight:700;">★ 4.6</span>
+                  <span style="color:#5a5a5a;">189 รีวิว</span>
+                </div>
+                <div class="card-old-actions">
+                  <div class="card-old-nav">นำทาง</div>
+                  <div class="card-old-fav" style="background:#dc2626; color:white;">♥</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Demo — CompactRow</div>
+          <div class="pair-title">76×76 photo + ETA tag (red/green/gray) + นำทาง link</div>
+        </div>
+        <span class="tag-new">NEW</span>
+      </div>
+      <div class="phone-mock light">
+        <div class="phone-screen light">
+          <div class="mock-content light">
+            <div class="row-new">
+              <div class="row-new-img">🍜</div>
+              <div class="card-old-body" style="flex:1; min-width:0;">
+                <div class="row-new-eta">
+                  <span class="eta-tag">ขับ 8 นาที</span>
+                  <span class="eta-tag gray">800 ม.</span>
+                </div>
+                <div class="row-new-name">ก๋วยเตี๋ยวลูกชิ้นปลาเจ๊เล็ก</div>
+                <div class="row-new-meta">
+                  <span class="star">★ 4.8</span>
+                  <span>·</span>
+                  <span>320 รีวิว</span>
+                  <span>·</span>
+                  <span class="open">เปิดอยู่</span>
+                </div>
+                <div class="row-new-action">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>นำทาง</span>
+                </div>
+              </div>
+            </div>
+            <div class="row-new">
+              <div class="row-new-img r2">🍢</div>
+              <div class="card-old-body" style="flex:1; min-width:0;">
+                <div class="row-new-eta">
+                  <span class="eta-tag">ขับ 12 นาที</span>
+                  <span class="eta-tag gray">1.2 กม.</span>
+                </div>
+                <div class="row-new-name">ส้มตำไทยแซ่บ ๆ</div>
+                <div class="row-new-meta">
+                  <span class="star">★ 4.6</span>
+                  <span>·</span>
+                  <span>189 รีวิว</span>
+                  <span>·</span>
+                  <span class="open">เปิดอยู่</span>
+                </div>
+                <div class="row-new-action">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>นำทาง</span>
+                </div>
+              </div>
+            </div>
+            <div class="row-new">
+              <div class="row-new-img r3">☕</div>
+              <div class="card-old-body" style="flex:1; min-width:0;">
+                <div class="row-new-eta">
+                  <span class="eta-tag">ขับ 5 นาที</span>
+                  <span class="eta-tag gray">450 ม.</span>
+                </div>
+                <div class="row-new-name">ร้านกาแฟข้างบ้าน</div>
+                <div class="row-new-meta">
+                  <span class="star">★ 4.9</span>
+                  <span>·</span>
+                  <span>540 รีวิว</span>
+                  <span>·</span>
+                  <span class="open">เปิดอยู่</span>
+                </div>
+                <div class="row-new-action">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>นำทาง</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="anno">
+        <span class="anno-label">i</span>
+        <div class="anno-text">
+          <strong>CompactRow:</strong> 76×76 photo (vs 88×88), no นำทาง button (link instead), border-bottom row separator, ETA tag colored by status (green=open, red=closed, gray=dist)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SECTION 5: BOTTOM NAV ====== -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Bottom Nav — M3 default → Custom indicator</h2>
+    <span class="section-tag">NavigationBarItem ใหม่</span>
+  </div>
+
+  <div class="pair">
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Current</div>
+          <div class="pair-title">M3 default — no top indicator</div>
+        </div>
+        <span class="tag-update">UPDATE</span>
+      </div>
+      <div class="phone-mock light">
+        <div class="phone-screen light">
+          <div style="height:80px;"></div>
+          <div class="bottom-old">
+            <div class="nav-old-item active">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-7 9 7v9a2 2 0 01-2 2h-4v-7H9v7H5a2 2 0 01-2-2z"/></svg>
+              <span>ทาง</span>
+            </div>
+            <div class="nav-old-item">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/></svg>
+              <span>ใกล้ฉัน</span>
+            </div>
+            <div class="nav-old-item">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+              <span>รายการโปรด</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair-card">
+      <div class="pair-head">
+        <div>
+          <div class="pair-label">Demo (target)</div>
+          <div class="pair-title">3dp red top bar + filled icon for active</div>
+        </div>
+        <span class="tag-new">CUSTOM</span>
+      </div>
+      <div class="phone-mock light">
+        <div class="phone-screen light">
+          <div style="height:80px;"></div>
+          <div class="bottom-new">
+            <div class="nav-new-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a2 2 0 01-2 2h-4v-7H9v7H5a2 2 0 01-2-2z"/></svg>
+              <span>ทาง</span>
+            </div>
+            <div class="nav-new-item active">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/></svg>
+              <span>ใกล้ฉัน</span>
+            </div>
+            <div class="nav-new-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+              <span>รายการโปรด</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SUMMARY TABLE ====== -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">Σ</span>
+    <h2 class="section-title">Summary — 7 changes total</h2>
+    <span class="section-tag">refactor เป็น sections ก่อน แล้วค่อย apply</span>
+  </div>
+
+  <table class="diff-table">
+    <thead>
+      <tr>
+        <th style="width:25%;">Component</th>
+        <th style="width:30%;">Current</th>
+        <th style="width:8%;"></th>
+        <th style="width:30%;">Target (Demo)</th>
+        <th style="width:7%;">Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Pill</strong></td>
+        <td>Red soft (FEF2F2) + dot</td>
+        <td class="arrow">→</td>
+        <td>Red solid (DC2626) + leading icon</td>
+        <td><span class="tag-update">UPDATE</span></td>
+      </tr>
+      <tr>
+        <td><strong>TopBarAvatar</strong></td>
+        <td>Plain gray 34dp</td>
+        <td class="arrow">→</td>
+        <td>Red gradient 32dp (DC2626→F87171)</td>
+        <td><span class="tag-new">NEW</span></td>
+      </tr>
+      <tr>
+        <td><strong>SearchInput</strong></td>
+        <td>12dp rounded, no mic</td>
+        <td class="arrow">→</td>
+        <td>999dp pill, mic icon (red), gray-50 bg</td>
+        <td><span class="tag-update">UPDATE</span></td>
+      </tr>
+      <tr>
+        <td><strong>AdSlot</strong></td>
+        <td>—</td>
+        <td class="arrow">→</td>
+        <td>140dp dashed border, "โฆษณา" corner label</td>
+        <td><span class="tag-new">NEW</span></td>
+      </tr>
+      <tr>
+        <td><strong>CategoryGrid</strong></td>
+        <td>Text chips (1 row, 5 items)</td>
+        <td class="arrow">→</td>
+        <td>5×2 emoji grid, 52dp circle icons</td>
+        <td><span class="tag-new">NEW</span></td>
+      </tr>
+      <tr>
+        <td><strong>RestaurantCard → CompactRow</strong></td>
+        <td>88×88 photo, 2 buttons</td>
+        <td class="arrow">→</td>
+        <td>76×76 photo, ETA tag, นำทาง link, border-bottom</td>
+        <td><span class="tag-new">NEW</span></td>
+      </tr>
+      <tr>
+        <td><strong>Bottom Nav</strong></td>
+        <td>M3 default</td>
+        <td class="arrow">→</td>
+        <td>3dp red top bar + filled icon when active</td>
+        <td><span class="tag-update">UPDATE</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+</div>
+</body>
+</html>

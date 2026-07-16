@@ -1,0 +1,2148 @@
+[
+  {
+    "id": "osm_3340127249",
+    "name": "@ริมน้ำ",
+    "lat": 18.899678,
+    "lng": 98.867784,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3343130815",
+    "name": "ร้านอาหาร ต้นน้ำปลาเผา",
+    "lat": 18.89986,
+    "lng": 98.869207,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4532822017",
+    "name": "Wareepana",
+    "lat": 18.779803,
+    "lng": 98.852362,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_766556853",
+    "name": "Thai food",
+    "lat": 19.086429,
+    "lng": 98.851381,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1599469327",
+    "name": "PP Barbeque",
+    "lat": 19.930674,
+    "lng": 99.224833,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1600670878",
+    "name": "Uncle Jack's Hideaway",
+    "lat": 19.949625,
+    "lng": 99.196897,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1460770114",
+    "name": "The Post Bar",
+    "lat": 18.895077,
+    "lng": 98.83899,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1517466209",
+    "name": "Mon Cham",
+    "lat": 18.935982,
+    "lng": 98.822731,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1517513409",
+    "name": "32 กม.คอฟฟี่ฮิลล์แอนด์รีสอร์ท",
+    "lat": 19.132967,
+    "lng": 98.704052,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "07:00-17:00"
+  },
+  {
+    "id": "osm_1819858250",
+    "name": "ร้านกาแฟบ้านแม่มด",
+    "lat": 19.218249,
+    "lng": 98.670708,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1985325612",
+    "name": "Maple Coffee",
+    "lat": 19.80483,
+    "lng": 99.168471,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2040260388",
+    "name": "Rim Doi Restaurant",
+    "lat": 19.437442,
+    "lng": 98.967168,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2088111608",
+    "name": "ร้านปากซอย",
+    "lat": 19.614931,
+    "lng": 98.957642,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2141043650",
+    "name": "Parichard",
+    "lat": 19.91736,
+    "lng": 99.21075,
+    "rating": null,
+    "tags": [
+      "diet:halal:yes",
+      "diet:halal"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2142300243",
+    "name": "Rimnum Restaurant",
+    "lat": 19.908318,
+    "lng": 99.201888,
+    "rating": null,
+    "tags": [
+      "diet:halal:yes",
+      "diet:halal"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2190918720",
+    "name": "Phuchinda Coffee",
+    "lat": 19.154597,
+    "lng": 98.85903,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2229123276",
+    "name": "Pimmada Coffee",
+    "lat": 18.861529,
+    "lng": 98.70499,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2293321077",
+    "name": "ไก่ย่าง หมูกรอบ บ้านสันมะเฟือง",
+    "lat": 19.836931,
+    "lng": 99.172812,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2423925024",
+    "name": "Green Food Coffee",
+    "lat": 19.111842,
+    "lng": 98.792572,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2423925036",
+    "name": "1st Gear Cafe",
+    "lat": 19.112345,
+    "lng": 98.793463,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2438297972",
+    "name": "Doi Chaang Resort Cafe",
+    "lat": 18.798896,
+    "lng": 98.832255,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2476296822",
+    "name": "Wongwan Restaurant",
+    "lat": 18.838377,
+    "lng": 98.727921,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2494631745",
+    "name": "ไร่นท-ภูผา",
+    "lat": 18.854782,
+    "lng": 98.752636,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2521030494",
+    "name": "Thomn Gob Inn",
+    "lat": 19.748686,
+    "lng": 99.027767,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2521984652",
+    "name": "Ban Suan 108",
+    "lat": 19.473069,
+    "lng": 98.961751,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2556159428",
+    "name": "ร้านอาหารตามสั่ง",
+    "lat": 18.890679,
+    "lng": 98.831962,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2564546349",
+    "name": "Rai Samoengtong",
+    "lat": 18.840174,
+    "lng": 98.727434,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2575169216",
+    "name": "บ้านระเบียงลม",
+    "lat": 18.849964,
+    "lng": 98.744634,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": "11:00-23:00"
+  },
+  {
+    "id": "osm_2633808687",
+    "name": "Strawberry Fields Forever",
+    "lat": 19.814317,
+    "lng": 99.113071,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2663144671",
+    "name": "Bamboo terraces along river",
+    "lat": 18.493866,
+    "lng": 98.668348,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2666702978",
+    "name": "ร้านครึ่งทางโอเคมาร์ท",
+    "lat": 19.20812,
+    "lng": 98.6707,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2678329386",
+    "name": "Baan Yotmuang",
+    "lat": 19.468699,
+    "lng": 98.95023,
+    "rating": null,
+    "tags": [
+      "cuisine:thai_and_western \"a la carte\" cuisine",
+      "cuisine:thai_and_western \"a la carte\" cuisine"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2696196375",
+    "name": "JAM Coffee Bakery & Steakhouse",
+    "lat": 19.702551,
+    "lng": 99.145716,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_2696206876",
+    "name": "T2 Steak",
+    "lat": 19.716481,
+    "lng": 99.142127,
+    "rating": null,
+    "tags": [
+      "cuisine:steak",
+      "cuisine:steak"
+    ],
+    "opening_hours": "Mo-Su 10:00-20:00"
+  },
+  {
+    "id": "osm_2697120188",
+    "name": "บะหมี่เจ้หัว",
+    "lat": 19.912155,
+    "lng": 99.206026,
+    "rating": null,
+    "tags": [
+      "cuisine:noodle",
+      "cuisine:noodle"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3012425754",
+    "name": "Baan Dong View Doi",
+    "lat": 18.78349,
+    "lng": 98.842249,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3139500829",
+    "name": "เค เอฟ ซี",
+    "lat": 19.910704,
+    "lng": 99.206572,
+    "rating": null,
+    "tags": [
+      "cuisine:chicken",
+      "cuisine:chicken",
+      "smoking:no",
+      "takeaway:yes",
+      "takeaway"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3139501329",
+    "name": "MK Restaurants",
+    "lat": 19.910831,
+    "lng": 99.206319,
+    "rating": null,
+    "tags": [
+      "cuisine:suki",
+      "cuisine:suki"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3211600662",
+    "name": "Coffee in Mae Lod",
+    "lat": 19.101215,
+    "lng": 98.772375,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3247403107",
+    "name": "ไร่องุ่น สอ บีกา",
+    "lat": 18.956452,
+    "lng": 98.804988,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3247403112",
+    "name": "ไร่องุ่น สอ บีกา",
+    "lat": 18.956574,
+    "lng": 98.805323,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3247431556",
+    "name": "Ouikaew Coffee",
+    "lat": 18.852352,
+    "lng": 98.733063,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3340127234",
+    "name": "Country House",
+    "lat": 18.900049,
+    "lng": 98.878684,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3355620166",
+    "name": "Baan Doi",
+    "lat": 18.894216,
+    "lng": 98.836924,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3379414262",
+    "name": "Hi Coffee",
+    "lat": 19.168639,
+    "lng": 98.691137,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3854066930",
+    "name": "คาเฟ่ อเมซอน",
+    "lat": 19.687897,
+    "lng": 99.148583,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop",
+      "smoking:no",
+      "takeaway:yes",
+      "takeaway"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3509493642",
+    "name": "Ninecool coffee",
+    "lat": 19.917454,
+    "lng": 99.210707,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 08:00-18:00"
+  },
+  {
+    "id": "osm_4269760997",
+    "name": "Galileo",
+    "lat": 19.935347,
+    "lng": 99.229554,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 10:00-22:00"
+  },
+  {
+    "id": "osm_3912487220",
+    "name": "โป่งแยงเบอร์รี่-วินดี้ฮิลล์",
+    "lat": 18.911772,
+    "lng": 98.825915,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3912487222",
+    "name": "Vienna Coffee",
+    "lat": 18.916639,
+    "lng": 98.821466,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3912487223",
+    "name": "di Bosco Coffee Home",
+    "lat": 18.920427,
+    "lng": 98.819837,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee;steak",
+      "cuisine:coffee;steak"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3913716389",
+    "name": "สถานีม่อนม้ง",
+    "lat": 18.93597,
+    "lng": 98.807998,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3933817831",
+    "name": "Orange Box Espresso Bar & Bistro",
+    "lat": 19.103595,
+    "lng": 98.820976,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4164220189",
+    "name": "Yunnan Restuarant ร้านเจ๊เหมย บ้านยาง",
+    "lat": 19.807576,
+    "lng": 99.102917,
+    "rating": null,
+    "tags": [
+      "cuisine:chinese",
+      "cuisine:chinese",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 10:00-18:00"
+  },
+  {
+    "id": "osm_4203872790",
+    "name": "Banporpiang Coffee",
+    "lat": 19.448467,
+    "lng": 98.983096,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4208599025",
+    "name": "Cafe de Time",
+    "lat": 19.624413,
+    "lng": 99.12892,
+    "rating": null,
+    "tags": [
+      "cuisine:thai;coffee_shop",
+      "cuisine:thai;coffee_shop",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4294806092",
+    "name": "Doi Chaang",
+    "lat": 19.746885,
+    "lng": 99.144696,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4308147089",
+    "name": "ลาบลุงหนาน",
+    "lat": 19.868071,
+    "lng": 99.183325,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4319428192",
+    "name": "Fang Duo",
+    "lat": 19.865901,
+    "lng": 99.1819,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 10:00-22:00"
+  },
+  {
+    "id": "osm_4338019392",
+    "name": "Sweet Paste",
+    "lat": 19.611078,
+    "lng": 98.957282,
+    "rating": null,
+    "tags": [
+      "cuisine:thai;local",
+      "cuisine:thai;local",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4366299394",
+    "name": "ครึ่งหนึ่ง อาหาร-เครื่องดื่ม",
+    "lat": 19.157082,
+    "lng": 98.6923,
+    "rating": null,
+    "tags": [
+      "cuisine:thai;noodles;seafood",
+      "cuisine:thai;noodles;seafood",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4403836128",
+    "name": "Tung Luang Royal Project Rose Garden Cafe",
+    "lat": 18.812458,
+    "lng": 98.817578,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;tea;cake",
+      "cuisine:coffee_shop;tea;cake",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4410956792",
+    "name": "M & B Cafe",
+    "lat": 19.730273,
+    "lng": 99.14008,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4417073216",
+    "name": "Thachang Hill",
+    "lat": 18.801142,
+    "lng": 98.830939,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4444964090",
+    "name": "My Mom Cafe",
+    "lat": 19.207527,
+    "lng": 98.670593,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;thai",
+      "cuisine:coffee_shop;thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4531052090",
+    "name": "Some name",
+    "lat": 18.899033,
+    "lng": 98.863394,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4547501391",
+    "name": "Restaurant",
+    "lat": 19.244169,
+    "lng": 98.655154,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4547525290",
+    "name": "Restaurant",
+    "lat": 19.243824,
+    "lng": 98.655228,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4581291005",
+    "name": "Krua Ban Chan",
+    "lat": 18.886059,
+    "lng": 98.821553,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 08:00-21:00"
+  },
+  {
+    "id": "osm_4582334489",
+    "name": "Coffee hill",
+    "lat": 19.51764,
+    "lng": 98.756833,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4594340661",
+    "name": "Max",
+    "lat": 18.783249,
+    "lng": 98.841656,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4606644114",
+    "name": "ข้าวซอยรสเด็ด",
+    "lat": 19.463884,
+    "lng": 98.9644,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4641230899",
+    "name": "Love Café",
+    "lat": 18.913979,
+    "lng": 98.823491,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4719575095",
+    "name": "Coffee Home",
+    "lat": 18.847558,
+    "lng": 98.73169,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4733771823",
+    "name": "Taan Joa Khun Coffee",
+    "lat": 19.918916,
+    "lng": 99.212688,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5215815622",
+    "name": "Noodle shop",
+    "lat": 19.687652,
+    "lng": 99.148551,
+    "rating": null,
+    "tags": [
+      "cuisine:noodle",
+      "cuisine:noodle"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4990013026",
+    "name": "ร้านบะหมี่เกี๊ยวยูนนานต้าหยง",
+    "lat": 19.741349,
+    "lng": 98.963677,
+    "rating": null,
+    "tags": [
+      "cuisine:noodles;chinese",
+      "cuisine:noodles;chinese"
+    ],
+    "opening_hours": "Mo-Su 08:00-18:00"
+  },
+  {
+    "id": "osm_5027619622",
+    "name": "ร้านบะหมี่เกี๊ยวยูนนานต้าหยง",
+    "lat": 19.740753,
+    "lng": 98.964916,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5187642722",
+    "name": "คาเฟ่ อิน ไวด์",
+    "lat": 19.225222,
+    "lng": 98.8149,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5213775023",
+    "name": "Five star chicken",
+    "lat": 19.688051,
+    "lng": 99.148729,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5269068736",
+    "name": "Gafre Café",
+    "lat": 19.920883,
+    "lng": 99.2128,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan",
+      "outdoor_seating:yes",
+      "smoking:outside",
+      "outdoor_seating"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5272840682",
+    "name": "Café de Mountain",
+    "lat": 18.854406,
+    "lng": 98.700297,
+    "rating": null,
+    "tags": [
+      "outdoor_seating:yes",
+      "smoking:outside",
+      "outdoor_seating"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5300285325",
+    "name": "อาการตามสั่ง",
+    "lat": 18.66066,
+    "lng": 98.665817,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5356035050",
+    "name": "Book Cafe",
+    "lat": 19.913185,
+    "lng": 99.20718,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5362750627",
+    "name": "Nice View Café",
+    "lat": 19.609477,
+    "lng": 98.957202,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5372494923",
+    "name": "Chantra khiri Chalet",
+    "lat": 18.782698,
+    "lng": 98.841741,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5372554721",
+    "name": "Chantra Khiri Chalet",
+    "lat": 18.78269,
+    "lng": 98.841774,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5579667122",
+    "name": "Fast food",
+    "lat": 19.91448,
+    "lng": 99.216722,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5580093624",
+    "name": "Rabiang Dao Café",
+    "lat": 19.416375,
+    "lng": 98.845477,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5667866723",
+    "name": "Supin Restaurant",
+    "lat": 19.160837,
+    "lng": 98.690726,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5867147588",
+    "name": "Chao Doi",
+    "lat": 19.464208,
+    "lng": 98.964444,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5923928435",
+    "name": "How Home",
+    "lat": 19.023905,
+    "lng": 98.87027,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6038521585",
+    "name": "Issara Samoeng Cafe",
+    "lat": 18.861587,
+    "lng": 98.703442,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6124463217",
+    "name": "Five Star Chicken",
+    "lat": 19.096582,
+    "lng": 98.84707,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6136470916",
+    "name": "Baan Mon Neung Doi",
+    "lat": 18.854838,
+    "lng": 98.695456,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6148883988",
+    "name": "Arunothai Coffee",
+    "lat": 19.73813,
+    "lng": 98.964104,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": "Mo-Su 07:30-18:30"
+  },
+  {
+    "id": "osm_6194386786",
+    "name": "Ma Mueang Win",
+    "lat": 18.661274,
+    "lng": 98.66117,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6284342885",
+    "name": "Not's Kitchen",
+    "lat": 19.204353,
+    "lng": 98.671817,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6290544485",
+    "name": "Noodles",
+    "lat": 19.119268,
+    "lng": 98.719187,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6369776688",
+    "name": "Him Nam Mae Ja",
+    "lat": 18.876605,
+    "lng": 98.798123,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6859261587",
+    "name": "ร้านหัวกะทิ",
+    "lat": 19.973857,
+    "lng": 99.245532,
+    "rating": null,
+    "tags": [
+      "cuisine:noodle",
+      "cuisine:noodle"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6950957217",
+    "name": "Coffee in the Garden",
+    "lat": 19.116827,
+    "lng": 98.729955,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_6965603346",
+    "name": "Krua Hi Ngoen",
+    "lat": 19.155392,
+    "lng": 98.693048,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7003531389",
+    "name": "Noodles 30THB",
+    "lat": 19.621091,
+    "lng": 98.958176,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7023601394",
+    "name": "Mac Coffee",
+    "lat": 19.9219,
+    "lng": 99.219076,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_8027537286",
+    "name": "ศูนย์ฝึกอาชีพคนพิการอาเซียน อำเภอเชียงดาว",
+    "lat": 19.44709,
+    "lng": 98.969656,
+    "rating": null,
+    "tags": [
+      "cuisine:regional",
+      "cuisine:regional"
+    ],
+    "opening_hours": "Mo-Su 08:00-17:00"
+  },
+  {
+    "id": "osm_7103957585",
+    "name": "Bake Bom Coffee",
+    "lat": 19.092444,
+    "lng": 98.858303,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7107398422",
+    "name": "The Chateau Cafe",
+    "lat": 19.222111,
+    "lng": 98.839941,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7107398583",
+    "name": "จังเกิ้ล เดอ คาเฟ่",
+    "lat": 19.220001,
+    "lng": 98.846518,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;tea;thai",
+      "cuisine:coffee_shop;tea;thai",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 08:30-17:30"
+  },
+  {
+    "id": "osm_7109381181",
+    "name": "Araksa Tea Gardens Restaurant",
+    "lat": 19.191997,
+    "lng": 98.851617,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7169617485",
+    "name": "Shogun Steakhouse",
+    "lat": 19.726028,
+    "lng": 99.139834,
+    "rating": null,
+    "tags": [
+      "cuisine:pizza",
+      "cuisine:pizza"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7170845485",
+    "name": "NT Cafe",
+    "lat": 19.724386,
+    "lng": 99.099628,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7273761078",
+    "name": "Cactus Café Chiang Dao",
+    "lat": 19.488913,
+    "lng": 99.02738,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7274163627",
+    "name": "Me Laab Café",
+    "lat": 19.723166,
+    "lng": 99.140528,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7284755985",
+    "name": "Pad Thai",
+    "lat": 19.09707,
+    "lng": 98.846248,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7774685385",
+    "name": "khao soi",
+    "lat": 19.913854,
+    "lng": 99.16301,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7921952451",
+    "name": "KMT Coffee",
+    "lat": 19.722405,
+    "lng": 99.096541,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_9442067218",
+    "name": "Chaixi noodles",
+    "lat": 19.738908,
+    "lng": 98.968978,
+    "rating": null,
+    "tags": [
+      "cuisine:noodles;thai",
+      "cuisine:noodles;thai",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_9443760620",
+    "name": "Irin Café",
+    "lat": 19.591503,
+    "lng": 98.960745,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;tea",
+      "cuisine:coffee_shop;tea",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 10:00-22:00"
+  },
+  {
+    "id": "osm_8200943607",
+    "name": "เฮาหลงดอย",
+    "lat": 19.203667,
+    "lng": 98.797535,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": "Mo-Su 08:00-22:00"
+  },
+  {
+    "id": "osm_8209596894",
+    "name": "Chill cafe",
+    "lat": 19.924669,
+    "lng": 99.218718,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_8568750910",
+    "name": "Hug Mueang Khong Cafe",
+    "lat": 19.379114,
+    "lng": 98.721322,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;tea",
+      "cuisine:coffee_shop;tea",
+      "internet_access:wlan",
+      "outdoor_seating:yes",
+      "outdoor_seating"
+    ],
+    "opening_hours": "Mo-Su 08:00-17:00"
+  },
+  {
+    "id": "osm_8892200306",
+    "name": "หมูน้อย Coffee & Bar",
+    "lat": 18.805453,
+    "lng": 98.810366,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "Mo,Tu,Th,Fr 07:00-20:00; Sa-Su 06:30-20:00"
+  },
+  {
+    "id": "osm_9314302717",
+    "name": "ม่อนอิงดาวคาเฟ่",
+    "lat": 18.936144,
+    "lng": 98.818655,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;tea",
+      "cuisine:coffee_shop;tea",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 08:30-18:00"
+  },
+  {
+    "id": "osm_9348094017",
+    "name": "Hug Mueang Khong Cafe",
+    "lat": 19.379156,
+    "lng": 98.721365,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 08:00-22:00"
+  },
+  {
+    "id": "osm_9438531917",
+    "name": "ทรัพย์ ปัน",
+    "lat": 19.965868,
+    "lng": 99.155871,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;tea",
+      "cuisine:coffee_shop;tea",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 08:30-16:00"
+  },
+  {
+    "id": "osm_9438664217",
+    "name": "Yai Han Ta Jerd Kitchen",
+    "lat": 19.966628,
+    "lng": 99.155367,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": "Mo-Su 08:00-19:00"
+  },
+  {
+    "id": "osm_9438702819",
+    "name": "Cha Anon Cafe",
+    "lat": 19.966587,
+    "lng": 99.155284,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_9441622517",
+    "name": "ข้าวซอยอิสลาม",
+    "lat": 19.802419,
+    "lng": 99.096154,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_9441689617",
+    "name": "สวนส้มนที",
+    "lat": 19.820276,
+    "lng": 99.099924,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_10609568735",
+    "name": "Orange Farm Food",
+    "lat": 19.838969,
+    "lng": 99.078215,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_10617860832",
+    "name": "Ninebar",
+    "lat": 19.20786,
+    "lng": 98.670699,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_9482831717",
+    "name": "Valley Coffee Lanna Resort",
+    "lat": 18.755385,
+    "lng": 98.877023,
+    "rating": null,
+    "tags": [
+      "cuisine:cake;coffee_shop;tea",
+      "cuisine:cake;coffee_shop;tea",
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Mo-Su 08:30-17:00"
+  },
+  {
+    "id": "osm_9610533215",
+    "name": "Dairy Queen",
+    "lat": 19.910777,
+    "lng": 99.206426,
+    "rating": null,
+    "tags": [
+      "cuisine:ice_cream",
+      "cuisine:ice_cream"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_9835734417",
+    "name": "Tonfang Forest Camp",
+    "lat": 19.876866,
+    "lng": 99.185583,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_9837524617",
+    "name": "PannaBookCafe",
+    "lat": 19.912364,
+    "lng": 99.205631,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": "Su-Th 07:00-16:00; Fr-Sa 08:00-17:00"
+  },
+  {
+    "id": "osm_9873712018",
+    "name": "Pizza Farm",
+    "lat": 19.114408,
+    "lng": 98.788387,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_10127777105",
+    "name": "เอเลฟิน ฟาร์ม แอนด์ คาเฟ่",
+    "lat": 18.803891,
+    "lng": 98.819588,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;thai",
+      "cuisine:coffee_shop;thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_10131813564",
+    "name": "Pang Yang Cafe",
+    "lat": 19.161955,
+    "lng": 98.819967,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_10538497409",
+    "name": "Online game esports",
+    "lat": 19.920651,
+    "lng": 99.212792,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_10548613809",
+    "name": "Bistro - Burger, pizza, steak",
+    "lat": 19.866928,
+    "lng": 99.182315,
+    "rating": null,
+    "tags": [
+      "cuisine:burger;chicken;pizza;sausage;steak_house",
+      "cuisine:burger;chicken;pizza;sausage;steak_house",
+      "diet:vegan:yes",
+      "diet:vegan"
+    ],
+    "opening_hours": "Mo-Su 10:30-21:00"
+  },
+  {
+    "id": "osm_10549024310",
+    "name": "Larb-Za",
+    "lat": 19.924483,
+    "lng": 99.219129,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_10564995616",
+    "name": "Sook Space",
+    "lat": 19.459013,
+    "lng": 98.964687,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "24/7"
+  },
+  {
+    "id": "osm_10569706509",
+    "name": "Compliment",
+    "lat": 19.92553,
+    "lng": 99.196586,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_11111088371",
+    "name": "Chillax cafe",
+    "lat": 19.930055,
+    "lng": 99.22582,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_11132324950",
+    "name": "ร้านน้องสตางค์ เมนูอินดิ้",
+    "lat": 19.920433,
+    "lng": 99.219279,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_11413834853",
+    "name": "Morning Glory Cafe",
+    "lat": 19.4364,
+    "lng": 98.947331,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "Mo-Su 10:00-18:00"
+  },
+  {
+    "id": "osm_11434220469",
+    "name": "nice local food",
+    "lat": 19.917409,
+    "lng": 99.210892,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_11502670881",
+    "name": "ริเวอร์ร็อคคาเฟ่ฮิลล์",
+    "lat": 18.899865,
+    "lng": 98.870369,
+    "rating": null,
+    "tags": [
+      "cuisine:pizza;coffee_shop;dessert;thai",
+      "cuisine:pizza;coffee_shop;dessert;thai"
+    ],
+    "opening_hours": "Mo-Su 09:00-18:00"
+  },
+  {
+    "id": "osm_12206408775",
+    "name": "เพลินจิต ข้าวต้ม",
+    "lat": 19.912339,
+    "lng": 99.206235,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_12418227020",
+    "name": "TOMMY ทอมมี่",
+    "lat": 19.917181,
+    "lng": 99.211347,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop",
+      "internet_access:yes",
+      "outdoor_seating:no",
+      "internet_access"
+    ],
+    "opening_hours": "Mo-Su 08:00-23:00"
+  },
+  {
+    "id": "osm_12430349831",
+    "name": "Swamp",
+    "lat": 19.742033,
+    "lng": 98.96387,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_12443762305",
+    "name": "ผาซ่อนดาว​ คาเฟ่",
+    "lat": 19.621213,
+    "lng": 99.127716,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "Mo-Su 07:30-16:30"
+  },
+  {
+    "id": "osm_13523412899",
+    "name": "Tayong Yunnan Noodles Restaurant",
+    "lat": 19.733609,
+    "lng": 98.962719,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_13108414413",
+    "name": "Pong Yana",
+    "lat": 18.858911,
+    "lng": 98.832439,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_13169192501",
+    "name": "Unnamedcoffeeproject",
+    "lat": 19.736474,
+    "lng": 99.143019,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "Mo-Fr 07:00-17:00; Sa-Su 09:00-17:00"
+  },
+  {
+    "id": "osm_13192214401",
+    "name": "Pha Daeng Cozy Coffee & Homestay",
+    "lat": 19.761875,
+    "lng": 99.012754,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_13247343001",
+    "name": "ข้าวซอยบ้านยาง",
+    "lat": 19.802826,
+    "lng": 99.097244,
+    "rating": null,
+    "tags": [
+      "cuisine:asian",
+      "cuisine:asian"
+    ],
+    "opening_hours": "Mo-Su 09:00-15:00"
+  },
+  {
+    "id": "osm_13255562001",
+    "name": "ก๋วยเตี๋ยวเป็ดรสเด็ดปากทางอ่างขาง",
+    "lat": 19.802484,
+    "lng": 99.165036,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": "Mo-Su 08:00-16:00"
+  },
+  {
+    "id": "osm_13257248680",
+    "name": "Cypress Lanes",
+    "lat": 18.79048,
+    "lng": 98.840026,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "Mo-We, Fr-Su 10:00-17:00"
+  },
+  {
+    "id": "osm_13293745101",
+    "name": "Imim Cafe. ซินหมี่",
+    "lat": 19.676149,
+    "lng": 98.785882,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "Mo-Su 08:00-17:00"
+  },
+  {
+    "id": "osm_13350620568",
+    "name": "The Good View Food & Coffee",
+    "lat": 19.166103,
+    "lng": 98.691021,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_13403797106",
+    "name": "Harmony Retreat Chiang Mai",
+    "lat": 18.76435,
+    "lng": 98.875066,
+    "rating": null,
+    "tags": [
+      "outdoor_seating:yes",
+      "outdoor_seating"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_13823950601",
+    "name": "Tamora cafe & eatery",
+    "lat": 19.902076,
+    "lng": 99.211184,
+    "rating": null,
+    "tags": [
+      "cuisine:asian",
+      "cuisine:asian"
+    ],
+    "opening_hours": "Mo-Su 08:30-20:00"
+  },
+  {
+    "id": "osm_347806330",
+    "name": "ร้านอาหารนาหา ดอยอ่างขาง",
+    "lat": 19.900655,
+    "lng": 99.03964,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_374525421",
+    "name": "Coffee Nine",
+    "lat": 19.017355,
+    "lng": 98.763075,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_388030311",
+    "name": "Eden Restaurant",
+    "lat": 18.928554,
+    "lng": 98.823297,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_587825532",
+    "name": "Pankled Coffee",
+    "lat": 19.115183,
+    "lng": 98.78496,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan"
+    ],
+    "opening_hours": "8:00-17:00"
+  },
+  {
+    "id": "osm_627546235",
+    "name": "ฮิมห้วย",
+    "lat": 19.019514,
+    "lng": 98.852165,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_642847855",
+    "name": "Cafe Amazon",
+    "lat": 19.915641,
+    "lng": 99.210616,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop",
+      "outdoor_seating:yes",
+      "air_conditioning:yes",
+      "outdoor_seating",
+      "air_conditioning"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_644697906",
+    "name": "Di Bosco",
+    "lat": 18.887841,
+    "lng": 98.828605,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": "Mo-Su 08:00-20:00"
+  },
+  {
+    "id": "osm_660846796",
+    "name": "Somewhere Cafe",
+    "lat": 19.915771,
+    "lng": 99.214112,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_674065612",
+    "name": "Doi Taeng Coffee",
+    "lat": 19.200769,
+    "lng": 98.798275,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_760258667",
+    "name": "Small Farm",
+    "lat": 18.478762,
+    "lng": 98.667074,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_760876001",
+    "name": "Farm Cafe",
+    "lat": 19.02787,
+    "lng": 98.869065,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1455780424",
+    "name": "River Side Cafe",
+    "lat": 18.95767,
+    "lng": 98.858925,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_779041594",
+    "name": "Hinoki Coffee",
+    "lat": 19.655808,
+    "lng": 99.14928,
+    "rating": null,
+    "tags": [
+      "internet_access:wlan",
+      "outdoor_seating:yes",
+      "changing_table:no",
+      "outdoor_seating"
+    ],
+    "opening_hours": "08:00+"
+  },
+  {
+    "id": "osm_868590987",
+    "name": "Hug Ner Coffee",
+    "lat": 19.37862,
+    "lng": 98.721613,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop",
+      "outdoor_seating:yes",
+      "outdoor_seating"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1017027386",
+    "name": "ปิงโค้ง",
+    "lat": 19.458997,
+    "lng": 98.99302,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1046144906",
+    "name": "Pakping Café",
+    "lat": 19.912563,
+    "lng": 99.172673,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1046149337",
+    "name": "Farm & Café",
+    "lat": 19.91258,
+    "lng": 99.191479,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop",
+      "outdoor_seating:yes",
+      "outdoor_seating"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1054979480",
+    "name": "Nermu coffee",
+    "lat": 19.114773,
+    "lng": 98.710508,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "Mo-Su 08:00-17:00"
+  },
+  {
+    "id": "osm_1082534462",
+    "name": "ร้านเดอะทรี",
+    "lat": 18.784717,
+    "lng": 98.843614,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1112434728",
+    "name": "View Plern",
+    "lat": 19.824743,
+    "lng": 99.181723,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1162771986",
+    "name": "ธาราล้านนา",
+    "lat": 19.431476,
+    "lng": 98.990708,
+    "rating": null,
+    "tags": [],
+    "opening_hours": "Mo 12:00-17:00; Tu-Su 09:00-17:00"
+  },
+  {
+    "id": "osm_1186805180",
+    "name": "CAA Bakary",
+    "lat": 19.094133,
+    "lng": 98.840699,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1348997661",
+    "name": "Baan Siri Coffee & Food",
+    "lat": 19.804979,
+    "lng": 99.167879,
+    "rating": null,
+    "tags": [
+      "cuisine:thai;coffee_shop",
+      "cuisine:thai;coffee_shop"
+    ],
+    "opening_hours": "Mo-Su 07:30-18:30"
+  },
+  {
+    "id": "osm_1348999439",
+    "name": "กุสุมากาแฟดอย",
+    "lat": 19.652694,
+    "lng": 99.147269,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop;thai",
+      "cuisine:coffee_shop;thai",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1371990662",
+    "name": "เดอะ เอส คอฟฟี่",
+    "lat": 19.983018,
+    "lng": 99.247719,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1376979658",
+    "name": "ลาบ หลู้ ศ้า",
+    "lat": 19.508023,
+    "lng": 99.053252,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": "Mo-Su 10:00-21:00"
+  },
+  {
+    "id": "osm_1379206267",
+    "name": "Mee Coffee",
+    "lat": 19.121418,
+    "lng": 98.704722,
+    "rating": null,
+    "tags": [
+      "cuisine:thai;coffee_shop",
+      "cuisine:thai;coffee_shop",
+      "internet_access:wlan"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1460177704",
+    "name": "Winter Coffee",
+    "lat": 19.514485,
+    "lng": 98.960306,
+    "rating": null,
+    "tags": [
+      "cuisine:coffee_shop",
+      "cuisine:coffee_shop"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1481326013",
+    "name": "Chomdao Cafe",
+    "lat": 19.008518,
+    "lng": 98.875166,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1481651344",
+    "name": "Garden View Restaurant",
+    "lat": 18.972902,
+    "lng": 98.726897,
+    "rating": null,
+    "tags": [
+      "cuisine:noodle;thai",
+      "cuisine:noodle;thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_1583717768",
+    "name": "บ้านปลายดอย",
+    "lat": 18.763028,
+    "lng": 98.872234,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_3355620168",
+    "name": "Wawee Coffee",
+    "lat": 18.899846,
+    "lng": 98.875567,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_4728841092",
+    "name": "ร้านอาหารทับริมธาร",
+    "lat": 18.899135,
+    "lng": 98.865189,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai",
+      "outdoor_seating:yes",
+      "outdoor_seating"
+    ],
+    "opening_hours": "Mo-Su 08:00-18:00"
+  },
+  {
+    "id": "osm_5021459625",
+    "name": "Vegetarian mountain",
+    "lat": 18.764859,
+    "lng": 98.87569,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_5486283289",
+    "name": "Lanna Rock Garden",
+    "lat": 18.760712,
+    "lng": 98.874179,
+    "rating": null,
+    "tags": [
+      "cuisine:thai",
+      "cuisine:thai"
+    ],
+    "opening_hours": null
+  },
+  {
+    "id": "osm_7189617385",
+    "name": "Creek Cafe",
+    "lat": 18.772178,
+    "lng": 98.8621,
+    "rating": null,
+    "tags": [],
+    "opening_hours": null
+  }
+]

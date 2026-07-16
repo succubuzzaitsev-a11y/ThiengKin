@@ -14,6 +14,7 @@ import com.thiengkin.data.Restaurant
 import com.thiengkin.data.RestaurantRepository
 import com.thiengkin.data.SettingsRepository
 import com.thiengkin.data.toBoundingBox
+import kotlinx.coroutines.flow.stateIn
 import com.thiengkin.util.Haversine
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -84,7 +85,9 @@ class TravelHomeViewModel(
     private val _refreshMessage = MutableStateFlow<String?>(null)
     private val _selectedCategoryKey = MutableStateFlow<String?>(null)  // M2.1: CategoryGrid selection
     private val _autoDetectEnabled = MutableStateFlow(true)  // M6: default = true (เดิม)
-    private val _hideClosed = MutableStateFlow(false)  // M7: default OFF (show all, badge เปิด/ปิด)
+    // M7: hideClosed — observe shared SettingsRepository (shared with NearMe)
+    private val _hideClosed = settingsRepository.hideClosed
+        .stateIn(viewModelScope, SharingStarted.Eagerly, SettingsRepository.DEFAULT_HIDE_CLOSED)
 
     private var refreshJob: Job? = null
 
@@ -406,9 +409,9 @@ class TravelHomeViewModel(
         }
     }
 
-    /** M7: toggle hide-closed (immediate effect, no persistence needed) */
+    /** M7: toggle hide-closed (shared with Near Me via SettingsRepository) */
     fun setHideClosed(hide: Boolean) {
-        _hideClosed.value = hide
+        viewModelScope.launch { settingsRepository.setHideClosed(hide) }
     }
 
     /**

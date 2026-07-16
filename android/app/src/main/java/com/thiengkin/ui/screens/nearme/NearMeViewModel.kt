@@ -7,6 +7,7 @@ import com.thiengkin.data.LocationState
 import com.thiengkin.data.OpeningHoursParser
 import com.thiengkin.data.Restaurant
 import com.thiengkin.data.RestaurantRepository
+import com.thiengkin.data.SettingsRepository
 import com.thiengkin.ui.screens.travel.TravelHomeViewModel
 import com.thiengkin.util.Haversine
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,11 +42,14 @@ data class NearMeState(
 class NearMeViewModel(
     private val repository: RestaurantRepository = TravelHomeViewModel.defaultRepository,
     private val locationRepository: LocationRepository = TravelHomeViewModel.defaultLocationRepository,
+    private val settingsRepository: SettingsRepository = TravelHomeViewModel.defaultSettingsRepository,
 ) : ViewModel() {
 
     private val _radius = MutableStateFlow(3.0)
     private val _category = MutableStateFlow("ทั้งหมด")
-    private val _hideClosed = MutableStateFlow(false)  // M7: default OFF (show all, badge เปิด/ปิด)
+    // M7: hideClosed — observe shared SettingsRepository (shared with Travel Home)
+    private val _hideClosed = settingsRepository.hideClosed
+        .stateIn(viewModelScope, SharingStarted.Eagerly, SettingsRepository.DEFAULT_HIDE_CLOSED)
 
     val state: StateFlow<NearMeState> = combine(
         repository.observeAll(),
@@ -115,9 +119,9 @@ class NearMeViewModel(
         _category.value = category
     }
 
-    /** M7: toggle hide-closed */
+    /** M7: toggle hide-closed (shared with Travel Home via SettingsRepository) */
     fun setHideClosed(hide: Boolean) {
-        _hideClosed.value = hide
+        viewModelScope.launch { settingsRepository.setHideClosed(hide) }
     }
 
     fun toggleFavorite(id: String) {

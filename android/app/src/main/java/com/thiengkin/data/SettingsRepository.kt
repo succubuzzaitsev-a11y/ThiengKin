@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.map
  * - `autoDetectEnabled` (default true) — คุม GPS auto-detect province behavior
  *   - true  = ทุกครั้งที่เปิดแอป → re-detect province จาก GPS
  *   - false = จำจังหวัดที่ user เลือกเอง (manual pin)
+ * - `hideClosed` (default false) — M7: ซ่อนร้านที่ปิดแล้ว (shared between Travel Home + Near Me)
  *
  * DataStore location: `Context.dataStore` extension ใช้ file `settings.preferences_pb`
  * ใน app's `filesDir/datastore/` — auto-managed by androidx.datastore
@@ -39,10 +40,21 @@ class SettingsRepository(private val context: Context) {
      */
     val autoDetectEnabled: Flow<Boolean> = context.dataStore.data
         .catch { e ->
-            Log.w(TAG, "DataStore read failed — falling back to default", e)
+            Log.w(TAG, "DataStore read failed (autoDetect) — falling back", e)
             emit(androidx.datastore.preferences.core.emptyPreferences())
         }
         .map { prefs -> prefs[KEY_AUTO_DETECT] ?: DEFAULT_AUTO_DETECT }
+
+    /**
+     * M7: hideClosed — ซ่อนร้านที่ปิดแล้ว
+     * Shared state ระหว่าง Travel Home + Near Me (ไม่ใช้ per-VM state)
+     */
+    val hideClosed: Flow<Boolean> = context.dataStore.data
+        .catch { e ->
+            Log.w(TAG, "DataStore read failed (hideClosed) — falling back", e)
+            emit(androidx.datastore.preferences.core.emptyPreferences())
+        }
+        .map { prefs -> prefs[KEY_HIDE_CLOSED] ?: DEFAULT_HIDE_CLOSED }
 
     /**
      * Set toggle value — suspend (writes to disk)
@@ -55,13 +67,25 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
+    /** M7: shared hide-closed toggle setter */
+    suspend fun setHideClosed(enabled: Boolean) {
+        Log.i(TAG, "setHideClosed: $enabled")
+        context.dataStore.edit { prefs ->
+            prefs[KEY_HIDE_CLOSED] = enabled
+        }
+    }
+
     companion object {
         private const val TAG = "SettingsRepository"
 
         /** Default = true (เริ่มต้นให้ auto-detect เปิดไว้ — behavior เดิมของ M4) */
         const val DEFAULT_AUTO_DETECT = true
 
+        /** Default = false (แสดงร้านปิดด้วย — badge เปิด/ปิด) */
+        const val DEFAULT_HIDE_CLOSED = false
+
         private val KEY_AUTO_DETECT = booleanPreferencesKey("auto_detect_province")
+        private val KEY_HIDE_CLOSED = booleanPreferencesKey("hide_closed_restaurants")
     }
 }
 

@@ -89,7 +89,11 @@ class LocationRepository(private val context: Context) {
             return
         }
 
-        _state.value = LocationState.Loading
+        // M7: กัน flicker — ถ้ามี Granted อยู่แล้ว ไม่ต้องเปลี่ยนเป็น Loading
+        // (user tap "GPS" เพื่อ refresh → ไม่อยากเห็น content หายไป)
+        if (_state.value !is LocationState.Granted) {
+            _state.value = LocationState.Loading
+        }
 
         // 1) Try last-known fix (instant) — pick freshest across providers
         val providers = listOfNotNull(

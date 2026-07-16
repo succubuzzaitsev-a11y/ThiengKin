@@ -190,7 +190,7 @@ fun NearMeScreen(
             }
         }
 
-        // === item: Result count + hide-closed toggle (M7) ===
+        // === item: Result count row (M7: hide-closed toggle ย้ายไป Travel Home แล้ว) ===
         item {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(vertical = S2),
@@ -207,24 +207,6 @@ fun NearMeScreen(
                         text = "${state.openNowCount} เปิดอยู่ตอนนี้",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.tertiary,
-                    )
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                ) {
-                    Text(
-                        text = "ซ่อนปิด",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Switch(
-                        checked = state.hideClosed,
-                        onCheckedChange = { viewModel.setHideClosed(it) },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                            checkedTrackColor = MaterialTheme.colorScheme.primary,
-                        ),
                     )
                 }
             }

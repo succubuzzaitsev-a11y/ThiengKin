@@ -14,6 +14,7 @@ import android.os.CancellationSignal
 import android.os.Looper
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.thiengkin.util.Haversine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -227,10 +228,21 @@ class LocationRepository(private val context: Context) {
 
         val lat = location.latitude
         val lng = location.longitude
+
+        // M7.1: preserve address ถ้า fix ใหม่อยู่ใกล้ fix เก่า (< 100m) — กัน "ตำแหน่งปัจจุบัน" flicker
+        // ตอน tap GPS ใหม่ในจุดเดิม → address เก่ายัง relevant → ใช้ซ้ำทันที ไม่ต้องรอ Geocoder (0.5-2s)
+        val current = _state.value
+        val preservedAddress: String? =
+            if (current is LocationState.Granted && !current.isFallback && current.address != null) {
+                val dKm = Haversine.distanceKm(current.lat, current.lng, lat, lng)
+                if (dKm < NEARBY_KM) current.address else null
+            } else null
+        val useOldAddress = preservedAddress != null
+
         _state.value = LocationState.Granted(
             lat = lat,
             lng = lng,
-            address = null,
+            address = preservedAddress,
             isFallback = false,
             fallbackReason = null,
             fixId = System.currentTimeMillis(),  // M6: unique per fix → StateFlow emits
@@ -239,12 +251,18 @@ class LocationRepository(private val context: Context) {
         userLat = lat
         userLng = lng
 
+        // ถ้า preserve ได้แล้ว → ไม่ต้อง geocode ใหม่ (กัน flicker + ลด Geocoder calls)
+        if (useOldAddress) {
+            Log.d(TAG, "applyLocation: preserved old address (fix within ${NEARBY_KM * 1000}m)")
+            return
+        }
+
         // Async reverse geocode
         scope.launch {
             val address = reverseGeocode(lat, lng)
-            val current = _state.value
-            if (current is LocationState.Granted && !current.isFallback) {
-                _state.value = current.copy(address = address)
+            val now = _state.value
+            if (now is LocationState.Granted && !now.isFallback) {
+                _state.value = now.copy(address = address)
             }
         }
     }
@@ -308,6 +326,9 @@ class LocationRepository(private val context: Context) {
         // ใช้ 0.0 เพื่อให้ UI แสดง "ที่อยู่ปัจจุบัน (ได้จาก GPS)" แทน hardcode
         const val DEFAULT_LAT = 0.0
         const val DEFAULT_LNG = 0.0
+
+        // M7.1: ถ้า fix ใหม่อยู่ใกล้ fix เก่าในระยะนี้ → ใช้ address เก่าต่อ (กัน flicker)
+        private const val NEARBY_KM = 0.1  // 100m
     }
 }
 

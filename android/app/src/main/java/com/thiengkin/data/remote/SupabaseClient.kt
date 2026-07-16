@@ -22,7 +22,7 @@ import kotlin.coroutines.resumeWithException
  * instead of fetching directly from OSM Overpass (which has aggressive rate limits).
  *
  * **Endpoint shape (PostgREST):**
- *   GET {supabaseUrl}/rest/v1/restaurants?select=*&province_id=eq.{id}&source=eq.osm
+ *   GET {supabaseUrl}/rest/v1/restaurants?select=*&province_id=eq.{id}&source=in.(osm,serpapi)
  *   [&district_id=eq.{districtId}]
  *   [&limit=N]
  *
@@ -54,10 +54,14 @@ class SupabaseClient(
     }
 
     /**
-     * Fetch all OSM-source restaurants for a province (and optionally district).
+     * Fetch all OSM/SerpApi-source restaurants for a province (and optionally district).
      *
      * PostgREST query:
-     *   restaurants?select=*&province_id=eq.{provinceId}&source=eq.osm[&district_id=eq.X]
+     *   restaurants?select=*&province_id=eq.{provinceId}&source=in.(osm,serpapi)[&district_id=eq.X]
+     *
+     * Includes both:
+     *   - source='osm' (33,442 OSM Overpass rows nationwide from M3.c)
+     *   - source='serpapi' (Google Maps data via SerpApi, M6 enrichment)
      *
      * @param provinceId Province.id (e.g. "bangkok", "chiang_mai")
      * @param districtId District.id (e.g. "phra_nakhon") — null = whole province
@@ -73,7 +77,7 @@ class SupabaseClient(
         val url = buildBaseUrl().newBuilder()
             .addQueryParameter("select", SELECT_COLUMNS)
             .addQueryParameter("province_id", "eq.$provinceId")
-            .addQueryParameter("source", "eq.osm")
+            .addQueryParameter("source", "in.(osm,serpapi)")  // M6: include SerpApi Google Maps data alongside OSM
             .apply {
                 if (districtId != null) {
                     addQueryParameter("district_id", "eq.$districtId")

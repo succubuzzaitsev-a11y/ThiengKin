@@ -183,33 +183,48 @@ function makeId(source, sourceId) {
 }
 
 // Convert SerpApi local_result to ThiengKin row
+// Schema: id, name, name_th, category, lat, lng, address, tel, website,
+//         rating, review_count, price, tags, source, photo_url,
+//         opening_hours, province_id, district_id, source_updated_at
+// (No description, name_en, source_id, price_level columns in DB)
 function toThiengKinRow(local, photosData) {
     const photos = photosData?.photos || [];
     const firstPhoto = photos[0];
     // photo URL: prefer serpapi_thumbnail (SerpApi CDN) > thumbnail (Google CDN)
     const photoUrl = local.serpapi_thumbnail || local.thumbnail || firstPhoto?.image || null;
 
+    // price: keep as int (extracted_price from SerpApi: e.g. 200, 1000)
+    // The DB column is int — if no extracted_price, use mapPriceLevel fallback (1-4)
+    const price = local.extracted_price || mapPriceLevel(local.price) || null;
+
+    // tags: array (PostgREST/Supabase tags column is jsonb array)
+    const tags = extractTags(local.extensions);
+
+    const nowMs = Date.now();
+    // Supabase expects updated_at as ISO string, but source_updated_at as bigint (ms)
+    const nowIso = new Date(nowMs).toISOString();
+
     return {
         id: makeId('serpapi', local.place_id),
         name: local.title || 'Unknown',
         name_th: local.title,  // SerpApi returns Thai if hl=th
-        name_en: null,  // SerpApi doesn't give English name
         category: mapCategory(local.type),
         lat: local.gps_coordinates?.latitude ?? null,
         lng: local.gps_coordinates?.longitude ?? null,
         address: local.address || null,
-        phone: local.phone || null,
+        tel: local.phone || null,
+        website: local.website || null,
         rating: local.rating ?? null,
         review_count: local.reviews ?? 0,
+        price: price,
         source: 'serpapi',
-        source_id: local.place_id,
         photo_url: photoUrl,
-        tags: extractTags(local.extensions),
+        tags: tags,
         opening_hours: mapOpeningHours(local.operating_hours) || local.hours || null,
-        price_level: mapPriceLevel(local.price) || local.extracted_price || null,
-        description: null,  // SerpApi doesn't return description in search
         province_id: NONTHABURI_PROVINCE_ID,
         district_id: null,  // Will be filled in Phase 2 with reverse-geocode matching
+        source_updated_at: nowMs,  // bigint (epoch ms)
+        updated_at: nowIso,         // timestamptz (ISO string)
     };
 }
 
@@ -281,7 +296,17 @@ console.log(`      Total photo calls: ${photoCalls}\n`);
 
 // Step 3: Convert to ThiengKin schema
 console.log('[3/4] Converting to ThiengKin schema...');
-const rows = allResults.map(r => toThiengKinRow(r, photosCache.get(r.place_id)));
+let rows = allResults.map(r => toThiengKinRow(r, photosCache.get(r.place_id)));
+// Dedupe by id (SerpApi may return same place_id in different positions across pages)
+const seen = new Map();
+for (const row of rows) {
+    if (!seen.has(row.id)) seen.set(row.id, row);
+}
+const beforeCount = rows.length;
+rows = [...seen.values()];
+if (rows.length < beforeCount) {
+    console.log(`      Dedup: ${beforeCount} → ${rows.length} (removed ${beforeCount - rows.length} dupes)`);
+}
 console.log(`      Converted ${rows.length} rows`);
 console.log(`      Sample: ${rows[0]?.name} | ${rows[0]?.category} | ⭐${rows[0]?.rating} | ${rows[0]?.photo_url?.substring(0, 60)}...`);
 

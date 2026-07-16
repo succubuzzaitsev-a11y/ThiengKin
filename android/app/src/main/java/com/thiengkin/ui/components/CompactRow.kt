@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.thiengkin.data.OpeningHoursParser
 import com.thiengkin.data.Restaurant
 import com.thiengkin.ui.theme.S1
 import com.thiengkin.ui.theme.S2
@@ -146,11 +147,33 @@ fun CompactRow(
                         .clip(androidx.compose.foundation.shape.CircleShape)
                         .background(MaterialTheme.colorScheme.outline),
                 )
+                // M7: real open/close status from OpeningHoursParser
+                val openNow = OpeningHoursParser.isOpenNow(restaurant.openingHours)
                 Text(
-                    text = if (isOpen(restaurant)) "เปิดอยู่" else "ปิดแล้ว",
+                    text = if (openNow) "เปิดอยู่" else "ปิดแล้ว",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = if (isOpen(restaurant)) MaterialTheme.colorScheme.tertiary
+                    color = if (openNow) MaterialTheme.colorScheme.tertiary
                     else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            // M7: opening hours detail — "10:00-22:00" or "เปิด 17:00" (next open if closed)
+            val hoursLabel = OpeningHoursParser.formatForDisplay(restaurant.openingHours)
+            val nextLabel = if (OpeningHoursParser.isOpenNow(restaurant.openingHours)) {
+                // Open: show close time
+                OpeningHoursParser.currentCloseTime(restaurant.openingHours)?.let { "ปิด $it" }
+            } else {
+                // Closed: show next open time
+                OpeningHoursParser.nextOpenTime(restaurant.openingHours)
+            }
+            if (hoursLabel != null || nextLabel != null) {
+                Text(
+                    text = listOfNotNull(hoursLabel, nextLabel).joinToString(" · "),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(top = 2.dp),
                 )
             }
 
@@ -236,14 +259,14 @@ private fun EtaTag(status: EtaStatus, text: String) {
 private enum class EtaStatus { Open, Closed, Distance }
 
 /**
- * เช็คว่าร้านเปิดอยู่ไหม — ใช้ opening_hours string ถ้ามี (ยังไม่ implement full parser ใน M2)
+ * เช็คว่าร้านเปิดอยู่ไหม — delegate to OpeningHoursParser (M7)
+ * ใช้ opening_hours string จริง + เวลาปัจจุบัน
  * fallback: ถ้าไม่มี openingHours → ถือว่าเปิด
+ *
+ * @deprecated ใช้ [OpeningHoursParser.isOpenNow] แทน
  */
-private fun isOpen(restaurant: Restaurant): Boolean {
-    // TODO M2.1: parse opening_hours string + check current time
-    // ตอนนี้: ถ้ามี openingHours → ถือว่าเปิด (จะ refine ใน next step)
-    return !restaurant.openingHours.isNullOrEmpty() || restaurant.openingHours == null
-}
+private fun isOpen(restaurant: Restaurant): Boolean =
+    OpeningHoursParser.isOpenNow(restaurant.openingHours)
 
 /**
  * ETA text — "ขับ X นาที" หรือ "ปิดแล้ว"

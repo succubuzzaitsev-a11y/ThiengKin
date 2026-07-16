@@ -8,6 +8,7 @@ import com.thiengkin.data.LocationRepository
 import com.thiengkin.data.ProvinceDao
 import com.thiengkin.data.RestaurantDao
 import com.thiengkin.data.RestaurantRepository
+import com.thiengkin.data.SettingsRepository
 import com.thiengkin.data.ThiengKinDatabase
 import com.thiengkin.data.remote.FoursquareClient
 import com.thiengkin.data.remote.SupabaseClient
@@ -53,6 +54,9 @@ class ThiengKinApp : Application() {
         private set
 
     lateinit var locationRepository: LocationRepository
+        private set
+
+    lateinit var settingsRepository: SettingsRepository
         private set
 
     /**
@@ -102,12 +106,14 @@ class ThiengKinApp : Application() {
         )
         geographyRepository = GeographyRepository(this, provinceDao, districtDao)
         locationRepository = LocationRepository(this)
+        settingsRepository = SettingsRepository(this)  // M6 Phase 1: persist user toggles
 
         // Wire singletons into ViewModels (used as default params)
         TravelHomeViewModel.defaultRepository = repository
         TravelHomeViewModel.defaultLocationRepository = locationRepository
         TravelHomeViewModel.defaultProvinceDao = provinceDao
         TravelHomeViewModel.defaultDistrictDao = districtDao
+        TravelHomeViewModel.defaultSettingsRepository = settingsRepository
 
         // First-launch: seed provinces + districts (M1.a — bundled JSON)
         // หลัง seed เสร็จ → set default province (Bangkok) ใน LocationRepository

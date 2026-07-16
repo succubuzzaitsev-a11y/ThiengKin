@@ -126,4 +126,7 @@ dependencies {
     // HTTP (OSM Overpass + Foursquare)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
+
+    // DataStore (Phase 1: persist user settings)
+    implementation(libs.androidx.datastore.preferences)
 }

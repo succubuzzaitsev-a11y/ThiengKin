@@ -11,6 +11,7 @@ import com.thiengkin.data.Province
 import com.thiengkin.data.ProvinceDao
 import com.thiengkin.data.Restaurant
 import com.thiengkin.data.RestaurantRepository
+import com.thiengkin.data.SettingsRepository
 import com.thiengkin.data.toBoundingBox
 import com.thiengkin.util.Haversine
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,6 +44,8 @@ data class TravelHomeState(
     val provinces: List<Province> = emptyList(),
     val districtsForSelectedProvince: List<District> = emptyList(),
     val refreshMessage: String? = null,  // แสดง toast/ข้อความหลัง refresh เสร็จ
+    val selectedCategoryKey: String? = null,  // M2.1: หมวดที่เลือกจาก CategoryGrid (null = ทั้งหมด)
+    val autoDetectEnabled: Boolean = true,  // M6 Phase 1: toggle GPS auto-detect province
 )
 
 /**
@@ -67,6 +70,7 @@ class TravelHomeViewModel(
     private val locationRepository: LocationRepository = defaultLocationRepository,
     private val provinceDao: ProvinceDao = defaultProvinceDao,
     private val districtDao: DistrictDao = defaultDistrictDao,
+    private val settingsRepository: SettingsRepository = defaultSettingsRepository,
 ) : ViewModel() {
 
     private val _filter = MutableStateFlow("ทั้งหมด")
@@ -75,12 +79,19 @@ class TravelHomeViewModel(
     private val _selectedDistrictId = MutableStateFlow<String?>(null)
     private val _refreshing = MutableStateFlow(false)
     private val _refreshMessage = MutableStateFlow<String?>(null)
+    private val _selectedCategoryKey = MutableStateFlow<String?>(null)  // M2.1: CategoryGrid selection
+    private val _autoDetectEnabled = MutableStateFlow(true)  // M6: default = true (เดิม)
 
     private var refreshJob: Job? = null
 
     /**
      * GPS auto-detect guard — เมื่อได้ real fix ครั้งแรกแล้ว จะ switch province อัตโนมัติ
-     * (ทำแค่ครั้งเดียวต่อ session — หลังจากนั้น user เปลี่ยนเอง = ไม่ override)
+     *
+     * M6 Phase 1 behavior:
+     * - ถ้า `_autoDetectEnabled.value == true` → reset flag เป็น false ทุกครั้งที่ได้ fix ใหม่
+     *   → auto-detect ทุกครั้ง (default behavior)
+     * - ถ้า `_autoDetectEnabled.value == false` → set flag เป็น true หลัง first detect
+     *   → จำจังหวัดที่ user เลือก (ไม่ override)
      */
     private var gpsAutoDetectDone = false
 
@@ -106,7 +117,7 @@ class TravelHomeViewModel(
             }
         }
 
-    /** Data + filter pipeline (6 flows) */
+    /** Data + filter pipeline (7 flows — M2.1: +selectedCategoryKey) */
     private val dataFlow = combine(
         restaurantsFlow,
         _filter,
@@ -114,6 +125,7 @@ class TravelHomeViewModel(
         locationRepository.state,
         _refreshing,
         _refreshMessage,
+        _selectedCategoryKey,
     ) { values ->
         @Suppress("UNCHECKED_CAST")
         val all = values[0] as List<Restaurant>
@@ -123,6 +135,7 @@ class TravelHomeViewModel(
         val location = values[3] as LocationState
         val refreshing = values[4] as Boolean
         val refreshMsg = values[5] as String?
+        val catKey = values[6] as String?
 
         // 1) Search query (M4) — substring match name + nameTh + nameEn + category
         //    ทำก่อน chip filter เพราะ result set เล็กลง filter เร็วขึ้น
@@ -145,21 +158,35 @@ class TravelHomeViewModel(
             searched.filter(predicate)
         }
 
+        // 2.5) M2.1: Filter by CategoryGrid (multi-strategy: category + tags + name)
+        //      catKey == null → no filter (ทั้งหมด)
+        val catFiltered = if (catKey.isNullOrBlank()) {
+            filtered
+        } else {
+            val predicate = CATEGORY_FILTERS[catKey]
+            if (predicate != null) {
+                filtered.filter(predicate)
+            } else {
+                // unknown key → no matches
+                emptyList()
+            }
+        }
+
         // 3) Sort: real GPS → distance asc, fallback → rating desc
         val sorted: List<Restaurant> = when (location) {
             is LocationState.Granted ->
                 if (!location.isFallback) {
-                    filtered.sortedBy { r ->
+                    catFiltered.sortedBy { r ->
                         Haversine.distanceKm(location.lat, location.lng, r.lat, r.lng)
                     }
                 } else {
                     // Fallback (province centroid) — ใช้ rating + ระยะจาก province centroid
-                    filtered.sortedWith(
+                    catFiltered.sortedWith(
                         compareByDescending<Restaurant> { it.rating ?: 0.0 }
                             .thenBy { r -> Haversine.distanceKm(location.lat, location.lng, r.lat, r.lng) }
                     )
                 }
-            else -> filtered.sortedByDescending { it.rating ?: 0.0 }
+            else -> catFiltered.sortedByDescending { it.rating ?: 0.0 }
         }
 
         DataState(
@@ -169,6 +196,7 @@ class TravelHomeViewModel(
             location = location,
             refreshing = refreshing,
             refreshMsg = refreshMsg,
+            catKey = catKey,
         )
     }
 
@@ -190,7 +218,8 @@ class TravelHomeViewModel(
     val state: StateFlow<TravelHomeState> = combine(
         dataFlow,
         lookupFlow,
-    ) { data, lookup ->
+        _autoDetectEnabled,
+    ) { data, lookup, autoDetect ->
         TravelHomeState(
             loading = false,
             refreshing = data.refreshing,
@@ -203,6 +232,8 @@ class TravelHomeViewModel(
             provinces = lookup.provinces,
             districtsForSelectedProvince = lookup.districts,
             refreshMessage = data.refreshMsg,
+            selectedCategoryKey = data.catKey,  // M2.1
+            autoDetectEnabled = autoDetect,  // M6 Phase 1
         )
     }.stateIn(
         scope = viewModelScope,
@@ -251,12 +282,23 @@ class TravelHomeViewModel(
 
         // M4: GPS auto-detect → เมื่อได้ real fix ครั้งแรก ให้หา province ที่ใกล้ที่สุด
         //     (centroid distance) แล้ว switch ถ้าต่างจาก default — ทำครั้งเดียวต่อ session
+        //
+        // M6 Phase 1: behavior เปลี่ยนตาม toggle
+        //   - autoDetectEnabled=true  → reset flag ทุก fix ใหม่ → re-detect ทุกครั้ง
+        //   - autoDetectEnabled=false → set flag=true หลัง first detect → จำจังหวัดเดิม
+        viewModelScope.launch {
+            settingsRepository.autoDetectEnabled.collect { enabled ->
+                _autoDetectEnabled.value = enabled
+            }
+        }
         viewModelScope.launch {
             locationRepository.state.collectLatest { location ->
-                if (!gpsAutoDetectDone &&
-                    location is LocationState.Granted &&
-                    !location.isFallback
-                ) {
+                if (location !is LocationState.Granted || location.isFallback) return@collectLatest
+                if (_autoDetectEnabled.value) {
+                    // M6: auto-detect ON → re-detect on every new fix
+                    autoSelectProvinceFromGps(location.lat, location.lng)
+                } else if (!gpsAutoDetectDone) {
+                    // M6: auto-detect OFF → only first detect, then sticky
                     gpsAutoDetectDone = true
                     autoSelectProvinceFromGps(location.lat, location.lng)
                 }
@@ -300,6 +342,15 @@ class TravelHomeViewModel(
         _filter.value = label
     }
 
+    /**
+     * M2.1: เลือกหมวดหมู่จาก CategoryGrid
+     * - key = "noodle" | "rice" | "cafe" | ... | null (toggle off)
+     * - ถ้า key เดิม → toggle off (null)
+     */
+    fun selectCategory(key: String?) {
+        _selectedCategoryKey.value = if (_selectedCategoryKey.value == key) null else key
+    }
+
     /** M4: search query — substring filter on restaurant name + nameTh + category */
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
@@ -316,6 +367,25 @@ class TravelHomeViewModel(
 
     fun onPermissionDenied() {
         locationRepository.markDenied()
+    }
+
+    /**
+     * M6 Phase 1: เปิด/ปิด auto-detect province
+     * - เมื่อ toggle เปลี่ยนจาก false→true ให้ reset flag → re-detect ทันที
+     * - เมื่อ toggle เปลี่ยนจาก true→false ให้ set flag=true → ไม่ override จังหวัดที่ user เลือก
+     */
+    fun setAutoDetectEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setAutoDetectEnabled(enabled)
+            _autoDetectEnabled.value = enabled
+            if (enabled) {
+                // Force re-detect on next fix
+                gpsAutoDetectDone = false
+            } else {
+                // Sticky: remember current province, no more auto-override
+                gpsAutoDetectDone = true
+            }
+        }
     }
 
     /**
@@ -387,6 +457,7 @@ class TravelHomeViewModel(
         val location: LocationState,
         val refreshing: Boolean,
         val refreshMsg: String?,
+        val catKey: String?,  // M2.1
     )
 
     private data class LookupState(
@@ -405,6 +476,7 @@ class TravelHomeViewModel(
         lateinit var defaultLocationRepository: LocationRepository
         lateinit var defaultProvinceDao: ProvinceDao
         lateinit var defaultDistrictDao: DistrictDao
+        lateinit var defaultSettingsRepository: SettingsRepository
 
         // v0.3: จำนวนจังหวัดที่ bundle ใน assets/thailand-geography.json (77 provinces)
         // ใช้เป็น target ในการ poll geography seed — เดิมใช้ isEmpty() เช็คแค่ "มีอย่างน้อย 1"
@@ -454,6 +526,85 @@ class TravelHomeViewModel(
             "ร้านกาแฟ" to { r ->
                 r.category == "คาเฟ่" ||
                     r.tags.contains("cuisine:coffee_shop")
+            },
+        )
+
+        /**
+         * M2.1: CategoryGrid filter — แต่ละ slot ใช้ multi-strategy
+         * (category + tags + name substring) เพราะ OSM `category` field มีแค่ 4 ค่า
+         * (ร้านอาหาร/คาเฟ่/ฟาสต์ฟู้ด/ศูนย์อาหาร) ไม่ครอบคลุม 10 slots
+         *
+         * Logic: substring match บน name + tags — เร็ว (in-memory), ไม่กระทบ schema
+         *
+         * ตัวอย่างจาก BKK+Nonthaburi (200+ ร้าน):
+         * - noodle: name contains ก๋วยเตี๋ยว/บะหมี่/ราเมง/เฝอ (rich)
+         * - cafe: r.category == "คาเฟ่" (direct)
+         * - late: parse opening_hours "22:00-..." (18% coverage in OSM)
+         * - papaya/salad: name-based (OSM ไม่ tag explicitly — rely on real shop names)
+         */
+        val CATEGORY_FILTERS: Map<String, (Restaurant) -> Boolean> = mapOf(
+            "noodle" to { r ->
+                val name = r.name
+                name.contains("ก๋วยเตี๋ยว") ||
+                    name.contains("บะหมี่") ||
+                    name.contains("ราเมง") ||
+                    name.contains("เฝอ") ||
+                    r.tags.any { it.contains("noodle") }
+            },
+            "rice" to { r ->
+                r.name.contains("ข้าว") &&
+                    (r.tags.any { it.contains("cuisine:thai") } || r.category == "ร้านอาหาร")
+            },
+            "cafe" to { r ->
+                r.category == "คาเฟ่" ||
+                    r.tags.any { it.contains("coffee_shop") }
+            },
+            "fastfood" to { r ->
+                r.category == "ฟาสต์ฟู้ด" ||
+                    r.tags.any { it.contains("burger") || it.contains("pizza") || it.contains("fast_food") }
+            },
+            "bakery" to { r ->
+                val name = r.name
+                name.contains("เบเกอรี่") ||
+                    name.contains("เค้ก") ||
+                    name.contains("ขนมปัง") ||
+                    name.contains("bakery", ignoreCase = true) ||
+                    name.contains("cake", ignoreCase = true)
+            },
+            "papaya" to { r ->
+                r.name.contains("ส้มตำ") ||
+                    r.name.contains("ตำ") ||
+                    r.name.contains("som tam", ignoreCase = true)
+            },
+            "salad" to { r ->
+                r.name.contains("สลัด") ||
+                    r.name.contains("salad", ignoreCase = true)
+            },
+            "pub" to { r ->
+                val name = r.name
+                name.contains("ผับ") ||
+                    name.contains("บาร์") ||
+                    name.contains("pub", ignoreCase = true) ||
+                    name.contains("bar", ignoreCase = true) ||
+                    r.tags.any { it == "amenity:pub" || it == "amenity:bar" || it == "amenity:nightclub" }
+            },
+            "dessert" to { r ->
+                r.tags.any { it.contains("ice_cream") } ||
+                    r.name.contains("ของหวาน") ||
+                    r.name.contains("ไอศกรีม") ||
+                    r.name.contains("dessert", ignoreCase = true)
+            },
+            "late" to { r ->
+                val oh = r.openingHours ?: return@to false
+                // OSM format: "Mo-Fr 07:00-22:00; Sa-Su 11:00-23:00"
+                // หา segment ที่ close >= 22:00 หรือ < 03:00
+                val timeRange = Regex("""(\d{1,2}):(\d{2})\s*[-–]\s*(\d{1,2}):(\d{2})""")
+                oh.split(';').any { segment ->
+                    timeRange.find(segment)?.let { match ->
+                        val closeHour = match.groupValues[3].toIntOrNull() ?: 0
+                        closeHour >= 22 || closeHour < 3
+                    } ?: false
+                }
             },
         )
     }

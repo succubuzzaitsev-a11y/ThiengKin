@@ -23,11 +23,14 @@ import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -153,6 +156,8 @@ fun TravelHomeScreen(
                             onRequestLocationPermission()
                         }
                     },
+                    autoDetectEnabled = state.autoDetectEnabled,
+                    onAutoDetectToggle = { viewModel.setAutoDetectEnabled(it) },
                     modifier = Modifier.padding(bottom = S2),
                 )
             }
@@ -235,9 +240,9 @@ fun TravelHomeScreen(
                         modifier = Modifier.padding(bottom = S2),
                     )
                     CategoryGrid(
-                        selectedKey = null,  // M2.1: wire to filter
+                        selectedKey = state.selectedCategoryKey,  // M2.1: wire to filter
                         onItemClick = { key ->
-                            // TODO M2.1: filter by category
+                            viewModel.selectCategory(key)  // M2.1: toggle category filter
                         },
                     )
                 }
@@ -422,6 +427,8 @@ private fun CurrentLocationCard(
     location: LocationState,
     onRequestPermission: () -> Unit,
     onRetry: () -> Unit,
+    autoDetectEnabled: Boolean,
+    onAutoDetectToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -432,70 +439,111 @@ private fun CurrentLocationCard(
             .padding(horizontal = S4, vertical = S3)
             .clickable { onRetry() },
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(S3),
-        ) {
-            when (location) {
-                is LocationState.Idle -> {
-                    Icon(
-                        Icons.Filled.MyLocation,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(20.dp),
-                    )
-                    Text(
-                        text = "แตะเพื่อระบุตำแหน่ง",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                is LocationState.Loading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    Text(
-                        text = "กำลังระบุตำแหน่ง...",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                is LocationState.Granted -> {
-                    Icon(
-                        Icons.Filled.LocationOn,
-                        contentDescription = null,
-                        tint = if (location.isFallback)
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        else
-                            MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(20.dp),
-                    )
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            text = location.address ?: "ตำแหน่งปัจจุบัน",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
+        Column(verticalArrangement = Arrangement.spacedBy(S3)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(S3),
+            ) {
+                when (location) {
+                    is LocationState.Idle -> {
+                        Icon(
+                            Icons.Filled.MyLocation,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp),
                         )
-                        if (location.isFallback) {
+                        Text(
+                            text = "แตะเพื่อระบุตำแหน่ง",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    is LocationState.Loading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Text(
+                            text = "กำลังระบุตำแหน่ง...",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    is LocationState.Granted -> {
+                        Icon(
+                            Icons.Filled.LocationOn,
+                            contentDescription = null,
+                            tint = if (location.isFallback)
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            else
+                                MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp),
+                        )
+                        Column(modifier = Modifier.fillMaxWidth()) {
                             Text(
-                                text = location.fallbackReason
-                                    ?: "แตะเพื่อลอง GPS จริง",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.primary,
+                                text = location.address ?: "ตำแหน่งปัจจุบัน",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 maxLines = 1,
                             )
-                        } else {
-                            Text(
-                                text = "%.4f, %.4f".format(location.lat, location.lng),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1,
-                            )
+                            if (location.isFallback) {
+                                Text(
+                                    text = location.fallbackReason
+                                        ?: "แตะเพื่อลอง GPS จริง",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    maxLines = 1,
+                                )
+                            } else {
+                                Text(
+                                    text = "%.4f, %.4f".format(location.lat, location.lng),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                )
+                            }
                         }
                     }
+                }
+            }
+
+            // M6 Phase 1: auto-detect toggle — เปิด/ปิด GPS re-detect province
+            // แสดงเฉพาะตอนมี Granted (มี GPS จริงหรือ fallback) — ถ้า Idle/Loading ไม่แสดง
+            if (location is LocationState.Granted) {
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    thickness = 1.dp,
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(S3),
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "ตรวจจับจังหวัดอัตโนมัติ",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Text(
+                            text = if (autoDetectEnabled) {
+                                "เปิด = ทุกครั้งที่เปิดแอปจะสลับตาม GPS"
+                            } else {
+                                "ปิด = จำจังหวัดที่เลือกไว้"
+                            },
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Switch(
+                        checked = autoDetectEnabled,
+                        onCheckedChange = onAutoDetectToggle,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                            checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        ),
+                    )
                 }
             }
         }

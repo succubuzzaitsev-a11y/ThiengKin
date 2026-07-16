@@ -229,6 +229,7 @@ class LocationRepository(private val context: Context) {
             address = null,
             isFallback = false,
             fallbackReason = null,
+            fixId = System.currentTimeMillis(),  // M6: unique per fix → StateFlow emits
         )
         // Push into RestaurantExt (for distanceMeters / etaMinutes extension properties)
         userLat = lat
@@ -324,5 +325,13 @@ sealed class LocationState {
         val address: String? = null,
         val isFallback: Boolean = false,
         val fallbackReason: String? = null,
+        /**
+         * Unique identifier สำหรับแต่ละ fix — ใช้ timestamp ตอน applyLocation
+         * ทำให้ทุก Granted instance ไม่ซ้ำกันใน [StateFlow] (distinct check ใช้ .equals())
+         * เพื่อให้ collectLatest ใน TravelHomeViewModel ทำงานทุก fix แม้ lat/lng เท่าเดิม
+         *
+         * Default = 0L ตอน `Loading` หรือ emit ครั้งแรก — applyLocation จะใส่ค่าจริงตอนได้ fix
+         */
+        val fixId: Long = 0L,
     ) : LocationState()
 }

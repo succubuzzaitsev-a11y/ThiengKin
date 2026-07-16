@@ -2,11 +2,11 @@
 
 > Action items + session handoff — ลบ/complete เมื่อทำเสร็จ
 
-**Last updated:** 2026-07-13 22:32 (Asia/Bangkok)
+**Last updated:** 2026-07-16 23:25 (Asia/Bangkok)
 **Project root:** `D:\thiengKin`
 **Git branch:** `main`
-**Latest commit:** `d96c3f4` (M5 wrap-up: 4 bug fixes + docs)
-**Working tree:** clean (post M5 wrap-up)
+**Latest commit:** `369522e` (M7.1 GPS flicker fix — after rebase + secret scrub)
+**Working tree:** clean (3 commits pushed to `origin/main` = `369522e`)
 
 ---
 
@@ -212,6 +212,83 @@ images match.
 - M10: Leaderboard, badges (Explorer = visited 10 provinces)
 
 ---
+
+## ✅ M6 · SerpApi Nonthaburi enrichment (2026-07-16) — DONE
+
+**Why**: SerpApi free tier (250/month) มี rating + reviews + photos ที่ OSM ไม่มี — ทดลอง enrich เฉพาะจังหวัดเดียวก่อน
+
+**Files**:
+- `scripts/serpapi-extract-key.mjs` — Playwright signup helper (auto-extract API key)
+- `scripts/enrich-serpapi-nonthaburi.mjs` — query SerpApi (10 queries × 20 results) → push to Supabase
+- `SERPAPI_KEY` in `thiengKin.env` (gitignored): `a43bcc923627049cf8ef67103cc3ba97b41efbef718fbdff6d87d2a9375b389a`
+
+**Result**:
+- **55 restaurants** pushed to Supabase (`source='serpapi'`, `province_id='nonthaburi'`)
+- Schema adapt: `description`/`name_en`/`source_id` removed, `tel`/`website`/`price (int)`/`source_updated_at (bigint ms)`/`tags (array)` used
+- `SupabaseClient.kt:78` source filter: `eq.osm` → `in.(osm,serpapi)` — both sources fetched ใน call เดียว
+- **63 calls used / 250 monthly** (~25% quota หมดไปกับ Nonthaburi 1 จังหวัด)
+- Commits: `f48ecaf` (M6 phase 1 auto-detect), `9a61bd4`, `495e05c`
+
+**Next (after MVP)**: enrich จังหวัดอื่น (กทม/เชียงใหม่/ภูเก็ต/ชลบุรี) — ต้องคิดเรื่อง quota ก่อน
+
+## ✅ M7 · Real-time features (2026-07-16) — DONE
+
+**Opening hours** (commit `17dbe3c`):
+- `OpeningHoursParser.kt` — parse OSM `opening_hours` format (Mo-Fr 09:00-18:00, 24/7, "PH off", etc.)
+- `CompactRow.kt` — แสดง open/close status (green "เปิด"/ red "ปิด"/ gray "ไม่ระบุ" ETA tag)
+- ผลลัพธ์: ร้านที่ระบุ `opening_hours` แสดงเวลาเปิดจริง, ร้านที่ไม่ระบุ → "ไม่ระบุเวลาเปิด"
+
+**Shared categories** (commit `34d3cbe`):
+- `RestaurantCategories.kt` — 10 categories with predicates (name substring + category field + tags)
+- Travel Home + Near Me ใช้ร่วมกัน — ไม่ duplicate logic
+- ใช้ได้กับทั้ง OSM (category="amenity") และ SerpApi (category="ร้านอาหาร" generic, name="ก๋วยเตี๋ยว")
+
+**Hide-closed toggle** (commits `e948ae4`, `0a1f4ef`):
+- `SettingsRepository.hideClosed` (DataStore) — single shared state
+- Toggle visible บน **Travel Home เท่านั้น** (ซ่อนจาก Near Me ตามคำขอ)
+- ใช้ร่วมกัน 2 หน้า — toggle ที่หนึ่งสะท้อนอีกหน้าทันที
+
+## ✅ M7.1 · GPS card flicker fix (2026-07-16) — DONE
+
+**Root cause**: `LocationRepository.applyLocation` เซ็ต `address=null` ทุก fix ใหม่ → UI แสดง "ตำแหน่งปัจจุบัน" ระหว่าง Geocoder (0.5-2s)
+
+**Fix**: preserve address เดิมถ้า fix ใหม่อยู่ห่างจาก fix เก่า < 100m (Haversine)
+```kotlin
+val current = _state.value
+val preservedAddress = if (current is LocationState.Granted && !current.isFallback && current.address != null) {
+    val dKm = Haversine.distanceKm(current.lat, current.lng, lat, lng)
+    if (dKm < NEARBY_KM) current.address else null
+} else null
+```
+- New constant: `NEARBY_KM = 0.1` (100m)
+- Skip reverse geocode ถ้า preserve ได้ → เร็วขึ้น + ลด Geocoder calls
+- Commit: `f0a5970` (rebased → `369522e`)
+
+**Verify**: ต้อง build APK + install + ทดสอบบนเครื่องจริง (รอ user สั่ง)
+
+## ⚠️ Security: Supabase secret key — DEFERRED (2026-07-16)
+
+- Old key (sb_secret_… — full value ใน git history ก่อน `500bfc8`) leaked ใน git history
+- ลบออกแล้วผ่าน `git filter-branch` + force-push ไป `500bfc8` (ก่อน M6)
+- **User decision (2026-07-16):** "Supabase key แล้ว รอแก้เมื่อหลังแอปเสร็จอีกที"
+- `scripts/rotate-supabase-key.mjs` พร้อม — แต่ **ห้ามรัน** จนกว่าจะหลังแอปเสร็จ
+- Action: revisit เมื่อ user นิยาม "แอปเสร็จ" ชัดเจน
+
+## 🆕 Lesson: ไม่ใส่ key value จริงใน script (2026-07-16)
+
+- `scripts/rotate-supabase-key.mjs:133` เคยมี `console.log('Old key (sb_secret_…) ...')` (full value ใน commit history ก่อน `500bfc8`)
+- GitHub push protection block — **แม้ value จะ invalid แล้ว** scanner ก็จับได้
+- Fix: เปลี่ยนเป็น "Old key has been invalidated in Supabase" (no key value)
+- Resolution: `git commit --fixup=e948ae4` + `git -c sequence.editor=true rebase -i --autosquash HEAD~4` + `git push --force-with-lease origin main`
+- **Rule**: แม้ comment/log/if-check ใน script ก็ห้ามเขียน key value จริง ใช้แค่ prefix `sb_secret_` พอ
+
+## 📋 Pending state (2026-07-16 23:25)
+
+- [ ] **Build APK + install + test M7.1 flicker fix** — รอ user สั่ง (rule: ห้าม build จนกว่าจะสั่ง)
+- [ ] **Supabase key rotation** — defer ตามด้านบน
+- [ ] **SerpApi enrich จังหวัดอื่น** (กทม/เชียงใหม่/ภูเก็ต/ชลบุรี) — หลัง M7.1 verified
+- [ ] **Phase B prep** — auth, reviews, points/tier (M8+)
+- [ ] **TODO cleanup** — remove P0/P1 sections (FoursquareClient done, Chiang Mai superseded)
 
 ## 📋 Session handoff (2026-07-13 22:30 — M5 wrap-up done, smoke test pending)
 
